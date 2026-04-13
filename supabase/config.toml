@@ -1,0 +1,15 @@
+project_id = "" # To be filled by the user in GitHub Secrets
+
+[api]
+port = 54321
+schemas = ["public"]
+
+[db]
+port = 54322
+shadow_port = 54320
+
+[storage]
+enabled = true
+
+[auth]
+enabled = true

@@ -1,0 +1,4 @@
+-- Initial Migration Placeholder
+-- Add your SQL table definitions here.
+-- Example:
+-- CREATE TABLE agents (id uuid primary key, name text);
