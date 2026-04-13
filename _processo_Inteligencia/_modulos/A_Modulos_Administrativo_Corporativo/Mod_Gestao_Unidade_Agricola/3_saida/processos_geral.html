@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Genius - Processos Geral</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #0b0d11;
+            --sidebar-bg: rgba(255, 255, 255, 0.02);
+            --accent-color: #00ff88;
+            --glass-border: rgba(255, 255, 255, 0.08);
+            --text-main: #e0e0e0;
+            --text-dim: #a0a0a0;
+            --sidebar-width: 280px;
+        }
+
+        body {
+            background: linear-gradient(135deg, #0b0d11 0%, #1a1e26 100%);
+            color: var(--text-main);
+            font-family: 'Outfit', sans-serif;
+            margin: 0; display: flex; min-height: 100vh;
+        }
+
+        .sidebar {
+            width: var(--sidebar-width);
+            background: var(--sidebar-bg);
+            backdrop-filter: blur(20px);
+            border-right: 1px solid var(--glass-border);
+            display: flex; flex-direction: column;
+            position: fixed; height: 100vh;
+        }
+
+        .sidebar-header { padding: 30px; border-bottom: 1px solid var(--glass-border); }
+        .sidebar-header h2 { font-size: 1.1rem; margin: 0; color: var(--accent-color); letter-spacing: 2px; text-transform: uppercase; }
+
+        .nav-menu { flex: 1; padding: 20px 0; list-style: none; margin: 0; }
+        .nav-item { padding: 12px 30px; display: flex; align-items: center; gap: 15px; color: var(--text-dim); text-decoration: none; transition: 0.3s; font-size: 0.85rem; }
+        .nav-item:hover, .nav-item.active { background: rgba(0, 255, 136, 0.05); color: #fff; border-left: 4px solid var(--accent-color); padding-left: 26px; }
+
+        .main-content { margin-left: var(--sidebar-width); flex: 1; padding: 60px 40px; }
+        header { margin-bottom: 40px; }
+        h1 { font-size: 2.2rem; margin: 0; letter-spacing: -1px; }
+
+        .pipeline-master { display: flex; flex-direction: column; gap: 30px; margin-top: 40px; position: relative; }
+        .stage-box { background: rgba(255,255,255,0.03); border: 1px solid var(--glass-border); border-radius: 20px; padding: 40px; display: flex; gap: 40px; align-items: center; position: relative; }
+        .stage-box::after { content: '↓'; position: absolute; bottom: -35px; left: 50px; font-size: 2rem; color: var(--glass-border); }
+        .stage-box:last-child::after { content: ''; }
+
+        .stage-icon { width: 80px; height: 80px; background: rgba(0,255,136,0.1); border: 2px solid var(--accent-color); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 2rem; flex-shrink: 0; box-shadow: 0 0 20px rgba(0,255,136,0.1); }
+        .stage-info h2 { font-size: 1.4rem; color: #fff; margin: 0 0 10px 0; }
+        .stage-info p { font-size: 0.95rem; color: var(--text-dim); line-height: 1.6; margin: 0; }
+        .sub-steps { margin-top: 20px; display: flex; gap: 10px; flex-wrap: wrap; }
+        .step-tag { font-size: 0.7rem; background: rgba(255,255,255,0.05); padding: 5px 12px; border-radius: 20px; color: var(--text-main); border: 1px solid var(--glass-border); }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    </style>
+</head>
+<body>
+
+<aside class="sidebar">
+    <div class="sidebar-header">
+        <h2>GENIUS Master</h2>
+    </div>
+    <ul class="nav-menu">
+        <li><a href="portal_visual_unidade_agricola.html" class="nav-item">🏢 Submódulos</a></li>
+        <li><a href="dashboard_geral.html" class="nav-item">📊 Dashboards Geral</a></li>
+        <li><a href="cadastro_geral.html" class="nav-item">➕ Cadastros Geral</a></li>
+        <li><a href="agentes_geral.html" class="nav-item">🤖 Agentes Geral</a></li>
+        <li><a href="processos_geral.html" class="nav-item active">🧠 Processos Geral</a></li>
+        <li><a href="ferramentas_geral.html" class="nav-item">🛠️ Ferramentas Geral</a></li>
+        <li><a href="fractais_geral.html" class="nav-item">💠 Fractais Geral</a></li>
+        <li><a href="banco_dados_geral.html" class="nav-item">🗄️ Banco de Dados Geral</a></li>
+    </ul>
+</aside>
+
+<main class="main-content">
+    <header>
+        <h1>Pipeline Governança Administrativa</h1>
+    </header>
+
+    <div class="pipeline-master">
+        <!-- Fase 1 -->
+        <div class="stage-box">
+            <div class="stage-icon">⚖️</div>
+            <div class="stage-info">
+                <h2>Identidade & Segurança Fundiária</h2>
+                <p>Consolidação da base proprietária e validação jurídica de ativos (Matrículas/Impostos). O alicerce da unidade.</p>
+                <div class="sub-steps">
+                    <span class="step-tag">Registro Proprietário</span>
+                    <span class="step-tag">Auditoria Legal Ativos</span>
+                    <span class="step-tag">Consolidação Tributária</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Fase 2 -->
+        <div class="stage-box">
+            <div class="stage-icon">🗺️</div>
+            <div class="stage-info">
+                <h2>Mapeamento & Zoneamento Territorial</h2>
+                <p>Georreferenciamento de perímetros, zoneamento de glebas e identificação unívoca de talhões produtivos.</p>
+                <div class="sub-steps">
+                    <span class="step-tag">Divisão de Glebas</span>
+                    <span class="step-tag">Abertura de Talhões</span>
+                    <span class="step-tag">Cálculo de Área Útil</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Fase 3 -->
+        <div class="stage-box">
+            <div class="stage-icon">🔗</div>
+            <div class="stage-info">
+                <h2>Orquestração & Interoperabilidade</h2>
+                <p>Conexão dos IDs Genius com ecossistemas externos (ERP) e geração de identificadores físicos de campo.</p>
+                <div class="sub-steps">
+                    <span class="step-tag">Cross-Ref Mapping</span>
+                    <span class="step-tag">Sync ERP Bridge</span>
+                    <span class="step-tag">Field Tagging</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+</body>
+</html>

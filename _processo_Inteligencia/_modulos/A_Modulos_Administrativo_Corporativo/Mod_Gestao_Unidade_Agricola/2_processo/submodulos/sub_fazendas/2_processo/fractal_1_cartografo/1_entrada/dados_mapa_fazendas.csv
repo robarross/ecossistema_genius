@@ -1,0 +1,4 @@
+ID_Fazenda;Nome_Fazenda;Hectares_Totais;Latitude;Longitude;Status_CAR
+FZ-001;Fazenda Machadinho;2500.50;-12.345678;-54.912345;Regularizado
+FZ-002;Fazenda Recanto;1800.20;-12.456789;-54.987654;Regularizado
+FZ-003;Fazenda Santa Fe;4200.00;-12.567890;-55.012345;Em Analise

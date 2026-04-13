@@ -1,0 +1,2271 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastro Datalake | Propriedades</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #06090e;
+            --surface-color: #111823;
+            --surface-border: #1f2937;
+            --text-primary: #ffffff;
+            --text-secondary: #8b949e;
+            --accent-orange: #f59e0b;
+            --accent-orange-hover: #d97706;
+            --accent-cyan: #0ea5e9;
+            --accent-cyan-glow: rgba(14, 165, 233, 0.2);
+            --font-family: 'Inter', sans-serif;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-primary);
+            font-family: var(--font-family);
+            line-height: 1.6;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Abstract glowing blobs for background */
+        .glow-blob-1 {
+            position: absolute;
+            top: -10%;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 800px;
+            height: 600px;
+            background: radial-gradient(circle, var(--accent-cyan-glow) 0%, transparent 60%);
+            z-index: -1;
+            filter: blur(80px);
+            pointer-events: none;
+        }
+
+        .glow-blob-2 {
+            position: absolute;
+            bottom: -20%;
+            right: -10%;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(245, 158, 11, 0.1) 0%, transparent 60%);
+            z-index: -1;
+            filter: blur(80px);
+            pointer-events: none;
+        }
+
+        /* Hero Section */
+        .hero {
+            text-align: center;
+            padding: 80px 24px 40px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .overline {
+            display: inline-block;
+            text-transform: uppercase;
+            font-weight: 800;
+            font-size: 0.85rem;
+            letter-spacing: 2px;
+            color: var(--accent-cyan);
+            margin-bottom: 16px;
+        }
+
+        .hero h1 {
+            font-weight: 800;
+            font-size: clamp(36px, 5vw, 56px);
+            line-height: 1.1;
+            letter-spacing: -0.03em;
+            margin-bottom: 24px;
+        }
+
+        .hero p {
+            color: var(--text-secondary);
+            font-size: 1.125rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Main Form Container - Bento Grid */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto 100px;
+            padding: 0 24px;
+        }
+
+        .bento-grid {
+            display: grid;
+            grid-template-columns: repeat(12, 1fr);
+            gap: 24px;
+        }
+
+        /* Form Sub-Sections */
+        .card {
+            background-color: var(--surface-color);
+            border: 1px solid var(--surface-border);
+            border-radius: 12px;
+            padding: 32px;
+            transition: border-color 0.3s ease, transform 0.3s ease;
+        }
+
+        .card:hover {
+            border-color: rgba(14, 165, 233, 0.4);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .bento-identificacao { grid-column: span 12; }
+        .bento-localizacao { grid-column: span 6; }
+        .bento-areas { grid-column: span 6; }
+        .bento-responsaveis { grid-column: span 7; }
+        .bento-outros { grid-column: span 5; }
+
+        @media (max-width: 900px) {
+            .bento-localizacao, .bento-areas, .bento-responsaveis, .bento-outros {
+                grid-column: span 12;
+            }
+        }
+
+        .card-header {
+            margin-bottom: 24px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid var(--surface-border);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .card-header-icon {
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            background: rgba(14, 165, 233, 0.1);
+            color: var(--accent-cyan);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .card h2 {
+            font-size: 1.25rem;
+            font-weight: 600;
+        }
+
+        /* Form Fields */
+        .form-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+            margin-bottom: 16px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        label {
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+        }
+
+        input, select, textarea {
+            background-color: rgba(0, 0, 0, 0.3);
+            border: 1px solid var(--surface-border);
+            border-radius: 6px;
+            padding: 12px 16px;
+            color: var(--text-primary);
+            font-family: var(--font-family);
+            font-size: 0.95rem;
+            transition: all 0.2s ease;
+            outline: none;
+        }
+
+        input:focus, select:focus, textarea:focus {
+            border-color: var(--accent-cyan);
+            box-shadow: 0 0 0 3px var(--accent-cyan-glow);
+        }
+
+        select {
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%238b949e' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 16px center;
+            padding-right: 40px;
+        }
+
+        /* Inputs de Área (com sufixo 'ha' visual) */
+        .input-icon-wrapper {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+        .input-icon-wrapper input {
+            width: 100%;
+            padding-right: 40px; /* Space for the unit */
+        }
+
+        .unit {
+            position: absolute;
+            right: 16px;
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+            pointer-events: none;
+        }
+
+        /* Actions Section */
+        .actions {
+            margin-top: 40px;
+            display: flex;
+            justify-content: flex-end;
+            gap: 16px;
+            border-top: 1px solid var(--surface-border);
+            padding-top: 24px;
+        }
+
+        button {
+            cursor: pointer;
+            font-family: var(--font-family);
+            font-size: 0.95rem;
+            font-weight: 600;
+            padding: 14px 28px;
+            border-radius: 8px;
+            transition: all 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .btn-outline {
+            background: transparent;
+            color: var(--text-primary);
+            border: 1px solid var(--surface-border);
+        }
+
+        .btn-outline:hover {
+            border-color: var(--text-secondary);
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .btn-primary {
+            background: var(--accent-orange);
+            color: #000;
+            border: 1px solid var(--accent-orange);
+        }
+
+        .btn-primary:hover {
+            background: var(--accent-orange-hover);
+            border-color: var(--accent-orange-hover);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3);
+        }
+
+        /* SVG Icons utility */
+        svg {
+            stroke: currentColor;
+            fill: none;
+            stroke-width: 2;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+
+        /* Sidebar Layout */
+        .app-layout {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        .sidebar {
+            width: 260px;
+            background: var(--surface-color);
+            border-right: 1px solid var(--surface-border);
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 32px;
+            flex-shrink: 0;
+            z-index: 100;
+        }
+        
+        .sidebar-location {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+        
+        .loc-title {
+            color: var(--accent-cyan);
+            font-weight: 800;
+            font-size: 1.15rem;
+            letter-spacing: 0.5px;
+        }
+        
+        .loc-module {
+            color: var(--text-primary);
+            font-size: 0.85rem;
+            font-weight: 600;
+            line-height: 1.3;
+        }
+
+        .loc-submodule {
+            color: var(--text-secondary);
+            font-size: 0.8rem;
+            margin-top: 4px;
+        }
+
+        .sidebar-nav {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .sidebar-nav .btn-ghost {
+            justify-content: flex-start;
+            padding: 12px 16px;
+            border-radius: 8px;
+            width: 100%;
+        }
+
+        .sidebar-nav .btn-ghost.active {
+            background: rgba(255,255,255,0.05);
+            color: #fff;
+        }
+
+        .main-content {
+            flex-grow: 1;
+            position: relative;
+            overflow-y: auto;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .btn-ghost {
+            background: transparent;
+            color: var(--text-secondary);
+            border: 1px solid transparent;
+            padding: 10px 16px;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .btn-ghost:hover {
+            color: var(--accent-cyan);
+            background: var(--accent-cyan-glow);
+            border-color: rgba(14, 165, 233, 0.3);
+        }
+
+        /* Modal Styles */
+        .modal-overlay {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.8);
+            backdrop-filter: blur(5px);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .modal-content {
+            background: var(--surface-color);
+            border: 1px solid var(--surface-border);
+            border-radius: 12px;
+            width: 90%;
+            max-width: 1000px;
+            max-height: 85vh;
+            display: flex;
+            flex-direction: column;
+            transform: translateY(20px);
+            transition: transform 0.3s ease;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+        }
+
+        .modal-overlay.active .modal-content {
+            transform: translateY(0);
+        }
+
+        .modal-header {
+            padding: 24px;
+            border-bottom: 1px solid var(--surface-border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-header h2 {
+            font-size: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin: 0;
+        }
+
+        .close-btn {
+            background: transparent;
+            border: none;
+            color: var(--text-secondary);
+            cursor: pointer;
+            padding: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .close-btn:hover {
+            color: #fff;
+        }
+
+        .modal-body {
+            padding: 24px;
+            overflow-y: auto;
+        }
+
+        /* Table Design */
+        .table-wrapper {
+            overflow-x: auto;
+            border: 1px solid var(--surface-border);
+            border-radius: 8px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+            font-size: 0.9rem;
+        }
+
+        th {
+            background: rgba(255,255,255,0.03);
+            color: var(--text-secondary);
+            font-weight: 600;
+            padding: 16px;
+            border-bottom: 1px solid var(--surface-border);
+            white-space: nowrap;
+        }
+
+        td {
+            padding: 16px;
+            border-bottom: 1px solid var(--surface-border);
+            color: var(--text-primary);
+        }
+
+        tr:hover td {
+            background: rgba(255,255,255,0.02);
+        }
+
+        .table-input {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid var(--accent-cyan);
+            color: #fff;
+            border-radius: 4px;
+            font-family: inherit;
+        }
+
+        .view-section {
+            display: none;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            width: 100%;
+        }
+
+        .view-section.active {
+            display: block;
+            opacity: 1;
+            animation: fadeIn 0.4s ease forwards;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* AI Chat Styles */
+        .chat-view-container {
+            display: flex;
+            flex-direction: column;
+            height: calc(100vh - 120px);
+            max-width: 900px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .chat-messages {
+            flex-grow: 1;
+            overflow-y: auto;
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            scrollbar-width: thin;
+            scrollbar-color: var(--surface-border) transparent;
+        }
+
+        .chat-bubble {
+            max-width: 80%;
+            padding: 16px 20px;
+            border-radius: 12px;
+            font-size: 0.95rem;
+            line-height: 1.5;
+            position: relative;
+            animation: fadeIn 0.3s ease forwards;
+        }
+
+        .chat-bubble.ai {
+            align-self: flex-start;
+            background: rgba(14, 165, 233, 0.1);
+            border: 1px solid rgba(14, 165, 233, 0.2);
+            color: var(--text-primary);
+            border-bottom-left-radius: 2px;
+        }
+
+        .chat-bubble.user {
+            align-self: flex-end;
+            background: var(--surface-color);
+            border: 1px solid var(--surface-border);
+            color: var(--text-primary);
+            border-bottom-right-radius: 2px;
+        }
+
+        .chat-input-container {
+            padding: 24px;
+            background: var(--bg-color);
+            border-top: 1px solid var(--surface-border);
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .chat-input-wrapper {
+            flex-grow: 1;
+            position: relative;
+        }
+
+        .chat-input-wrapper input {
+            width: 100%;
+            padding: 14px 20px;
+            background: var(--surface-color);
+            border: 1px solid var(--surface-border);
+            border-radius: 12px;
+            color: #fff;
+            outline: none;
+            transition: all 0.2s ease;
+        }
+
+        .chat-input-wrapper input:focus {
+            border-color: var(--accent-cyan);
+            box-shadow: 0 0 0 3px var(--accent-cyan-glow);
+        }
+
+        .chat-send-btn {
+            background: var(--accent-cyan);
+            color: #000;
+            border: none;
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: transform 0.2s ease, background 0.2s ease;
+        }
+
+        .chat-send-btn:hover {
+            background: #0ea5e9;
+            transform: scale(1.05);
+        }
+
+        /* Sidebar History Section */
+        .sidebar-chat-section {
+            margin-top: 24px;
+            padding-top: 24px;
+            border-top: 1px solid var(--surface-border);
+        }
+
+        .sidebar-chat-title {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--text-secondary);
+            font-weight: 800;
+            margin-bottom: 16px;
+            padding: 0 16px;
+        }
+
+        .chat-history-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px 16px;
+            border-radius: 8px;
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            margin-bottom: 4px;
+        }
+
+        .chat-history-item:hover {
+            background: rgba(255,255,255,0.05);
+            color: var(--text-primary);
+        }
+
+        .chat-history-item span {
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .chat-history-item svg {
+            flex-shrink: 0;
+            opacity: 0.6;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.5; transform: scale(0.95); }
+            100% { opacity: 1; transform: scale(1); }
+        }
+
+        /* Sidebar Right - Chat Drawer */
+        .sidebar-right {
+            position: fixed;
+            top: 0;
+            right: 0;
+            width: 380px;
+            height: 100vh;
+            background: var(--surface-color);
+            border-left: 1px solid var(--surface-border);
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: -10px 0 30px rgba(0, 0, 0, 0.5);
+            /* Overlay on main content */
+        }
+
+        .sidebar-right.collapsed {
+            transform: translateX(100%);
+        }
+
+        .sidebar-right .chat-view-container {
+            height: 100%;
+            max-width: none;
+            width: 100%;
+        }
+
+        /* Enriched Specs Styles */
+        .spec-section {
+            margin-top: 24px;
+            padding-top: 16px;
+            border-top: 1px solid var(--surface-border);
+        }
+
+        .spec-section-title {
+            font-size: 0.85rem;
+            font-weight: 800;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .skills-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .skill-tag {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid var(--surface-border);
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            color: var(--text-primary);
+            transition: all 0.2s ease;
+        }
+
+        .skill-tag:hover {
+            border-color: var(--accent-cyan);
+            background: var(--accent-cyan-glow);
+        }
+
+        .pipeline-container {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .pipeline-step {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            position: relative;
+            padding-bottom: 12px;
+        }
+
+        .pipeline-step:not(:last-child)::after {
+            content: '';
+            position: absolute;
+            left: 7px;
+            top: 20px;
+            bottom: 0;
+            width: 2px;
+            background: var(--surface-border);
+        }
+
+        .step-indicator {
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: var(--surface-border);
+            border: 2px solid var(--bg-color);
+            z-index: 1;
+            flex-shrink: 0;
+        }
+
+        .pipeline-step.active .step-indicator {
+            background: var(--accent-cyan);
+            box-shadow: 0 0 10px var(--accent-cyan);
+        }
+
+        .step-label {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+
+        .rag-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .rag-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px;
+            background: rgba(0,0,0,0.2);
+            border-radius: 8px;
+            border: 1px solid var(--surface-border);
+        }
+
+        .rag-item svg {
+            color: var(--accent-cyan);
+            opacity: 0.8;
+        }
+
+        .rag-item span {
+            font-size: 0.85rem;
+        }
+
+        .sidebar-right-header {
+            padding: 24px;
+            border-bottom: 1px solid var(--surface-border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.02);
+        }
+
+        .sidebar-right-header h3 {
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        /* Toggle Button */
+        .chat-toggle-btn {
+            position: fixed;
+            bottom: 32px;
+            right: 32px;
+            width: 56px;
+            height: 56px;
+            background: var(--accent-cyan);
+            color: #000;
+            border-radius: 50%;
+            border: none;
+            cursor: pointer;
+            z-index: 1001;
+            box-shadow: 0 4px 20px rgba(14, 165, 233, 0.4);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+        }
+
+        .chat-toggle-btn:hover {
+            transform: scale(1.1) rotate(5deg);
+            background: #38bdf8;
+        }
+
+        .chat-toggle-btn.active {
+            background: #ef4444; /* Rojo para cerrar */
+            color: #fff;
+            transform: rotate(90deg);
+        }
+
+        /* Responsive */
+        @media (max-width: 600px) {
+            .sidebar-right {
+                width: 100%;
+            }
+        }
+
+        /* Genius Excel Environment Styles */
+        .excel-toolbar {
+            background: #107c41;
+            padding: 8px 16px;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            color: #fff;
+            font-size: 0.85rem;
+        }
+
+        .excel-menu-item {
+            cursor: pointer;
+            padding: 4px 8px;
+            border-radius: 4px;
+            opacity: 0.9;
+            transition: all 0.2s;
+        }
+
+        .excel-menu-item:hover, .excel-menu-item.active {
+            opacity: 1;
+            background: rgba(255,255,255,0.15);
+        }
+
+        .excel-formula-bar {
+            background: #fff;
+            border-bottom: 1px solid #e1dfdd;
+            padding: 4px 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #333;
+        }
+
+        .formula-fx {
+            font-family: serif;
+            font-style: italic;
+            font-weight: bold;
+            color: #888;
+            user-select: none;
+        }
+
+        .formula-input {
+            flex-grow: 1;
+            border: none;
+            padding: 4px;
+            font-size: 0.9rem;
+            color: #000;
+            outline: none;
+            background: transparent;
+        }
+
+        .excel-grid-container {
+            background: #fff;
+            overflow: auto;
+            flex-grow: 1;
+            position: relative;
+        }
+
+        .excel-table {
+            border-collapse: collapse;
+            table-layout: fixed;
+            width: 100%;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .excel-table th, .excel-table td {
+            border: 1px solid #e1dfdd;
+            height: 25px;
+            padding: 0 4px;
+            font-size: 0.85rem;
+            color: #333;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .excel-col-header {
+            background: #f3f2f1;
+            text-align: center;
+            width: 150px;
+            font-weight: normal;
+        }
+
+        .excel-row-header {
+            background: #f3f2f1;
+            text-align: center;
+            width: 40px;
+            font-weight: normal;
+        }
+
+        .excel-cell {
+            background: #fff;
+            cursor: cell;
+            outline: none;
+        }
+
+        .excel-cell:focus {
+            border: 2px solid #107c41;
+            background: #e9f5ef;
+            padding: 0 3px;
+        }
+
+        .excel-tabs {
+            background: #f3f2f1;
+            border-top: 1px solid #e1dfdd;
+            padding: 4px 12px;
+            display: flex;
+            gap: 20px;
+            font-size: 0.75rem;
+            color: #666;
+        }
+
+        .excel-tab-item {
+            padding: 2px 8px;
+            cursor: pointer;
+            border-bottom: 2px solid transparent;
+        }
+
+        .excel-tab-item.active {
+            color: #107c41;
+            border-bottom-color: #107c41;
+            font-weight: bold;
+            background: #fff;
+        }
+
+        /* Data Lineage Styles */
+        .lineage-section {
+            margin-top: 40px;
+            padding-top: 32px;
+            border-top: 1px solid var(--surface-border);
+        }
+
+        .lineage-title {
+            font-size: 1.1rem;
+            margin-bottom: 24px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: var(--text-primary);
+        }
+
+        .lineage-flow {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 20px;
+            position: relative;
+        }
+
+        .lineage-column {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .lineage-node {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--surface-border);
+            padding: 12px 16px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 0.85rem;
+            transition: all 0.2s;
+        }
+
+        .lineage-node:hover {
+            border-color: var(--accent-cyan);
+            background: rgba(14, 165, 233, 0.05);
+        }
+
+        .lineage-node.core {
+            border-color: var(--accent-cyan);
+            background: rgba(14, 165, 233, 0.1);
+            font-weight: bold;
+        }
+
+        .lineage-arrow {
+            display: flex;
+            align-items: center;
+            padding-top: 15px;
+            color: var(--text-secondary);
+            opacity: 0.5;
+        }
+
+        .node-tag {
+            font-size: 0.65rem;
+            text-transform: uppercase;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-weight: 800;
+        }
+
+        .tag-in { background: rgba(16, 185, 129, 0.1); color: #10b981; }
+        .tag-out { background: rgba(245, 158, 11, 0.1); color: var(--accent-orange); }
+
+        .lineage-label {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: bold;
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="app-layout">
+        <aside class="sidebar">
+            <div class="sidebar-location">
+                <span class="loc-title">Genius Sistems</span>
+                <span class="loc-module">Módulo Gestão da Unidade Agrícola</span>
+                <span class="loc-submodule">Submódulo: Cadastros</span>
+            </div>
+            <nav class="sidebar-nav">
+                <button type="button" class="btn-ghost" id="btn-sidebar-dash" onclick="switchView('view-dashboard', this)">
+                    <svg width="18" height="18" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+                    Dashboard
+                </button>
+                <button type="button" class="btn-ghost active" id="btn-sidebar-cad" onclick="switchView('view-cadastros', this)">
+                    <svg width="18" height="18" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="12" y1="18" x2="12" y2="12"></line><line x1="9" y1="15" x2="15" y2="15"></line></svg>
+                    Cadastros
+                </button>
+                <button type="button" class="btn-ghost" id="btn-sidebar-ia" onclick="switchView('view-agentes', this)">
+                    <svg width="18" height="18" viewBox="0 0 24 24"><path d="M12 2v2"></path><path d="M12 20v2"></path><path d="M5 12H3"></path><path d="M21 12h-2"></path><rect x="7" y="6" width="10" height="12" rx="2" ry="2"></rect><circle cx="10" cy="10" r="1"></circle><circle cx="14" cy="10" r="1"></circle><line x1="10" y1="14" x2="14" y2="14"></line></svg>
+                    Agentes de IA
+                </button>
+                <button type="button" class="btn-ghost" id="btn-relatorios">
+                    <svg width="18" height="18" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+                    Relatórios
+                </button>
+                <button type="button" class="btn-ghost" id="btn-banco">
+                    <svg width="18" height="18" viewBox="0 0 24 24"><ellipse cx="12" cy="5" rx="9" ry="3"></ellipse><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"></path><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"></path></svg>
+                    Banco de Dados
+                </button>
+            </nav>
+
+            <nav class="sidebar-nav" style="margin-top: auto; border-top: 1px solid var(--surface-border); padding-top: 24px;">
+                <button type="button" class="btn-ghost" style="font-size: 0.8rem; padding: 10px;" onclick="alert('Navegação para Tela Principal de Cadastros')">
+                    <svg width="16" height="16" viewBox="0 0 24 24" style="flex-shrink: 0;"><polyline points="15 18 9 12 15 6"></polyline></svg>
+                    Submódulo Cadastros
+                </button>
+                <button type="button" class="btn-ghost" style="font-size: 0.8rem; padding: 10px;" onclick="alert('Navegação para Módulo Gestão Agrícola')">
+                    <svg width="16" height="16" viewBox="0 0 24 24" style="flex-shrink: 0;"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+                    Gestão Agrícola
+                </button>
+                <button type="button" class="btn-ghost" style="font-size: 0.8rem; padding: 10px;" onclick="alert('Abrir painel de configurações do ambiente')">
+                    <svg width="16" height="16" viewBox="0 0 24 24" style="flex-shrink: 0;"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+                    Configurações
+                </button>
+            </nav>
+        </aside>
+
+        <main class="main-content">
+            <div id="view-cadastros" class="view-section active">
+                <div class="glow-blob-1"></div>
+    <div class="glow-blob-2"></div>
+
+    <header class="hero">
+        <span class="overline">Gestão de Infraestrutura</span>
+        <h1>Cadastro de Propriedade</h1>
+        <p>Insira os dados da nova unidade na plataforma. O sistema de core de dados será sincronizado automaticamente com todos os módulos operacionais.</p>
+    </header>
+
+    <main class="container">
+        <form>
+            <div class="bento-grid">
+                
+                <!-- Identificação Básica -->
+                <div class="card bento-identificacao">
+                    <div class="card-header">
+                        <div class="card-header-icon">
+                            <svg width="18" height="18" viewBox="0 0 24 24"><path d="M4 22h14a2 2 0 0 0 2-2V7.5L14.5 2H6a2 2 0 0 0-2 2v4"></path><polyline points="14 2 14 8 20 8"></polyline><path d="M2 15h10"></path><path d="M5 12l-3 3 3 3"></path></svg>
+                        </div>
+                        <h2>Identificação da Unidade</h2>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="codigo_unidade">Código da Unidade</label>
+                            <input type="text" id="codigo_unidade" name="codigo_unidade" placeholder="Ex: CX-0101" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="tipo_unidade">Tipo de Unidade</label>
+                            <select id="tipo_unidade" name="tipo_unidade">
+                                <option value="">Selecione...</option>
+                                <option value="Fazenda">Fazenda</option>
+                                <option value="Usina">Usina</option>
+                                <option value="CD">Centro de Distribuição</option>
+                                <option value="Silo">Silo / Armazém</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="status">Status Operacional</label>
+                            <select id="status" name="status">
+                                <option value="Ativo">Ativo</option>
+                                <option value="Em Implantação">Em Implantação</option>
+                                <option value="Inativo">Inativo</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="nome_unidade">Nome da Unidade (Oficial)</label>
+                            <input type="text" id="nome_unidade" name="nome_unidade" placeholder="Razão social ou registro">
+                        </div>
+                        <div class="form-group">
+                            <label for="nome_fantasia">Nome Fantasia</label>
+                            <input type="text" id="nome_fantasia" name="nome_fantasia" placeholder="Nome usual">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Localização -->
+                <div class="card bento-localizacao">
+                    <div class="card-header">
+                        <div class="card-header-icon" style="color: var(--accent-orange); background: rgba(245, 158, 11, 0.1);">
+                            <svg width="18" height="18" viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+                        </div>
+                        <h2>Dados de Localização</h2>
+                    </div>
+                    
+                    <div class="form-group" style="margin-bottom: 16px;">
+                        <label for="localizacao_geral">Endereço / Localização Geral</label>
+                        <input type="text" id="localizacao_geral" name="localizacao_geral" placeholder="Rodovia, Km, Zona Rural...">
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="municipio">Município</label>
+                            <input type="text" id="municipio" name="municipio">
+                        </div>
+                        <div class="form-group">
+                            <label for="estado">Estado</label>
+                            <input type="text" id="estado" name="estado" placeholder="UF">
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="pais">País</label>
+                            <input type="text" id="pais" name="pais" value="Brasil">
+                        </div>
+                        <div class="form-group">
+                            <label for="coordenada_central">Coordenadas (Lat/Long)</label>
+                            <input type="text" id="coordenada_central" name="coordenada_central" placeholder="-15.7801, -47.9292">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Áreas e Capacidade -->
+                <div class="card bento-areas">
+                    <div class="card-header">
+                        <div class="card-header-icon" style="color: #10b981; background: rgba(16, 185, 129, 0.1);">
+                            <svg width="18" height="18" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="3" y1="9" x2="21" y2="9"></line><line x1="9" y1="21" x2="9" y2="9"></line></svg>
+                        </div>
+                        <h2>Métricas de Espaço</h2>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="area_total_ha">Área Total</label>
+                            <div class="input-icon-wrapper">
+                                <input type="number" id="area_total_ha" step="0.01" name="area_total_ha" placeholder="0.00">
+                                <span class="unit">ha</span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="area_util_ha">Área Útil</label>
+                            <div class="input-icon-wrapper">
+                                <input type="number" id="area_util_ha" step="0.01" name="area_util_ha" placeholder="0.00">
+                                <span class="unit">ha</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="area_produtiva_ha">Área Produtiva</label>
+                            <div class="input-icon-wrapper">
+                                <input type="number" id="area_produtiva_ha" step="0.01" name="area_produtiva_ha" placeholder="0.00">
+                                <span class="unit">ha</span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="area_nao_produtiva_ha">Área Reserva/Não Produt.</label>
+                            <div class="input-icon-wrapper">
+                                <input type="number" id="area_nao_produtiva_ha" step="0.01" name="area_nao_produtiva_ha" placeholder="0.00">
+                                <span class="unit">ha</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="capacidade_operacional">Capacidade Operacional (Ton/Sc)</label>
+                        <input type="number" id="capacidade_operacional" name="capacidade_operacional" placeholder="Ex: 50000">
+                    </div>
+                </div>
+
+                <!-- Gestão e Responsáveis -->
+                <div class="card bento-responsaveis">
+                    <div class="card-header">
+                        <div class="card-header-icon" style="color: #a855f7; background: rgba(168, 85, 247, 0.1);">
+                            <svg width="18" height="18" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+                        </div>
+                        <h2>Vínculos Organizacionais</h2>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="propriedade_principal_id">ID Propriedade Matriz (Se Filial)</label>
+                            <input type="text" id="propriedade_principal_id" name="propriedade_principal_id" placeholder="Cód. da matriz">
+                        </div>
+                        <div class="form-group">
+                            <label for="centro_custo_id">ID Centro de Custo ERP</label>
+                            <input type="text" id="centro_custo_id" name="centro_custo_id" placeholder="Ex: CC-4099">
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="responsavel_geral_id">Responsável Geral (ID / Nome)</label>
+                            <input type="text" id="responsavel_geral_id" name="responsavel_geral_id">
+                        </div>
+                        <div class="form-group">
+                            <label for="gerente_unidade_id">Gerente da Unidade (ID / Nome)</label>
+                            <input type="text" id="gerente_unidade_id" name="gerente_unidade_id">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Extras -->
+                <div class="card bento-outros">
+                    <div class="card-header">
+                        <div class="card-header-icon" style="color: #ec4899; background: rgba(236, 72, 153, 0.1);">
+                            <svg width="18" height="18" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+                        </div>
+                        <h2>Documentos e Extras</h2>
+                    </div>
+
+                    <div class="form-group" style="margin-bottom: 16px;">
+                        <label for="data_inicio_operacao">Data de Início da Operação</label>
+                        <input type="date" id="data_inicio_operacao" name="data_inicio_operacao">
+                    </div>
+
+                    <div class="form-group" style="margin-bottom: 16px;">
+                        <label for="documentos_ids">ID/Links de Documentação</label>
+                        <input type="text" id="documentos_ids" name="documentos_ids" placeholder="URLs ou códigos separadaos por vírgula">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="observacoes_gerais">Notas Adicionais</label>
+                        <textarea id="observacoes_gerais" name="observacoes_gerais" rows="3" placeholder="Informações de infraestrutura da propriedade..."></textarea>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Formulário Actions CTA -->
+            <div class="actions">
+                <button type="button" class="btn-outline">Cancelar</button>
+                <button type="submit" class="btn-primary">
+                    <svg width="18" height="18" viewBox="0 0 24 24" style="stroke: #000;"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg>
+                    Cadastrar Propriedade
+                </button>
+            </div>
+        </form>
+    </main>
+    </div> <!-- Fim View Cadastros -->
+
+    <!-- View Dashboard -->
+    <div id="view-dashboard" class="view-section">
+        <header class="hero" style="padding-bottom: 20px;">
+            <span class="overline">Visão Geral</span>
+            <h1>Dashboard Principal</h1>
+            <p>Métricas consolidadas de infraestrutura e gestão da Fractal.</p>
+        </header>
+        <div class="container" style="max-width: 1200px; padding: 24px;">
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 24px;">
+                <div class="card" style="padding: 24px; border-left: 4px solid var(--accent-cyan); display: flex; flex-direction: column; gap: 8px;">
+                    <span style="color: var(--text-secondary); font-size: 0.9rem;">Propriedades Cadastradas</span>
+                    <strong style="font-size: 2.5rem; color: #fff;">142</strong>
+                </div>
+                <div class="card" style="padding: 24px; border-left: 4px solid #10b981; display: flex; flex-direction: column; gap: 8px;">
+                    <span style="color: var(--text-secondary); font-size: 0.9rem;">Área Total (ha)</span>
+                    <strong style="font-size: 2.5rem; color: #fff;">85.400</strong>
+                </div>
+                <div class="card" style="padding: 24px; border-left: 4px solid var(--accent-orange); display: flex; flex-direction: column; gap: 8px;">
+                    <span style="color: var(--text-secondary); font-size: 0.9rem;">Modelos Preditivos Rodando</span>
+                    <strong style="font-size: 2.5rem; color: #fff;">3 Modelos</strong>
+                </div>
+            </div> <!-- Close grid at line 1125 -->
+            
+            <!-- Gráficos do Dashboard -->
+            <div style="margin-top: 40px; display: grid; grid-template-columns: repeat(auto-fit, minmax(450px, 1fr)); gap: 24px;">
+                <!-- Gráfico de Pizza -->
+                <div class="card" style="padding: 24px; display: flex; flex-direction: column; align-items: center; justify-content: center;">
+                    <h3 style="font-size: 1rem; margin-bottom: 24px; color: var(--text-secondary); width: 100%;">Distribuição por Status</h3>
+                    <div style="width: 100%; max-width: 300px;">
+                        <canvas id="chart-status-pizza"></canvas>
+                    </div>
+                </div>
+                <!-- Gráfico de Colunas -->
+                <div class="card" style="padding: 24px;">
+                    <h3 style="font-size: 1rem; margin-bottom: 24px; color: var(--text-secondary);">Área por Propriedade (Top 5)</h3>
+                    <div style="width: 100%; height: 300px;">
+                        <canvas id="chart-area-colunas"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div> <!-- Close container at line 1124 -->
+    </div> <!-- Close view-dashboard at line 1118 -->
+
+    <!-- View Agentes de IA -->
+    <div id="view-agentes" class="view-section">
+        <header class="hero" style="padding-bottom: 20px;">
+            <span class="overline">Inteligência Artificial</span>
+            <h1>Ecossistema de Agentes</h1>
+            <p>Gerencie seus assistentes especializados em automação e validação de dados.</p>
+        </header>
+        <div class="container" style="max-width: 1200px; padding: 0 24px 24px;">
+            
+            <!-- Painel de Monitoramento Único (Movido para o topo) -->
+            <div class="card" style="margin-bottom: 24px; padding: 24px; border-left: 4px solid var(--accent-cyan); background: rgba(14, 165, 233, 0.03);">
+                <h3 style="margin-bottom: 16px; font-size: 1rem; color: var(--text-primary);">Histórico de Atividade (24h)</h3>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 24px;">
+                    <div>
+                        <span style="color: var(--text-secondary); font-size: 0.8rem;">Correções de CEP</span>
+                        <div style="font-size: 1.5rem; font-weight: 800; color: var(--accent-orange);">+342</div>
+                    </div>
+                    <div>
+                        <span style="color: var(--text-secondary); font-size: 0.8rem;">Registros Estruturados</span>
+                        <div style="font-size: 1.5rem; font-weight: 800; color: var(--accent-cyan);">+156</div>
+                    </div>
+                </div>
+            </div>
+
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(360px, 1fr)); gap: 24px;">
+                
+                <!-- Agente 1: Cadastrador -->
+                <div class="card" style="padding: 32px; background: rgba(14, 165, 233, 0.05); border: 1px solid var(--accent-cyan); position: relative; overflow: hidden;">
+                    <div style="position: absolute; top: 0; left: 0; width: 4px; height: 100%; background: var(--accent-cyan);"></div>
+                    <div class="card-header" style="border: none; margin-bottom: 24px;">
+                        <div class="card-header-icon" style="width: 44px; height: 44px; background: var(--accent-cyan); color: #000;">
+                            <svg width="20" height="20" viewBox="0 0 24 24"><path d="M12 2v2"></path><path d="M12 20v2"></path><path d="M5 12H3"></path><path d="M21 12h-2"></path><rect x="7" y="6" width="10" height="12" rx="2" ry="2"></rect></svg>
+                        </div>
+                        <div style="display: flex; flex-direction: column;">
+                            <h2 style="font-size: 1.25rem; margin: 0;">Agente Cadastrador</h2>
+                            <span style="color: var(--accent-cyan); font-weight: 800; font-size: 0.7rem; text-transform: uppercase;">Módulo: Automação Central</span>
+                        </div>
+                    </div>
+                    <p style="color: var(--text-secondary); margin-bottom: 24px; font-size: 0.9rem; line-height: 1.6;">Monitoramento e estruturação de novos registros de propriedades no Datalake.</p>
+                    <div style="display: flex; justify-content: space-between; align-items: center; gap: 12px;">
+                        <span style="font-size: 0.8rem; color: #10b981; flex-shrink: 0;">● Online</span>
+                        <div style="display: flex; gap: 8px;">
+                            <button class="btn-outline" style="padding: 8px 12px; font-size: 0.8rem;" onclick="showSpecs('cadastrador')">Especificações</button>
+                            <button class="btn-primary" style="padding: 8px 16px; font-size: 0.85rem;" onclick="toggleChat()">Abrir Chat</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Agente 2: Buscador de CEP -->
+                <div class="card" style="padding: 32px; background: rgba(245, 158, 11, 0.05); border: 1px solid var(--accent-orange); position: relative; overflow: hidden;">
+                    <div style="position: absolute; top: 0; left: 0; width: 4px; height: 100%; background: var(--accent-orange);"></div>
+                    <div class="card-header" style="border: none; margin-bottom: 24px;">
+                        <div class="card-header-icon" style="width: 44px; height: 44px; background: var(--accent-orange); color: #000;">
+                            <svg width="20" height="20" viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+                        </div>
+                        <div style="display: flex; flex-direction: column;">
+                            <h2 style="font-size: 1.25rem; margin: 0;">Buscador de CEP</h2>
+                            <span style="color: var(--accent-orange); font-weight: 800; font-size: 0.7rem; text-transform: uppercase;">Módulo: Geolocalização</span>
+                        </div>
+                    </div>
+                    <p style="color: var(--text-secondary); margin-bottom: 24px; font-size: 0.9rem; line-height: 1.6;">Validação automática de endereços e preenchimento de campos via integração API Correios.</p>
+                    <div style="display: flex; justify-content: space-between; align-items: center; gap: 12px;">
+                        <span style="font-size: 0.8rem; color: #10b981; flex-shrink: 0;">● Online</span>
+                        <div style="display: flex; gap: 8px;">
+                            <button class="btn-outline" style="padding: 8px 12px; font-size: 0.8rem;" onclick="showSpecs('cep')">Especificações</button>
+                            <button class="btn-primary" style="padding: 8px 16px; font-size: 0.85rem; background: var(--accent-orange); border-color: var(--accent-orange);" onclick="toggleChat()">Consultar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Genius Excel Environment -->
+    <div class="modal-overlay" id="modal-excel">
+        <div class="modal-content" style="max-width: 95vw; height: 90vh; padding: 0; display: flex; flex-direction: column; overflow: hidden; border: 1px solid #107c41;">
+            <div class="excel-toolbar">
+                <div style="font-weight: 800; font-size: 1rem; margin-right: 10px;">Genius Excel</div>
+                <div class="excel-menu-item active">Arquivo</div>
+                <div class="excel-menu-item">Página Inicial</div>
+                <div class="excel-menu-item">Inserir</div>
+                <div class="excel-menu-item">Fórmulas</div>
+                <div class="excel-menu-item">Dados</div>
+                <div style="margin-left: auto;">
+                    <button class="close-btn" onclick="closeModal('modal-excel')" style="color: #fff; background: rgba(255,255,255,0.1); padding: 4px 12px; border-radius: 4px; border: 1px solid rgba(255,255,255,0.2);">Fechar</button>
+                </div>
+            </div>
+            
+            <div style="background: #107c41; padding: 4px 16px; display: flex; gap: 8px; border-bottom: 1px solid rgba(0,0,0,0.1);">
+                <!-- Quick Access Simulation -->
+                <div style="width: 20px; height: 20px; border-radius: 2px; background: rgba(255,255,255,0.2); display: flex; align-items: center; justify-content: center; cursor: pointer;">
+                    <svg width="12" height="12" viewBox="0 0 24 24" style="stroke: #fff;"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg>
+                </div>
+                <div style="width: 20px; height: 20px; border-radius: 2px; background: rgba(255,255,255,0.2); display: flex; align-items: center; justify-content: center; cursor: pointer;">
+                    <svg width="12" height="12" viewBox="0 0 24 24" style="stroke: #fff;"><polyline points="1 4 1 10 7 10"></polyline><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"></path></svg>
+                </div>
+            </div>
+
+            <div class="excel-formula-bar">
+                <div style="background: #f3f2f1; padding: 2px 8px; border-right: 1px solid #e1dfdd; font-size: 0.8rem; min-width: 60px; text-align: center;">B1</div>
+                <div class="formula-fx">fx</div>
+                <input type="text" class="formula-input" id="excel-formula-input" value="" readonly>
+            </div>
+
+            <div class="excel-grid-container" id="excel-grid-container">
+                <table class="excel-table">
+                    <thead>
+                        <tr>
+                            <th class="excel-row-header"></th>
+                            <th class="excel-col-header">A</th>
+                            <th class="excel-col-header">B</th>
+                            <th class="excel-col-header">C</th>
+                            <th class="excel-col-header">D</th>
+                            <th class="excel-col-header">E</th>
+                        </tr>
+                    </thead>
+                    <tbody id="excel-body">
+                        <!-- Content dynamic -->
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="excel-tabs">
+                <div class="excel-tab-item active">Ficha de Cadastro</div>
+                <div class="excel-tab-item">Datalake Sync</div>
+                <div class="excel-tab-item">Logs</div>
+                <div style="margin-left: auto; color: #107c41; font-weight: bold; cursor: pointer;" onclick="alert('Dados sincronizados com o Banco Principal!'); closeModal('modal-excel');">+ Salvar e Registrar</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Banco de Dados -->
+    <div class="modal-overlay" id="modal-db">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 style="display: flex; align-items: center; gap: 12px; margin: 0;">
+                    <svg width="24" height="24" viewBox="0 0 24 24" style="color: var(--accent-cyan)"><ellipse cx="12" cy="5" rx="9" ry="3"></ellipse><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"></path><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"></path></svg>
+                    Banco de Dados: Propriedades
+                </h2>
+                <div style="display: flex; gap: 12px; align-items: center;">
+                    <button class="btn-primary" style="padding: 8px 16px; font-size: 0.85rem;" onclick="prepareNewForm()">
+                        + Novo Cadastro
+                    </button>
+                    <button class="close-btn" onclick="closeModal('modal-db')">
+                        <svg width="24" height="24" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                    </button>
+                </div>
+            </div>
+            <div class="modal-body">
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Cód. Unidade</th>
+                                <th>Nome da Unidade</th>
+                                <th>Tipo</th>
+                                <th>Status</th>
+                                <th>Área Total (ha)</th>
+                                <th>Município/UF</th>
+                                <th>Excel</th>
+                                <th>Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody id="db-table-body">
+                            <tr>
+                                <td colspan="8" style="text-align: center; color: var(--text-secondary);">Nenhum dado cadastrado na sessão atual.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Seção de Linhagem de Dados -->
+                <div class="lineage-section">
+                    <h3 class="lineage-title">
+                        <svg width="20" height="20" viewBox="0 0 24 24" style="color: var(--accent-cyan)"><polyline points="16 3 21 3 21 8"></polyline><line x1="4" y1="20" x2="21" y2="3"></line><polyline points="21 16 21 21 16 21"></polyline><line x1="15" y1="15" x2="21" y2="21"></line><line x1="4" y1="4" x2="9" y2="9"></line></svg>
+                        Conexões e Linhagem de Dados
+                    </h3>
+                    <div class="lineage-flow">
+                        <!-- Fontes -->
+                        <div class="lineage-column">
+                            <div class="lineage-label">Alimentada Por (Inputs)</div>
+                            <div class="lineage-node">
+                                <span class="node-tag tag-in">API</span>
+                                <div>
+                                    <div style="font-weight: bold; color: #fff;">IBGE Territorial</div>
+                                    <div style="font-size: 0.75rem; color: var(--text-secondary);">Municípios e Estados (Malhas)</div>
+                                </div>
+                            </div>
+                            <div class="lineage-node">
+                                <span class="node-tag tag-in">API</span>
+                                <div>
+                                    <div style="font-weight: bold; color: #fff;">ViaCEP / Correios</div>
+                                    <div style="font-size: 0.75rem; color: var(--text-secondary);">Endereços e Logradouros</div>
+                                </div>
+                            </div>
+                            <div class="lineage-node">
+                                <span class="node-tag tag-in">RAG</span>
+                                <div>
+                                    <div style="font-weight: bold; color: #fff;">Cadastro Rural (CAR)</div>
+                                    <div style="font-size: 0.75rem; color: var(--text-secondary);">Perantes Ambientais e Limites</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Seta 1 -->
+                        <div class="lineage-arrow">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+                        </div>
+
+                        <!-- Tabela Atual -->
+                        <div class="lineage-column">
+                            <div class="lineage-label">Tabela Principal</div>
+                            <div class="lineage-node core">
+                                <svg width="18" height="18" viewBox="0 0 24 24" style="color: var(--accent-cyan)"><ellipse cx="12" cy="5" rx="9" ry="3"></ellipse><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"></path><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"></path></svg>
+                                <div>
+                                    <div style="color: var(--accent-cyan);">DB_PROPRIEDADES</div>
+                                    <div style="font-size: 0.75rem; color: var(--text-secondary);">Core de Unidades Agrícolas</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Seta 2 -->
+                        <div class="lineage-arrow">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+                        </div>
+
+                        <!-- Consumidores -->
+                        <div class="lineage-column">
+                            <div class="lineage-label">Alimenta (Outputs)</div>
+                            <div class="lineage-node">
+                                <span class="node-tag tag-out">SaaS</span>
+                                <div>
+                                    <div style="font-weight: bold; color: #fff;">Gestão de Ativos</div>
+                                    <div style="font-size: 0.75rem; color: var(--text-secondary);">Alocação de Recursos Reais</div>
+                                </div>
+                            </div>
+                            <div class="lineage-node">
+                                <span class="node-tag tag-out">SaaS</span>
+                                <div>
+                                    <div style="font-weight: bold; color: #fff;">Inventário & Máquinas</div>
+                                    <div style="font-size: 0.75rem; color: var(--text-secondary);">Vínculos de Frota e Implementos</div>
+                                </div>
+                            </div>
+                            <div class="lineage-node">
+                                <span class="node-tag tag-out">SaaS</span>
+                                <div>
+                                    <div style="font-weight: bold; color: #fff;">Plano de Safra</div>
+                                    <div style="font-size: 0.75rem; color: var(--text-secondary);">Cálculo de Área x Produtividade</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Relatórios -->
+    <div class="modal-overlay" id="modal-relatorio">
+        <div class="modal-content" style="max-width: 600px;">
+            <div class="modal-header">
+                <h2>
+                    <svg width="24" height="24" viewBox="0 0 24 24" style="color: var(--accent-orange)"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+                    Gerar Relatório
+                </h2>
+                <button class="close-btn" onclick="closeModal('modal-relatorio')">
+                    <svg width="24" height="24" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p style="margin-bottom: 24px; color: var(--text-secondary);">Selecione o formato para exportar os dados cadastrados no banco de dados da plataforma.</p>
+                <div style="display: flex; gap: 16px; flex-direction: column;">
+                    <button class="btn-outline" style="justify-content: flex-start;" onclick="baixarRelatorio('pdf')">
+                        <svg width="20" height="20" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>
+                        Exportar Relatório Consolidado (PDF)
+                    </button>
+                    <button class="btn-outline" style="justify-content: flex-start;" onclick="baixarRelatorio('excel')">
+                        <svg width="20" height="20" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="3" y1="9" x2="21" y2="9"></line><line x1="9" y1="21" x2="9" y2="9"></line></svg>
+                        Baixar Planilha de Dados (XLSX)
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    </div> <!-- Fim de main-content -->
+
+    <aside class="sidebar-right collapsed" id="ai-chat-sidebar">
+        <div class="sidebar-right-header">
+            <h3>
+                <svg width="20" height="20" viewBox="0 0 24 24" style="color: var(--accent-cyan)"><path d="M12 2v2"></path><path d="M12 20v2"></path><path d="M5 12H3"></path><path d="M21 12h-2"></path><rect x="7" y="6" width="10" height="12" rx="2" ry="2"></rect></svg>
+                Genius AI Chat
+            </h3>
+            <button class="close-btn" onclick="toggleChat()" style="padding: 4px;">
+                <svg width="20" height="20" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+            </button>
+        </div>
+
+        <div class="chat-view-container">
+            <div class="chat-messages" id="chat-messages">
+                <div class="chat-bubble ai">
+                    Olá! Sou o <strong>Genius AI</strong>. Como posso ajudar você com a gestão da sua unidade agrícola hoje? Posso analisar áreas, status de cadastros ou gerar resumos operacionais.
+                </div>
+            </div>
+            
+            <div class="chat-input-container">
+                <div class="chat-input-wrapper">
+                    <input type="text" id="chat-input" placeholder="Pergunte aos seus dados..." onkeypress="if(event.key === 'Enter') sendMessage()">
+                </div>
+                <button class="chat-send-btn" onclick="sendMessage()">
+                    <svg width="18" height="18" viewBox="0 0 24 24" style="stroke: #000;"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
+                </button>
+            </div>
+        </div>
+    </aside>
+
+    <button class="chat-toggle-btn" id="chat-toggle-btn" onclick="toggleChat()" title="Abrir Agente de IA">
+        <svg width="24" height="24" viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+    </button>
+
+    <!-- Modal Especificações -->
+    <div class="modal-overlay" id="modal-specs">
+        <div class="modal-content" style="max-width: 500px;">
+            <div class="modal-header">
+                <h2 id="specs-title">Especificações do Agente</h2>
+                <button class="close-btn" onclick="closeModal('modal-specs')">
+                    <svg width="24" height="24" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                </button>
+            </div>
+            <div class="modal-body" id="specs-body">
+                <!-- Content will be injected via JS -->
+            </div>
+        </div>
+    </div>
+
+    </div> <!-- Fim de app-layout -->
+
+    <!-- Script that simulates form submission -->
+    <script>
+        // Mock DB
+        const mockDb = [
+            { 
+                codigo: 'FZ-001', nome: 'Fazenda Alvorada', tipo: 'Fazenda', status: 'Ativo', area: '1200', local: 'Rio Verde / GO',
+                fullData: {
+                    codigo_unidade: 'FZ-001', nome_unidade: 'Fazenda Alvorada', nome_fantasia: 'Alvorada', tipo_unidade: 'Fazenda', status: 'Ativo', localizacao_geral: 'Rodovia GO-050 Km 12', municipio: 'Rio Verde', estado: 'GO', pais: 'Brasil', area_total_ha: '1200', area_util_ha: '1000'
+                }
+            },
+            { 
+                codigo: 'US-002', nome: 'Usina Central Integrada', tipo: 'Usina', status: 'Ativo', area: '450', local: 'Ribeirão Preto / SP',
+                fullData: {
+                    codigo_unidade: 'US-002', nome_unidade: 'Usina Central Integrada', nome_fantasia: 'Usina Central', tipo_unidade: 'Usina', status: 'Ativo', localizacao_geral: 'Via Anhanguera Km 300', municipio: 'Ribeirão Preto', estado: 'SP', pais: 'Brasil', area_total_ha: '450', capacidade_operacional: '100000'
+                }
+            }
+        ];
+
+        let editingFormIndex = -1;
+
+        // Modal Functions
+        function openModal(id) {
+            document.getElementById(id).classList.add('active');
+            if(id === 'modal-db') renderTable();
+        }
+        function closeModal(id) {
+            document.getElementById(id).classList.remove('active');
+        }
+
+        document.getElementById('btn-banco').addEventListener('click', () => openModal('modal-db'));
+        document.getElementById('btn-relatorios').addEventListener('click', () => openModal('modal-relatorio'));
+
+        function renderTable() {
+            const tbody = document.getElementById('db-table-body');
+            if (mockDb.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="7" style="text-align: center; color: var(--text-secondary);">Nenhum dado cadastrado na sessão atual.</td></tr>';
+                return;
+            }
+            tbody.innerHTML = mockDb.map((item, index) => {
+                return `
+                <tr>
+                    <td style="font-family: monospace; color: var(--accent-cyan);">${item.codigo}</td>
+                    <td><strong>${item.nome}</strong></td>
+                    <td><span style="background: rgba(255,255,255,0.1); padding: 4px 8px; border-radius: 4px; font-size: 0.8rem;">${item.tipo}</span></td>
+                    <td><span style="color: #10b981;">●</span> ${item.status}</td>
+                    <td>${item.area}</td>
+                    <td>${item.local}</td>
+                    <td>
+                        <button onclick="openExcelEditor(${index})" class="btn-ghost" style="padding: 4px; color: #107c41;" title="Abrir no Genius Excel">
+                            <svg width="18" height="18" viewBox="0 0 24 24" style="stroke: #107c41;"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="3" y1="9" x2="21" y2="9"></line><line x1="9" y1="21" x2="9" y2="9"></line></svg>
+                        </button>
+                    </td>
+                    <td>
+                        <button onclick="editInForm(${index})" class="btn-ghost" style="padding: 4px; color: var(--accent-orange);" title="Editar Registro Completo">
+                            <svg width="18" height="18" viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
+                        </button>
+                    </td>
+                </tr>
+                `;
+            }).join('');
+        }
+
+        function editInForm(index) {
+            closeModal('modal-db');
+            editingFormIndex = index;
+            const data = mockDb[index].fullData || {};
+            const form = document.querySelector('form');
+            form.reset();
+            
+            for (const key in data) {
+                const input = form.querySelector(`[name="${key}"]`);
+                if (input) input.value = data[key];
+            }
+            
+            form.querySelector('button[type=submit]').innerHTML = `
+                <svg width="18" height="18" viewBox="0 0 24 24" style="stroke: #000;"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                Salvar Alterações
+            `;
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function prepareNewForm() {
+            closeModal('modal-db');
+            document.querySelector('form').reset();
+            editingFormIndex = -1;
+            document.querySelector('form button[type=submit]').innerHTML = `
+                <svg width="18" height="18" viewBox="0 0 24 24" style="stroke: #000;"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg>
+                Cadastrar Propriedade
+            `;
+            window.scrollTo({top: 0, behavior: 'smooth'});
+        }
+
+        function openExcelEditor(index) {
+            const item = mockDb[index];
+            const data = [
+                ["CAMPO", "VALOR ATUAL", "VALIDAÇÃO", "STATUS"],
+                ["Cód. Unidade", item.codigo, "OK", "Sincronizado"],
+                ["Nome Unidade", item.nome, "OK", "Sincronizado"],
+                ["Tipo", item.tipo, "OK", "Sincronizado"],
+                ["Status", item.status, "OK", "Sincronizado"],
+                ["Área (ha)", item.area, "OK", "Sincronizado"],
+                ["Local", item.local, "OK", "Sincronizado"],
+                ["Data Registro", new Date().toLocaleDateString(), "AUTO", "Pendente"],
+                ["Responsável", "Admin Genius", "AUTO", "Sincronizado"],
+                ["Lat/Long", "-23.5505 / -46.6333", "API", "Validado"]
+            ];
+
+            const tbody = document.getElementById('excel-body');
+            tbody.innerHTML = "";
+
+            data.forEach((row, rowIndex) => {
+                const tr = document.createElement('tr');
+                
+                // Row Header
+                const thRow = document.createElement('th');
+                thRow.className = 'excel-row-header';
+                thRow.innerText = rowIndex + 1;
+                tr.appendChild(thRow);
+
+                row.forEach((cell, colIndex) => {
+                    const td = document.createElement('td');
+                    td.className = 'excel-cell';
+                    if (rowIndex === 0) {
+                        td.style.fontWeight = 'bold';
+                        td.style.background = '#f3f2f1';
+                        td.style.textAlign = 'center';
+                    } else {
+                        td.contentEditable = "true";
+                        if (colIndex === 1) td.style.color = '#107c41';
+                    }
+                    td.innerText = cell;
+
+                    // Click event to update formula bar
+                    td.addEventListener('click', () => {
+                        document.getElementById('excel-formula-input').value = td.innerText;
+                        // Highlight selected row/col could be added here
+                    });
+
+                    // Input event to update formula bar while typing
+                    td.addEventListener('input', () => {
+                        document.getElementById('excel-formula-input').value = td.innerText;
+                    });
+
+                    tr.appendChild(td);
+                });
+
+                // Add empty cells to fill the grid
+                for (let i = row.length; i < 5; i++) {
+                    const tdEmpty = document.createElement('td');
+                    tdEmpty.className = 'excel-cell';
+                    tdEmpty.contentEditable = "true";
+                    tr.appendChild(tdEmpty);
+                }
+
+                tbody.appendChild(tr);
+            });
+
+            // Add some empty rows
+            for (let i = data.length; i < 25; i++) {
+                const trEmpty = document.createElement('tr');
+                const thRow = document.createElement('th');
+                thRow.className = 'excel-row-header';
+                thRow.innerText = i + 1;
+                trEmpty.appendChild(thRow);
+                for (let j = 0; j < 5; j++) {
+                    const td = document.createElement('td');
+                    td.className = 'excel-cell';
+                    td.contentEditable = "true";
+                    trEmpty.appendChild(td);
+                }
+                tbody.appendChild(trEmpty);
+            }
+
+            openModal('modal-excel');
+        }
+
+        function baixarRelatorio(tipo) {
+            if (mockDb.length === 0) {
+                alert('Não há dados para exportar na sessão atual.');
+                return;
+            }
+
+            const btnPdf = document.querySelector(`button[onclick="baixarRelatorio('pdf')"]`);
+            const btnExcel = document.querySelector(`button[onclick="baixarRelatorio('excel')"]`);
+            
+            const tableData = mockDb.map(item => ({
+                'Cód. Unidade': item.codigo,
+                'Nome da Unidade': item.nome,
+                'Tipo': item.tipo,
+                'Status': item.status,
+                'Área (ha)': item.area,
+                'Localização': item.local
+            }));
+
+            if (tipo === 'excel') {
+                try {
+                    const worksheet = XLSX.utils.json_to_sheet(tableData);
+                    const workbook = XLSX.utils.book_new();
+                    XLSX.utils.book_append_sheet(workbook, worksheet, "Propriedades");
+                    XLSX.writeFile(workbook, "Banco_Propriedades.xlsx");
+                } catch(e) {
+                    alert('Erro ao exportar Excel. As bibliotecas foram carregadas?');
+                    console.error(e);
+                }
+            } else if (tipo === 'pdf') {
+                try {
+                    const { jsPDF } = window.jspdf;
+                    const doc = new jsPDF();
+                    
+                    doc.setFontSize(16);
+                    doc.text("Relatório Consolidado - Propriedades", 14, 16);
+                    doc.setFontSize(10);
+                    doc.setTextColor(100);
+                    doc.text(`Gerado em: ${new Date().toLocaleDateString('pt-BR')}`, 14, 23);
+
+                    const tableHeaders = Object.keys(tableData[0]);
+                    const tableRows = tableData.map(obj => Object.values(obj));
+
+                    doc.autoTable({
+                        head: [tableHeaders],
+                        body: tableRows,
+                        startY: 30,
+                        theme: 'grid',
+                        styles: { fontSize: 8, cellPadding: 3 },
+                        headStyles: { fillColor: [14, 165, 233], textColor: [255, 255, 255] },
+                    });
+
+                    doc.save("Relatorio_Propriedades.pdf");
+                } catch(e) {
+                    alert('Erro ao exportar PDF. As bibliotecas foram carregadas?');
+                    console.error(e);
+                }
+            }
+            closeModal('modal-relatorio');
+        }
+
+        function baixarExcelUnico(index) {
+            const item = mockDb[index];
+            const tableData = [{
+                'Cód. Unidade': item.codigo,
+                'Nome da Unidade': item.nome,
+                'Tipo': item.tipo,
+                'Status': item.status,
+                'Área (ha)': item.area,
+                'Localização': item.local
+            }];
+
+            try {
+                const worksheet = XLSX.utils.json_to_sheet(tableData);
+                const workbook = XLSX.utils.book_new();
+                XLSX.utils.book_append_sheet(workbook, worksheet, "Propriedade");
+                XLSX.writeFile(workbook, `Propriedade_${item.codigo}.xlsx`);
+            } catch(e) {
+                alert('Erro ao exportar Excel.');
+                console.error(e);
+            }
+        }
+
+        // Form Submit
+        document.querySelector('form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const btn = document.querySelector('.btn-primary');
+            const originalText = btn.innerHTML;
+            
+            // Simulação de saving...
+            btn.innerHTML = `<svg width="18" height="18" viewBox="0 0 24 24" style="animation: spin 1s linear infinite;"><path d="M21 12a9 9 0 1 1-6.219-8.56"></path></svg> Processando...`;
+            btn.style.opacity = '0.8';
+            btn.style.pointerEvents = 'none';
+
+            // Capture data for mock
+            const formData = new FormData(this);
+            const fullDataObj = {};
+            for (let [k, v] of formData.entries()) { fullDataObj[k] = v; }
+
+            const entry = {
+                codigo: formData.get('codigo_unidade') || '-',
+                nome: formData.get('nome_unidade') || formData.get('nome_fantasia') || '-',
+                tipo: formData.get('tipo_unidade') || '-',
+                status: formData.get('status') || '-',
+                area: formData.get('area_total_ha') || '-',
+                local: `${formData.get('municipio') || '-'} / ${formData.get('estado') || '-'}`,
+                fullData: fullDataObj
+            };
+
+            if (editingFormIndex > -1) {
+                mockDb[editingFormIndex] = entry;
+            } else {
+                mockDb.unshift(entry);
+            }
+
+            setTimeout(() => {
+                btn.innerHTML = `<svg width="18" height="18" viewBox="0 0 24 24" style="stroke: #000;"><polyline points="20 6 9 17 4 12"></polyline></svg> Sucesso!`;
+                btn.style.background = '#10b981';
+                btn.style.borderColor = '#10b981';
+                
+                setTimeout(() => {
+                    btn.innerHTML = originalText;
+                    btn.style.background = '';
+                    btn.style.borderColor = '';
+                    btn.style.opacity = '1';
+                    btn.style.pointerEvents = 'auto';
+                    editingFormIndex = -1;
+                    document.querySelector('form button[type=submit]').innerHTML = `
+                        <svg width="18" height="18" viewBox="0 0 24 24" style="stroke: #000;"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg>
+                        Cadastrar Propriedade
+                    `;
+                    this.reset();
+                }, 3000);
+            }, 1500);
+        });
+        // Specs Data
+        const agentSpecsData = {
+            cadastrador: {
+                title: "Agente Cadastrador",
+                icon: 'var(--accent-cyan)',
+                specs: [
+                    { label: "Modelo Base", value: "Genius Llama-3 (80B)" },
+                    { label: "Precisão de Dados", value: "99.4%" },
+                    { label: "Tempo de Resposta", value: "< 2.0s" }
+                ],
+                habilidades: ["Extração OCR", "Validação CNPJ/CPF", "Normalização de Endereços", "Detecção de Duplicidade"],
+                fluxo: ["Entrada de Dados Brutos", "Parsing & Limpeza", "Validação Contextual", "Enriquecimento RAG", "Escrita no Datalake"],
+                rag: ["Manual de Normas Técnicas Agrícolas", "Base de Dados de Unidades (Fractal)", "Dicionário de Sinônimos Agrícolas"],
+                description: "Especializado em transformar dados brutos de formulários e planilhas em registros estruturados para o Datalake."
+            },
+            cep: {
+                title: "Buscador de CEP",
+                icon: 'var(--accent-orange)',
+                specs: [
+                    { label: "Integração", value: "ViaCEP / Correios API" },
+                    { label: "Velocidade de Consulta", value: "450ms" },
+                    { label: "Status de Serviço", value: "Operacional" }
+                ],
+                habilidades: ["Consulta REST API", "Geolocalização Reversa", "Preenchimento Automático", "Cálculo de Distância"],
+                fluxo: ["Captura de Input (CEP)", "Consulta Cache Interno", "Requisição API Externa", "Validação de Logradouro", "Retorno Estruturado"],
+                rag: ["Base Territorial Brasileira (IBGE)", "Tabela de Faixas de CEP Nacional"],
+                description: "Automatiza a entrada de dados de localização e valida a existência do endereço instantaneamente."
+            }
+        };
+
+        function showSpecs(agentId) {
+            const data = agentSpecsData[agentId];
+            if (!data) return;
+
+            document.getElementById('specs-title').innerHTML = `
+                <div style="width: 12px; height: 12px; border-radius: 50%; background: ${data.icon}; margin-right: 12px;"></div>
+                ${data.title}
+            `;
+
+            let html = `
+                <p style="color: var(--text-secondary); margin-bottom: 24px; font-size: 0.9rem;">${data.description}</p>
+                <div style="display: flex; flex-direction: column; gap: 8px;">
+            `;
+
+            // Render Core Specs
+            data.specs.forEach(spec => {
+                html += `
+                    <div style="display: flex; justify-content: space-between; padding: 10px; background: rgba(255,255,255,0.03); border-radius: 6px; border: 1px solid var(--surface-border);">
+                        <span style="color: var(--text-secondary); font-size: 0.85rem;">${spec.label}</span>
+                        <strong style="color: #fff; font-size: 0.85rem;">${spec.value}</strong>
+                    </div>
+                `;
+            });
+            html += `</div>`;
+
+            // Render Habilidades
+            html += `
+                <div class="spec-section">
+                    <div class="spec-section-title">
+                        <svg width="14" height="14" viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"></path></svg>
+                        Habilidades
+                    </div>
+                    <div class="skills-grid">
+                        ${data.habilidades.map(h => `<span class="skill-tag">${h}</span>`).join('')}
+                    </div>
+                </div>
+            `;
+
+            // Render Fluxo
+            html += `
+                <div class="spec-section">
+                    <div class="spec-section-title">
+                        <svg width="14" height="14" viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>
+                        Fluxo de Habilidades
+                    </div>
+                    <div class="pipeline-container">
+                        ${data.fluxo.map((f, i) => `
+                            <div class="pipeline-step ${i === 0 ? 'active' : ''}">
+                                <div class="step-indicator"></div>
+                                <span class="step-label">${f}</span>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            `;
+
+            // Render RAG
+            html += `
+                <div class="spec-section">
+                    <div class="spec-section-title">
+                        <svg width="14" height="14" viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>
+                        Conhecimentos (RAG)
+                    </div>
+                    <div class="rag-list">
+                        ${data.rag.map(r => `
+                            <div class="rag-item">
+                                <svg width="14" height="14" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>
+                                <span>${r}</span>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            `;
+
+            html += `
+                <button class="btn-primary" style="width: 100%; margin-top: 32px;" onclick="closeModal('modal-specs')">Entendido</button>
+            `;
+
+            document.getElementById('specs-body').innerHTML = html;
+            openModal('modal-specs');
+        }
+
+        // Toggle Sidebar Chat
+        function toggleChat() {
+            const sidebar = document.getElementById('ai-chat-sidebar');
+            const btn = document.getElementById('chat-toggle-btn');
+            sidebar.classList.toggle('collapsed');
+            btn.classList.toggle('active');
+            
+            if (!sidebar.classList.contains('collapsed')) {
+                document.getElementById('chat-input').focus();
+                const container = document.getElementById('chat-messages');
+                container.scrollTop = container.scrollHeight;
+            }
+        }
+
+        // Global View Switcher
+        let statusChart = null;
+        let areaChart = null;
+
+        function switchView(viewId, btnElement) {
+            document.querySelectorAll('.view-section').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.sidebar-nav .btn-ghost:not(#btn-relatorios):not(#btn-banco)').forEach(el => el.classList.remove('active'));
+            
+            document.getElementById(viewId).classList.add('active');
+            if(btnElement) btnElement.classList.add('active');
+
+            if (viewId === 'view-dashboard') {
+                setTimeout(initDashboardCharts, 100);
+            }
+        }
+
+        function initDashboardCharts() {
+            const ctxStatus = document.getElementById('chart-status-pizza').getContext('2d');
+            const ctxArea = document.getElementById('chart-area-colunas').getContext('2d');
+
+            // Destroy previous instances to avoid overlay
+            if (statusChart) statusChart.destroy();
+            if (areaChart) areaChart.destroy();
+
+            // Data aggregation from mockDb
+            const statuses = mockDb.reduce((acc, item) => {
+                acc[item.status] = (acc[item.status] || 0) + 1;
+                return acc;
+            }, {});
+
+            // Pie Chart for Status
+            statusChart = new Chart(ctxStatus, {
+                type: 'pie',
+                data: {
+                    labels: Object.keys(statuses).length > 0 ? Object.keys(statuses) : ['Ativo', 'Inativo', 'Pendente'],
+                    datasets: [{
+                        data: Object.keys(statuses).length > 0 ? Object.values(statuses) : [120, 15, 7],
+                        backgroundColor: ['#0ea5e9', '#f59e0b', '#334155'],
+                        borderWidth: 0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: { position: 'bottom', labels: { color: '#8b949e' } }
+                    }
+                }
+            });
+
+            // Column Chart for Top 5 Areas
+            const top5 = [...mockDb]
+                .sort((a, b) => parseFloat(b.area) - parseFloat(a.area))
+                .slice(0, 5);
+
+            areaChart = new Chart(ctxArea, {
+                type: 'bar',
+                data: {
+                    labels: top5.length > 0 ? top5.map(i => i.nome) : ['Fz. Alvorada', 'Us. Central', 'Faz. Norte', 'Sítio Sol', 'Us. Beta'],
+                    datasets: [{
+                        label: 'Área (ha)',
+                        data: top5.length > 0 ? top5.map(i => i.area) : [1200, 450, 800, 150, 300],
+                        backgroundColor: '#0ea5e9',
+                        borderRadius: 4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: { beginAtZero: true, grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#8b949e' } },
+                        x: { grid: { display: false }, ticks: { color: '#8b949e' } }
+                    },
+                    plugins: {
+                        legend: { display: false }
+                    }
+                }
+            });
+        }
+
+        // AI Chat Logic
+        function sendMessage() {
+            const input = document.getElementById('chat-input');
+            const container = document.getElementById('chat-messages');
+            const text = input.value.trim();
+            
+            if (!text) return;
+
+            // User Message
+            const userBubble = document.createElement('div');
+            userBubble.className = 'chat-bubble user';
+            userBubble.innerText = text;
+            container.appendChild(userBubble);
+            
+            input.value = '';
+            container.scrollTop = container.scrollHeight;
+
+            // Simulação de resposta da IA
+            setTimeout(() => {
+                const aiBubble = document.createElement('div');
+                aiBubble.className = 'chat-bubble ai';
+                aiBubble.innerHTML = `<svg width="14" height="14" viewBox="0 0 24 24" style="margin-right: 8px; animation: pulse 1.5s infinite;"><circle cx="12" cy="12" r="10"></circle></svg> Pensando...`;
+                container.appendChild(aiBubble);
+                container.scrollTop = container.scrollHeight;
+
+                setTimeout(() => {
+                    let response = "Interessante! Posso analisar esses dados para você. Atualmente temos 142 propriedades cadastradas. Deseja que eu gere um relatório detalhado?";
+                    
+                    if (text.toLowerCase().includes('área') || text.toLowerCase().includes('area')) {
+                        response = "A área total cadastrada é de 85.400 hectares. A Fazenda Alvorada é a maior unidade com 1.200 ha.";
+                    } else if (text.toLowerCase().includes('status')) {
+                        response = "92% das unidades estão 'Ativo'. Temos 3% inativas que podem precisar de atenção.";
+                    }
+
+                    aiBubble.innerHTML = response;
+                    container.scrollTop = container.scrollHeight;
+                }, 1500);
+            }, 500);
+        }
+
+    </script>
+    <style>
+        @keyframes spin {
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</body>
+</html>

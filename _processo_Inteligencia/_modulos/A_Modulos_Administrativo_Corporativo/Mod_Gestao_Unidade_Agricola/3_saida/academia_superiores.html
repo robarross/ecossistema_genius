@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cursos Superiores - Academia Genius</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #0b1016;
+            --sidebar-width: 280px;
+            --accent-color: #00ff88;
+            --glass-bg: rgba(255, 255, 255, 0.03);
+            --glass-border: rgba(255, 255, 255, 0.08);
+            --text-main: #e0e6ed;
+            --text-dim: #94a3b8;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            font-family: 'Outfit', sans-serif;
+            margin: 0; display: flex;
+        }
+
+        /* GOLD THEME OVERRIDE */
+        body.theme-gold { --accent-color: #ffd700; }
+
+        /* SIDEBAR (Standard) */
+        .sidebar { width: var(--sidebar-width); height: 100vh; background: rgba(15, 18, 24, 0.95); backdrop-filter: blur(20px); border-right: 1px solid var(--glass-border); position: fixed; display: flex; flex-direction: column; z-index: 100; }
+        .sidebar-header { padding: 40px 30px; }
+        .sidebar-header h2 { font-size: 1.2rem; margin: 0; letter-spacing: 2px; color: var(--accent-color); text-transform: uppercase; }
+        .nav-menu { list-style: none; padding: 0; margin: 0; flex: 1; }
+        .nav-item { padding: 12px 30px; display: flex; align-items: center; gap: 15px; color: var(--text-dim); text-decoration: none; transition: 0.3s; font-size: 0.9rem; }
+        .nav-item:hover { background: rgba(255, 255, 255, 0.05); color: #fff; }
+        .nav-item.active { background: rgba(0, 255, 136, 0.1); color: var(--accent-color); border-left: 4px solid var(--accent-color); }
+        .nav-divider { height: 1px; background: var(--glass-border); margin: 15px 30px; opacity: 0.5; }
+
+        .main-content { margin-left: var(--sidebar-width); flex: 1; padding: 60px 40px; }
+        
+        header { margin-bottom: 60px; display: flex; align-items: center; gap: 20px; }
+        header a { color: var(--text-dim); text-decoration: none; font-size: 0.9rem; }
+        header h1 { font-size: 2.5rem; margin: 0; letter-spacing: -1px; }
+
+        /* CHAT SIDEBAR (Right) */
+        .chat-sidebar { position: fixed; right: 0; top: 0; width: 400px; height: 100vh; background: rgba(15, 18, 24, 0.98); backdrop-filter: blur(30px); border-left: 1px solid var(--glass-border); z-index: 1000; transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1); display: flex; flex-direction: column; transform: translateX(100%); }
+        .chat-sidebar.active { transform: translateX(0); }
+        .chat-toggle-tab { position: absolute; left: -60px; top: 50%; transform: translateY(-50%); width: 60px; height: 60px; background: var(--accent-color); color: #000; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; cursor: pointer; border-radius: 15px 0 0 15px; box-shadow: -10px 0 20px rgba(0,0,0,0.3); }
+        .chat-header { padding: 30px; border-bottom: 1px solid var(--glass-border); display: flex; align-items: center; gap: 15px; }
+        .chat-body { flex: 1; padding: 30px; overflow-y: auto; display: flex; flex-direction: column; gap: 20px; }
+        .chat-message { padding: 12px 18px; border-radius: 15px; font-size: 0.85rem; line-height: 1.5; max-width: 85%; }
+        .agent-msg { background: rgba(255,255,255,0.05); color: var(--text-main); align-self: flex-start; border-bottom-left-radius: 2px; }
+        .user-msg { background: var(--accent-color); color: #000; align-self: flex-end; border-bottom-right-radius: 2px; font-weight: 500; }
+        .chat-input-area { padding: 30px; border-top: 1px solid var(--glass-border); background: rgba(0,0,0,0.2); display: flex; gap: 15px; }
+        .chat-input-area input { flex: 1; background: none; border: none; color: #fff; font-family: inherit; font-size: 0.85rem; outline: none; }
+
+        /* GRID */
+        .category-row { display: flex; gap: 40px; margin-bottom: 80px; }
+        .section-title { min-width: 150px; font-size: 1.5rem; color: #fff; font-weight: 800; }
+        .course-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px; flex: 1; }
+        .course-card { background: var(--glass-bg); border: 1px solid var(--glass-border); border-radius: 20px; overflow: hidden; transition: 0.4s; position: relative; }
+        .course-card:hover { transform: translateY(-10px); border-color: var(--accent-color); }
+        .course-image { height: 180px; width: 100%; background-size: cover; background-position: center; position: relative; }
+        .course-image::after { content: ''; position: absolute; bottom: 0; left: 0; width: 100%; height: 60%; background: linear-gradient(0deg, var(--bg-color) 0%, transparent 100%); }
+        .course-info { padding: 25px; }
+        .course-info h3 { margin: 0 0 10px 0; font-size: 1.1rem; }
+        .course-info p { font-size: 0.85rem; color: var(--text-dim); margin-bottom: 20px; line-height: 1.5; }
+        .btn-enter { width: 100%; padding: 12px; background: rgba(255,255,255,0.05); border: 1px solid var(--glass-border); border-radius: 12px; color: var(--accent-color); font-weight: 800; cursor: pointer; text-transform: uppercase; font-size: 0.75rem; letter-spacing: 1px; transition: 0.3s; }
+        .btn-enter:hover { background: var(--accent-color); color: #000; }
+        .badge-course { position: absolute; top: 20px; right: 20px; padding: 4px 10px; background: rgba(0,0,0,0.6); backdrop-filter: blur(5px); border-radius: 20px; font-size: 0.65rem; color: var(--accent-color); z-index: 2; border: 1px solid rgba(0,255,136,0.3); }
+    </style>
+</head>
+<body>
+
+<aside class="sidebar">
+    <div class="sidebar-header"><h2>GENIUS Master</h2></div>
+    <ul class="nav-menu">
+        <li><a href="portal_visual_unidade_agricola.html" class="nav-item">🏢 Submódulos</a></li>
+        <li><a href="dashboard_geral.html" class="nav-item">📊 Dashboards Geral</a></li>
+        <li><a href="cadastro_geral.html" class="nav-item">➕ Cadastros Geral</a></li>
+        <li><a href="agentes_geral.html" class="nav-item">🤖 Agentes Geral</a></li>
+        <li><a href="fractais_geral.html" class="nav-item">💠 Fractais Geral</a></li>
+        <li><a href="banco_dados_geral.html" class="nav-item">🗄️ Banco de Dados Geral</a></li>
+        <li class="nav-divider"></li>
+        <li><a href="academia_geral.html" class="nav-item active">🎓 Academia Genius</a></li>
+    </ul>
+</aside>
+
+<div id="chatSidebar" class="chat-sidebar">
+    <div class="chat-toggle-tab" onclick="toggleChat()">🤖</div>
+    <div class="chat-header">
+        <div style="width: 40px; height: 40px; background: rgba(0,255,136,0.1); border: 1px solid var(--accent-color); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.2rem;">🤖</div>
+        <div>
+            <div style="font-size:0.9rem; font-weight:600;">Genius Academy Guardian</div>
+            <div style="font-size:0.65rem; color: var(--accent-color);">MODO SUPERIOR ATIVO</div>
+        </div>
+    </div>
+    <div id="chatBody" class="chat-body">
+        <div class="chat-message agent-msg">Este é o núcleo de pesquisa superior. Você está prestes a ingressar em módulos de governança estratégica.</div>
+    </div>
+    <div class="chat-input-area">
+        <input type="text" placeholder="Comando..." id="chatInput">
+        <button onclick="enviarMensagem()" style="background:none; border:none; color:var(--accent-color); cursor:pointer;">➔</button>
+    </div>
+</div>
+
+<main class="main-content">
+    <header>
+        <a href="academia_geral.html">⬅ VOLTAR AO HUB</a>
+        <h1>Cursos Superiores</h1>
+    </header>
+
+    <div class="category-row">
+        <div class="section-title"><span style="font-size: 2rem;">🎓</span><br>Graduação &<br>Especialização</div>
+        <div class="course-grid">
+            
+            <!-- CURSO 1 -->
+            <div class="course-card">
+                <span class="badge-course">Engenharia</span>
+                <div class="course-image" style="background-image: url('https://images.unsplash.com/photo-1523348837708-15d4a09cfac2?auto=format&fit=crop&w=400&q=80')"></div>
+                <div class="course-info">
+                    <h3>Agronomia de Precisão</h3>
+                    <p>Dominio técnico de sensores, drones e análise de solo georreferenciada.</p>
+                    <button class="btn-enter" onclick="cursar('Agronomia de Precisão', 'Agronomia')">Entrar na Aula</button>
+                </div>
+            </div>
+
+            <!-- CURSO 2 -->
+            <div class="course-card">
+                <span class="badge-course">MBA</span>
+                <div class="course-image" style="background-image: url('https://images.unsplash.com/photo-1454165833767-027ffea10c3b?auto=format&fit=crop&w=400&q=80')"></div>
+                <div class="course-info">
+                    <h3>Gestão de Agronegócio</h3>
+                    <p>Administração de grandes contas, exportação e hedge de commodities.</p>
+                    <button class="btn-enter" onclick="cursar('Gestão de Agronegócio', 'Gestão')">Entrar na Aula</button>
+                </div>
+            </div>
+
+            <!-- CURSO 3 -->
+            <div class="course-card">
+                <span class="badge-course">Engenharia</span>
+                <div class="course-image" style="background-image: url('https://images.unsplash.com/photo-1464226184884-fa280b87c399?auto=format&fit=crop&w=400&q=80')"></div>
+                <div class="course-info">
+                    <h3>Engenharia Agrícola</h3>
+                    <p>Design de infraestruturas rurais e automação de sistemas de plantio.</p>
+                    <button class="btn-enter" onclick="cursar('Engenharia Agrícola', 'Engenharia')">Entrar na Aula</button>
+                </div>
+            </div>
+
+            <!-- CURSO 4 (NEW) -->
+            <div class="course-card">
+                <span class="badge-course">Lab</span>
+                <div class="course-image" style="background-image: url('https://images.unsplash.com/photo-1576086213369-97a306d36557?auto=format&fit=crop&w=400&q=80')"></div>
+                <div class="course-info">
+                    <h3>Biotecnologia Rural</h3>
+                    <p>Genômica aplicada para elevar a produtividade por talhão em escala acelerada.</p>
+                    <button class="btn-enter" onclick="cursar('Biotecnologia Rural', 'Agronomia')">Entrar na Aula</button>
+                </div>
+            </div>
+
+            <!-- CURSO 5 (NEW) -->
+            <div class="course-card">
+                <span class="badge-course">Market</span>
+                <div class="course-image" style="background-image: url('https://images.unsplash.com/photo-1611974715855-9c8c14b6d087?auto=format&fit=crop&w=400&q=80')"></div>
+                <div class="course-info">
+                    <h3>Economia de Commodities</h3>
+                    <p>Análise macroeconômica e tendências globais do mercado de grãos e carne.</p>
+                    <button class="btn-enter" onclick="cursar('Economia de Commodities', 'Gestão')">Entrar na Aula</button>
+                </div>
+            </div>
+
+            <!-- CURSO 6 (NEW) -->
+            <div class="course-card">
+                <span class="badge-course">Lei</span>
+                <div class="course-image" style="background-image: url('https://images.unsplash.com/photo-1589829545856-d10d557cf95f?auto=format&fit=crop&w=400&q=80')"></div>
+                <div class="course-info">
+                    <h3>Direito Agrário Corp.</h3>
+                    <p>Segurança jurídica, holdings patrimoniais e sucessão em empresas rurais.</p>
+                    <button class="btn-enter" onclick="cursar('Direito Agrário Corp.', 'Gestão')">Entrar na Aula</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</main>
+
+<script>
+    window.onload = () => {
+        if(localStorage.getItem('genius_theme') === 'gold') document.body.classList.add('theme-gold');
+    };
+
+    function cursar(nome, medalha) {
+        alert('INICIANDO TREINAMENTO SUPERIOR: ' + nome + '\n\nO Genius está processando sua carga horária de alta complexidade...');
+        setTimeout(() => {
+            const medals = JSON.parse(localStorage.getItem('genius_medals') || '[]');
+            if(!medals.includes(medalha)) {
+                medals.push(medalha);
+                localStorage.setItem('genius_medals', JSON.stringify(medals));
+                alert('🏆 CERTIFICAÇÃO CONCLUÍDA!\n\nParabéns! Você conquistou a medalha: ' + medalha);
+            } else {
+                alert('📚 REVISÃO CONCLUÍDA!\n\nVocê já possui esta certificação.');
+            }
+        }, 3000);
+    }
+
+    function toggleChat() { document.getElementById('chatSidebar').classList.toggle('active'); }
+    function enviarMensagem() {
+        const input = document.getElementById('chatInput');
+        if(!input.value) return;
+        const body = document.getElementById('chatBody');
+        const userMsg = document.createElement('div');
+        userMsg.className = 'chat-message user-msg';
+        userMsg.innerText = input.value;
+        body.appendChild(userMsg);
+        input.value = '';
+        body.scrollTop = body.scrollHeight;
+    }
+</script>
+
+</body>
+</html>

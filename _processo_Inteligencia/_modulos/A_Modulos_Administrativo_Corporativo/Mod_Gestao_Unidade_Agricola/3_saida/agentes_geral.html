@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Genius - Agentes Geral</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #0b0d11;
+            --sidebar-bg: rgba(255, 255, 255, 0.02);
+            --accent-color: #00ff88;
+            --glass-border: rgba(255, 255, 255, 0.08);
+            --text-main: #e0e0e0;
+            --text-dim: #a0a0a0;
+            --sidebar-width: 280px;
+        }
+
+        body {
+            background: linear-gradient(135deg, #0b0d11 0%, #1a1e26 100%);
+            color: var(--text-main);
+            font-family: 'Outfit', sans-serif;
+            margin: 0; display: flex; min-height: 100vh;
+        }
+
+        .sidebar {
+            width: var(--sidebar-width);
+            background: var(--sidebar-bg);
+            backdrop-filter: blur(20px);
+            border-right: 1px solid var(--glass-border);
+            display: flex; flex-direction: column;
+            position: fixed; height: 100vh;
+        }
+
+        .sidebar-header { padding: 30px; border-bottom: 1px solid var(--glass-border); }
+        .sidebar-header h2 { font-size: 1.1rem; margin: 0; color: var(--accent-color); letter-spacing: 2px; text-transform: uppercase; }
+
+        .nav-menu { flex: 1; padding: 20px 0; list-style: none; margin: 0; }
+        .nav-item { padding: 12px 30px; display: flex; align-items: center; gap: 15px; color: var(--text-dim); text-decoration: none; transition: 0.3s; font-size: 0.85rem; }
+        .nav-item:hover, .nav-item.active { background: rgba(0, 255, 136, 0.05); color: #fff; border-left: 4px solid var(--accent-color); padding-left: 26px; }
+
+        .main-content { margin-left: var(--sidebar-width); flex: 1; padding: 60px 40px; animation: fadeIn 0.6s ease-out; }
+        header { margin-bottom: 40px; }
+        h1 { font-size: 2.2rem; margin: 0; letter-spacing: -1px; }
+        .breadcrumb { font-size: 0.8rem; color: var(--text-dim); text-transform: uppercase; margin-bottom: 10px; }
+
+        .agents-scroll { max-width: 1200px; margin-top: 30px; }
+        .module-section { margin-bottom: 50px; }
+        .module-section h2 { font-size: 1rem; color: #fff; border-bottom: 1px solid var(--glass-border); padding-bottom: 10px; margin-bottom: 25px; display: flex; align-items: center; gap: 10px; }
+        .module-color { width: 12px; height: 12px; border-radius: 50%; }
+
+        .agents-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 15px; }
+        .agent-card { background: rgba(255,255,255,0.02); border: 1px solid var(--glass-border); border-radius: 12px; padding: 20px; text-align: center; transition: 0.3s; }
+        .agent-card:hover { background: rgba(255,255,255,0.05); border-color: var(--accent-color); transform: translateY(-3px); }
+        .agent-card .icon { font-size: 2rem; display: block; margin-bottom: 10px; }
+        .agent-card .name { font-size: 0.85rem; font-weight: 600; color: #fff; display: block; margin-bottom: 4px; }
+        .agent-card .role { font-size: 0.7rem; color: var(--text-dim); text-transform: uppercase; letter-spacing: 1px; }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    </style>
+</head>
+<body>
+
+<aside class="sidebar">
+    <div class="sidebar-header">
+        <h2>GENIUS Master</h2>
+    </div>
+    <ul class="nav-menu">
+        <li><a href="portal_visual_unidade_agricola.html" class="nav-item">🏢 Submódulos</a></li>
+        <li><a href="dashboard_geral.html" class="nav-item">📊 Dashboards Geral</a></li>
+        <li><a href="cadastro_geral.html" class="nav-item">➕ Cadastros Geral</a></li>
+        <li><a href="agentes_geral.html" class="nav-item active">🤖 Agentes Geral</a></li>
+        <li><a href="processos_geral.html" class="nav-item">🧠 Processos Geral</a></li>
+        <li><a href="ferramentas_geral.html" class="nav-item">🛠️ Ferramentas Geral</a></li>
+        <li><a href="fractais_geral.html" class="nav-item">💠 Fractais Geral</a></li>
+        <li><a href="banco_dados_geral.html" class="nav-item">🗄️ Banco de Dados Geral</a></li>
+    </ul>
+</aside>
+
+<main class="main-content">
+    <header>
+        <div class="breadcrumb">G Genius / Workforce Intelligence</div>
+        <h1>Agentes do Módulo Administrativo</h1>
+    </header>
+
+    <div class="agents-scroll">
+        <!-- Seção Proprietários -->
+        <div class="module-section">
+            <h2><div class="module-color" style="background: #00d4ff;"></div> Equipe de Proprietários (#01)</h2>
+            <div class="agents-grid">
+                <div class="agent-card"><span class="icon">🛡️</span><span class="name">Guardião</span><span class="role">Segurança Societária</span></div>
+                <div class="agent-card"><span class="icon">📊</span><span class="name">Gerente</span><span class="role">Gestor de Equity</span></div>
+                <div class="agent-card"><span class="icon">🚜</span><span class="name">Técnico</span><span class="role">Analista de Contratos</span></div>
+                <div class="agent-card"><span class="icon">📝</span><span class="name">Secretária</span><span class="role">Protocolo Jurídico</span></div>
+                <div class="agent-card"><span class="icon">📚</span><span class="name">Bibliotecária</span><span class="role">Custódia de Documentos</span></div>
+            </div>
+        </div>
+
+        <!-- Seção Fazendas -->
+        <div class="module-section">
+            <h2><div class="module-color" style="background: #00ff88;"></div> Equipe de Fazendas (#02)</h2>
+            <div class="agents-grid">
+                <div class="agent-card"><span class="icon">🏰</span><span class="name">Guardião</span><span class="role">Supervisor Macro</span></div>
+                <div class="agent-card"><span class="icon">💼</span><span class="name">Gerente</span><span class="role">Gestor de Unidade</span></div>
+                <div class="agent-card"><span class="icon">🗺️</span><span class="name">Técnico</span><span class="role">Cartógrafo Master</span></div>
+                <div class="agent-card"><span class="icon">🏙️</span><span class="name">Secretária</span><span class="role">Endereçamento</span></div>
+                <div class="agent-card"><span class="icon">📔</span><span class="name">Bibliotecária</span><span class="role">Atlas Oficial</span></div>
+            </div>
+        </div>
+
+        <!-- Seção Glebas -->
+        <div class="module-section">
+            <h2><div class="module-color" style="background: #fab1a0;"></div> Equipe de Glebas (#03)</h2>
+            <div class="agents-grid">
+                <div class="agent-card"><span class="icon">⛰️</span><span class="name">Guardião</span><span class="role">Zona Segura</span></div>
+                <div class="agent-card"><span class="icon">🏗️</span><span class="name">Gerente</span><span class="role">Arquiteto de Solo</span></div>
+                <div class="agent-card"><span class="icon">🌿</span><span class="name">Técnico</span><span class="role">Especialista Ambiental</span></div>
+                <div class="agent-card"><span class="icon">📂</span><span class="name">Secretária</span><span class="role">Logística Interna</span></div>
+                <div class="agent-card"><span class="icon">📜</span><span class="name">Bibliotecária</span><span class="role">Arquivos Geofísicos</span></div>
+            </div>
+        </div>
+
+        <!-- Seção Talhões -->
+        <div class="module-section">
+            <h2><div class="module-color" style="background: #0fbcf9;"></div> Equipe de Talhões (#04)</h2>
+            <div class="agents-grid">
+                <div class="agent-card"><span class="icon">🔍</span><span class="name">Guardião</span><span class="role">Identidade Célula</span></div>
+                <div class="agent-card"><span class="icon">📐</span><span class="name">Gerente</span><span class="role">Cálculo de Área</span></div>
+                <div class="agent-card"><span class="icon">🛰️</span><span class="name">Técnico</span><span class="role">Agrimensor Digital</span></div>
+                <div class="agent-card"><span class="icon">🏷️</span><span class="name">Secretária</span><span class="role">Etiquetagem</span></div>
+                <div class="agent-card"><span class="icon">📖</span><span class="name">Bibliotecária</span><span class="role">Histórico de Célula</span></div>
+            </div>
+        </div>
+
+        <!-- Seção Ativos -->
+        <div class="module-section">
+            <h2><div class="module-color" style="background: #ff9f43;"></div> Equipe de Ativos (#05)</h2>
+            <div class="agents-grid">
+                <div class="agent-card"><span class="icon">⚖️</span><span class="name">Guardião</span><span class="role">Risco Jurídico</span></div>
+                <div class="agent-card"><span class="icon">🏛️</span><span class="name">Gerente</span><span class="role">Gestor de Títulos</span></div>
+                <div class="agent-card"><span class="icon">💧</span><span class="name">Técnico</span><span class="role">Outorgas & Licenças</span></div>
+                <div class="agent-card"><span class="icon">📅</span><span class="name">Secretária</span><span class="role">Impostos (ITR/CCIR)</span></div>
+                <div class="agent-card"><span class="icon">📜</span><span class="name">Bibliotecária</span><span class="role">Custódia Oficial</span></div>
+            </div>
+        </div>
+
+        <!-- Seção Chaves -->
+        <div class="module-section">
+            <h2><div class="module-color" style="background: #6c5ce7;"></div> Equipe de Chaves (#06)</h2>
+            <div class="agents-grid">
+                <div class="agent-card"><span class="icon">🔗</span><span class="name">Orquestrador</span><span class="role">Cross-Reference</span></div>
+                <div class="agent-card"><span class="icon">🌉</span><span class="name">Integrador</span><span class="role">Bridge ERP</span></div>
+                <div class="agent-card"><span class="icon">🔍</span><span class="name">Auditor</span><span class="role">Sincronia de Dados</span></div>
+                <div class="agent-card"><span class="icon">🏷️</span><span class="name">Secretária</span><span class="role">Field Tags Generator</span></div>
+                <div class="agent-card"><span class="icon">🗂️</span><span class="name">Bibliotecária</span><span class="role">Metadata Hub</span></div>
+            </div>
+        </div>
+    </div>
+</main>
+
+</body>
+</html>

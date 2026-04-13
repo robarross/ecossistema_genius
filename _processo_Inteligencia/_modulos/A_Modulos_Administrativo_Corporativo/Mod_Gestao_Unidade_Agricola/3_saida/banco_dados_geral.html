@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Genius - Banco de Dados Geral</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #0b0d11;
+            --sidebar-bg: rgba(255, 255, 255, 0.02);
+            --accent-color: #00ff88;
+            --glass-border: rgba(255, 255, 255, 0.08);
+            --text-main: #e0e0e0;
+            --text-dim: #a0a0a0;
+            --sidebar-width: 280px;
+        }
+
+        body {
+            background: linear-gradient(135deg, #0b0d11 0%, #1a1e26 100%);
+            color: var(--text-main);
+            font-family: 'Outfit', sans-serif;
+            margin: 0; display: flex; min-height: 100vh;
+        }
+
+        .sidebar {
+            width: var(--sidebar-width);
+            background: var(--sidebar-bg);
+            backdrop-filter: blur(20px);
+            border-right: 1px solid var(--glass-border);
+            display: flex; flex-direction: column;
+            position: fixed; height: 100vh;
+        }
+
+        .sidebar-header { padding: 30px; border-bottom: 1px solid var(--glass-border); }
+        .sidebar-header h2 { font-size: 1.1rem; margin: 0; color: var(--accent-color); letter-spacing: 2px; text-transform: uppercase; }
+
+        .nav-menu { flex: 1; padding: 20px 0; list-style: none; margin: 0; }
+        .nav-item { padding: 12px 30px; display: flex; align-items: center; gap: 15px; color: var(--text-dim); text-decoration: none; transition: 0.3s; font-size: 0.85rem; }
+        .nav-item:hover, .nav-item.active { background: rgba(0, 255, 136, 0.05); color: #fff; border-left: 4px solid var(--accent-color); padding-left: 26px; }
+
+        .main-content { margin-left: var(--sidebar-width); flex: 1; padding: 60px 40px; }
+        header { margin-bottom: 40px; }
+        h1 { font-size: 2.2rem; margin: 0; letter-spacing: -1px; }
+
+        .db-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; margin-top: 30px; }
+        .db-card { background: rgba(255,255,255,0.03); border: 1px solid var(--glass-border); border-radius: 15px; padding: 25px; transition: 0.3s; cursor: pointer; text-decoration: none; display: block; }
+        .db-card:hover { border-color: var(--accent-color); transform: scale(1.02); background: rgba(0,255,136,0.02); }
+        .db-card h3 { font-size: 1rem; color: #fff; margin: 0 0 8px 0; display: flex; align-items: center; gap: 10px; }
+        .db-card p { font-size: 0.75rem; color: var(--text-dim); margin: 0; }
+        .file-tag { font-size: 0.6rem; color: var(--accent-color); background: rgba(0,255,136,0.1); padding: 2px 6px; border-radius: 3px; display: inline-block; margin-top: 12px; }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    </style>
+</head>
+<body>
+
+<aside class="sidebar">
+    <div class="sidebar-header">
+        <h2>GENIUS Master</h2>
+    </div>
+    <ul class="nav-menu">
+        <li><a href="portal_visual_unidade_agricola.html" class="nav-item">🏢 Submódulos</a></li>
+        <li><a href="dashboard_geral.html" class="nav-item">📊 Dashboards Geral</a></li>
+        <li><a href="cadastro_geral.html" class="nav-item">➕ Cadastros Geral</a></li>
+        <li><a href="agentes_geral.html" class="nav-item">🤖 Agentes Geral</a></li>
+        <li><a href="processos_geral.html" class="nav-item">🧠 Processos Geral</a></li>
+        <li><a href="ferramentas_geral.html" class="nav-item">🛠️ Ferramentas Geral</a></li>
+        <li><a href="fractais_geral.html" class="nav-item">💠 Fractais Geral</a></li>
+        <li><a href="banco_dados_geral.html" class="nav-item active">🗄️ Banco de Dados Geral</a></li>
+    </ul>
+</aside>
+
+<main class="main-content">
+    <header>
+        <h1>Hub de Registros (Master Data)</h1>
+    </header>
+
+    <div class="db-grid">
+        <a href="../2_processo/submodulos/sub_proprietarios/saida_proprietarios/banco_dados_proprietarios.html" class="db-card">
+            <h3>🗄️ Mastro Proprietários</h3>
+            <p>Lista completa de holdings e identidades jurídicas.</p>
+            <span class="file-tag">lista_proprietarios.csv</span>
+        </a>
+        <a href="../2_processo/submodulos/sub_fazendas/3_saida/banco_dados_fazendas.html" class="db-card">
+            <h3>🗄️ Mastro Fazendas</h3>
+            <p>Inventário de áreas e centros de lucro registrados.</p>
+            <span class="file-tag">lista_fazendas.csv</span>
+        </a>
+        <a href="../2_processo/submodulos/sub_glebas/3_saida/banco_dados_glebas.html" class="db-card">
+            <h3>🗄️ Mastro Glebas</h3>
+            <p>Zoneamento técnico e divisões geofísicas.</p>
+            <span class="file-tag">lista_glebas.csv</span>
+        </a>
+        <a href="../2_processo/submodulos/sub_talhoes/3_saida/banco_dados_talhoes.html" class="db-card">
+            <h3>🗄️ Mastro Talhões</h3>
+            <p>Dados mestres das células básicas de produção.</p>
+            <span class="file-tag">lista_talhoes.csv</span>
+        </a>
+        <a href="../2_processo/submodulos/sub_ativos/3_saida/banco_dados_ativos.html" class="db-card">
+            <h3>🗄️ Mastro Ativos</h3>
+            <p>Cofre de matrículas, CAR e licenças ambientais.</p>
+            <span class="file-tag">lista_ativos.csv</span>
+        </a>
+        <a href="../2_processo/submodulos/sub_chaves/3_saida/banco_dados_chaves.html" class="db-card">
+            <h3>🗄️ Mastro de Chaves</h3>
+            <p>Dicionário de Cross-Reference e IDs de integração.</p>
+            <span class="file-tag">mapa_chaves.csv</span>
+        </a>
+    </div>
+
+    <!-- Novo: Arquitetura e Relações -->
+    <header style="margin-top: 60px;">
+        <h1>Arquitetura & Relações (ER)</h1>
+    </header>
+
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin-top: 30px;">
+        <div class="db-card" style="cursor: default;">
+            <h3>📐 Dicionário de Propriedades</h3>
+            <table style="width: 100%; border-collapse: collapse; font-size: 0.75rem; margin-top: 15px;">
+                <thead>
+                    <tr style="border-bottom: 1px solid var(--glass-border);">
+                        <th style="padding: 10px; text-align: left; color: var(--accent-color);">Propriedade</th>
+                        <th style="padding: 10px; text-align: left; color: var(--accent-color);">Tipo</th>
+                        <th style="padding: 10px; text-align: left; color: var(--accent-color);">Constraint</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td style="padding: 8px;">ID_Genius</td><td style="padding: 8px;">UUID String</td><td style="padding: 8px;">Primary Key / Unique</td></tr>
+                    <tr><td style="padding: 8px;">Area_HA</td><td style="padding: 8px;">Float (2)</td><td style="padding: 8px;">Metric Area</td></tr>
+                    <tr><td style="padding: 8px;">Vinculo_ID</td><td style="padding: 8px;">UUID String</td><td style="padding: 8px;">Foreign Key Association</td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="db-card" style="cursor: default;">
+            <h3>🔗 Mapa de Dependência Lógica</h3>
+            <div style="margin-top: 20px; font-size: 0.8rem; line-height: 2;">
+                <div style="display: flex; align-items: center; gap: 10px;">
+                    <span style="color: #00d4ff;">Proprietários</span> ➔ 
+                    <span style="color: #00ff88;">Fazendas</span> ➔ 
+                    <span style="color: #fab1a0;">Glebas</span> ➔ 
+                    <span style="color: #0fbcf9;">Talhões</span>
+                </div>
+                <div style="margin-top: 10px; padding-top: 10px; border-top: 1px solid var(--glass-border);">
+                    <span style="color: #00ff88;">Fazendas</span> ➔ 
+                    <span style="color: #ff9f43;">Ativos Imobiliários</span>
+                </div>
+                <div style="margin-top: 10px; padding-top: 10px; border-top: 1px solid var(--glass-border);">
+                    <span style="color: var(--text-main);">Master Grid</span> ➔ 
+                    <span style="color: #6c5ce7;">Central de Chaves (Cross-Ref)</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+</body>
+</html>

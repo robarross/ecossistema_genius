@@ -1,0 +1,6 @@
+ID_Genius,ID_Externo,Sistema_Origem,Tipo_Ativo,Status_Sincronia,Ultima_Verificacao
+GNS-PRP-001,PRP-1020,SAP_AGRO,Proprietario,Sincronizado,12/04/2026
+GNS-FZD-001,FZD-MACH-01,TOTVS_RM,Fazenda,Sincronizado,12/04/2026
+GNS-GLB-102,GLB-SUL-B,PROTHEUS,Gleba,Pendente,11/04/2026
+GNS-TLH-201,TLH-201-99,SAP_AGRO,Talhao,Sincronizado,12/04/2026
+GNS-MAT-001,MAT-SC-12345,REGIN,Ativo_Fundiario,Sincronizado,12/04/2026

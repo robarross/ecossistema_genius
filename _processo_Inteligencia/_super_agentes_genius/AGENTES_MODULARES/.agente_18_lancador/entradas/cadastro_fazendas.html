@@ -1,0 +1,1516 @@
+<!DOCTYPE html>
+<html lang="pt-BR" data-theme="dark">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>FRACTAIS — Cadastro de Fazendas e Propriedades</title>
+  <style>
+    /* ══ TEMA ESCURO (padrão) ══ */
+    :root {
+      --green-dark:   #0d2418;
+      --green-mid:    #1e5c38;
+      --green-accent: #7ee8a2;
+      --green-pale:   #162b1e;
+      --green-border: #2a4d38;
+      --yellow:       #f5c842;
+      --bg:           #0b1912;
+      --card:         #10201a;
+      --card2:        #132318;
+      --border:       #1e3628;
+      --text:         #ffffff;
+      --text-muted:   #a8ccb6;
+      --text-label:   #c8e8d4;
+      --input-bg:     #0f1e17;
+      --input-color:  #e8f5ee;
+      --disabled-bg:  #0d1a14;
+      --disabled-fg:  #3a5c48;
+      --legend-bg:    #0d1e16;
+      --action-bg:    #0f1d16;
+      --red:          #f07070;
+      --radius:       10px;
+      --shadow:       0 2px 18px rgba(0,0,0,.5);
+      --modal-bg:     #0f1e17;
+      --modal-overlay:#000000cc;
+      --th-bg:        #061410;
+      --th-color:     #7ee8a2;
+      --tr-even:      #0d1c15;
+      --tr-hover:     #162b20;
+      --td-border:    #1e3326;
+      --badge-pk-bg:#3a2e00; --badge-pk-fg:#f5c842; --badge-pk-b:#806600;
+      --badge-fk-bg:#003040; --badge-fk-fg:#7dd3e8; --badge-fk-b:#006880;
+      --badge-uq-bg:#003020; --badge-uq-fg:#7ee8a2; --badge-uq-b:#006840;
+    }
+    [data-theme="light"] {
+      --green-dark:   #1a4a2e;
+      --green-mid:    #2d7a4f;
+      --green-accent: #1a6640;
+      --green-pale:   #e8f5ee;
+      --green-border: #b2dfcc;
+      --yellow:       #f5c842;
+      --bg:           #f2f6f3;
+      --card:         #ffffff;
+      --card2:        #f8faf9;
+      --border:       #ccd8d2;
+      --text:         #111111;
+      --text-muted:   #3a6050;
+      --text-label:   #2a5040;
+      --input-bg:     #ffffff;
+      --input-color:  #111111;
+      --disabled-bg:  #efefef;
+      --disabled-fg:  #999;
+      --legend-bg:    #f4f8f5;
+      --action-bg:    #e6f3ec;
+      --red:          #c0392b;
+      --shadow:       0 2px 12px rgba(26,74,46,.10);
+      --modal-bg:     #ffffff;
+      --modal-overlay:#00000088;
+      --th-bg:        #1a4a2e;
+      --th-color:     #ffffff;
+      --tr-even:      #f4f9f6;
+      --tr-hover:     #dff0e8;
+      --td-border:    #d0d8d4;
+      --badge-pk-bg:#fff3cd; --badge-pk-fg:#856404; --badge-pk-b:#ffc107;
+      --badge-fk-bg:#d1ecf1; --badge-fk-fg:#0c5460; --badge-fk-b:#bee5eb;
+      --badge-uq-bg:#d4edda; --badge-uq-fg:#155724; --badge-uq-b:#c3e6cb;
+    }
+
+    *{ box-sizing:border-box; margin:0; padding:0; }
+    body{
+      font-family:'Segoe UI',Arial,sans-serif;
+      background:var(--bg);
+      color:var(--text);
+      min-height:100vh;
+      transition:background .3s,color .3s;
+    }
+
+    /* ── HEADER ── */
+    header{
+      background:linear-gradient(135deg, var(--green-dark) 0%, var(--green-mid) 100%);
+      color:#fff; padding:0 40px;
+      display:flex; align-items:center; gap:16px;
+      height:72px;
+      box-shadow:0 3px 14px rgba(0,0,0,.5);
+      position:sticky; top:0; z-index:200;
+    }
+    .logo-mark{
+      width:42px; height:42px;
+      background:var(--yellow);
+      border-radius:8px;
+      display:flex; align-items:center; justify-content:center;
+      font-weight:900; font-size:20px; color:#1a3a20;
+      flex-shrink:0;
+    }
+    .header-text h1{ font-size:17px; font-weight:700; color:#fff; letter-spacing:.4px; }
+    .header-text p { font-size:12px; color:rgba(255,255,255,.65); margin-top:1px; }
+    .header-controls{ margin-left:auto; display:flex; align-items:center; gap:10px; }
+    .header-badge{
+      background:rgba(255,255,255,.12);
+      border:1px solid rgba(255,255,255,.25);
+      border-radius:20px;
+      padding:5px 14px; font-size:11px;
+      color:var(--green-accent); letter-spacing:.5px; white-space:nowrap;
+    }
+    .dark-toggle{
+      background:rgba(255,255,255,.10);
+      border:1.5px solid rgba(255,255,255,.22);
+      border-radius:22px;
+      padding:5px 14px 5px 10px;
+      display:flex; align-items:center; gap:7px;
+      cursor:pointer; font-size:12px; font-weight:600; color:#fff;
+      transition:background .2s; white-space:nowrap; user-select:none;
+    }
+    .dark-toggle:hover{ background:rgba(255,255,255,.20); }
+    .toggle-track{
+      width:34px; height:18px;
+      background:rgba(255,255,255,.2);
+      border-radius:9px; position:relative;
+      transition:background .3s; flex-shrink:0;
+    }
+    [data-theme="light"] .toggle-track{ background:var(--yellow); }
+    .toggle-thumb{
+      width:14px; height:14px; background:#fff;
+      border-radius:50%; position:absolute; top:2px; left:2px;
+      transition:left .25s cubic-bezier(.4,0,.2,1);
+      box-shadow:0 1px 4px rgba(0,0,0,.3);
+    }
+    [data-theme="light"] .toggle-thumb{ left:18px; }
+    .btn-db{
+      background:var(--yellow); color:#1a3a20;
+      border:none; border-radius:22px;
+      padding:7px 16px; font-size:12px; font-weight:700;
+      cursor:pointer;
+      display:flex; align-items:center; gap:6px;
+      transition:all .2s; white-space:nowrap;
+    }
+    .btn-db:hover{ filter:brightness(1.08); transform:translateY(-1px);
+      box-shadow:0 4px 14px rgba(245,200,66,.35); }
+
+    /* BREADCRUMB */
+    .breadcrumb{
+      background:var(--green-dark);
+      padding:8px 40px; font-size:12px;
+      color:rgba(255,255,255,.45);
+      display:flex; gap:6px; align-items:center;
+    }
+    .breadcrumb span.active{ color:var(--yellow); }
+
+    /* WRAPPER */
+    .wrapper{ max-width:1100px; margin:30px auto; padding:0 24px 60px; }
+
+    /* PAGE TITLE */
+    .page-title{ display:flex; align-items:center; gap:14px; margin-bottom:28px; }
+    .page-title .icon{
+      width:48px; height:48px;
+      background:var(--green-pale);
+      border:2px solid var(--green-border);
+      border-radius:12px;
+      display:flex; align-items:center; justify-content:center; font-size:22px;
+    }
+    .page-title h2{ font-size:22px; font-weight:700; color:var(--text); }
+    .page-title p { font-size:13px; color:var(--text-muted); margin-top:3px; }
+
+    /* STEPS */
+    .steps{
+      display:flex; margin-bottom:32px;
+      border-radius:var(--radius); overflow:hidden; box-shadow:var(--shadow);
+    }
+    .step{
+      flex:1; padding:12px 8px;
+      background:var(--card);
+      text-align:center; font-size:11px; font-weight:600;
+      color:var(--text-muted);
+      border-right:1px solid var(--border);
+      cursor:default; transition:background .2s;
+    }
+    .step:last-child{ border-right:none; }
+    .step .snum{
+      width:22px; height:22px; border-radius:50%;
+      background:var(--border); color:var(--text-muted);
+      font-size:11px; font-weight:700;
+      margin:0 auto 4px;
+      display:flex; align-items:center; justify-content:center;
+    }
+    .step.active{ background:var(--green-pale); color:var(--green-accent); }
+    .step.active .snum{ background:var(--green-mid); color:#fff; }
+
+    /* SECTION CARD */
+    .section-card{
+      background:var(--card);
+      border:1px solid var(--border);
+      border-radius:var(--radius);
+      margin-bottom:22px;
+      box-shadow:var(--shadow);
+      overflow:hidden;
+      transition:background .3s,border-color .3s;
+    }
+    .section-header{
+      background:linear-gradient(90deg, var(--green-dark) 0%, var(--green-mid) 100%);
+      color:#fff;
+      padding:13px 22px;
+      display:flex; align-items:center; gap:10px;
+      font-size:13px; font-weight:700; letter-spacing:.3px;
+    }
+    .section-header .s-icon{
+      font-size:16px; background:rgba(255,255,255,.12);
+      border-radius:6px; padding:4px 6px;
+    }
+    .section-header .s-tag{
+      margin-left:auto; font-size:10px; font-weight:400;
+      background:rgba(255,255,255,.12); border-radius:10px;
+      padding:2px 10px; letter-spacing:.4px;
+    }
+    .section-body{ padding:22px 22px 10px; }
+
+    /* GRID */
+    .grid{ display:grid; gap:16px 20px; }
+    .g-2{ grid-template-columns:repeat(2,1fr); }
+    .g-3{ grid-template-columns:repeat(3,1fr); }
+    .g-4{ grid-template-columns:repeat(4,1fr); }
+    .span-2{ grid-column:span 2; }
+    .span-3{ grid-column:span 3; }
+    .span-4{ grid-column:span 4; }
+
+    /* FIELD */
+    .field{ display:flex; flex-direction:column; gap:5px; }
+    .field label{
+      font-size:11.5px; font-weight:600;
+      color:var(--text-label);
+      text-transform:uppercase; letter-spacing:.4px;
+      display:flex; align-items:center; gap:5px;
+    }
+    .field label .req{ color:var(--red); font-size:13px; line-height:1; }
+    .badge-pk{ background:var(--badge-pk-bg); color:var(--badge-pk-fg); border:1px solid var(--badge-pk-b); font-size:9px; font-weight:700; border-radius:4px; padding:1px 5px; }
+    .badge-fk{ background:var(--badge-fk-bg); color:var(--badge-fk-fg); border:1px solid var(--badge-fk-b); font-size:9px; font-weight:700; border-radius:4px; padding:1px 5px; }
+    .badge-uq{ background:var(--badge-uq-bg); color:var(--badge-uq-fg); border:1px solid var(--badge-uq-b); font-size:9px; font-weight:700; border-radius:4px; padding:1px 5px; }
+
+    .field input, .field select, .field textarea{
+      border:1.5px solid var(--border);
+      border-radius:7px; padding:9px 12px;
+      font-size:13.5px; font-family:inherit;
+      color:var(--input-color);
+      background:var(--input-bg);
+      transition:border-color .2s,box-shadow .2s,background .3s;
+      outline:none; width:100%;
+    }
+    .field input:focus, .field select:focus, .field textarea:focus{
+      border-color:var(--green-accent);
+      box-shadow:0 0 0 3px rgba(126,232,162,.12);
+    }
+    .field input.err, .field select.err, .field textarea.err{
+      border-color:var(--red) !important;
+      box-shadow:0 0 0 3px rgba(240,112,112,.12) !important;
+    }
+    .field input[disabled], .field select[disabled]{
+      background:var(--disabled-bg); color:var(--disabled-fg); cursor:not-allowed;
+    }
+    .field textarea{ resize:vertical; min-height:80px; }
+    .field input[type="number"]{ -moz-appearance:textfield; }
+    .field input[type="number"]::-webkit-outer-spin-button,
+    .field input[type="number"]::-webkit-inner-spin-button{ -webkit-appearance:none; }
+    .field .hint{ font-size:11px; color:var(--text-muted); margin-top:1px; }
+    .field .err-msg{ font-size:11px; color:var(--red); display:none; margin-top:1px; }
+    .field .err-msg.show{ display:block; }
+    .field select option{ background:var(--card); color:var(--input-color); }
+    .divider{ border:none; border-top:1px dashed var(--green-border); margin:6px 0 18px; }
+
+    /* TOGGLE BOOLEAN */
+    .bool-group{ display:flex; gap:0; border:1.5px solid var(--border); border-radius:7px; overflow:hidden; }
+    .bool-group input[type="radio"]{ display:none; }
+    .bool-group label{
+      flex:1; text-align:center; padding:9px 8px;
+      font-size:12px; font-weight:600; cursor:pointer;
+      color:var(--text-muted); background:var(--input-bg);
+      transition:background .15s,color .15s;
+      text-transform:none; letter-spacing:0;
+    }
+    .bool-group input:checked + label{
+      background:var(--green-mid); color:#fff;
+    }
+    .bool-sep{ width:1px; background:var(--border); flex-shrink:0; }
+
+    /* INFO NOTE */
+    .note{
+      background:var(--green-pale); border-left:3px solid var(--green-accent);
+      border-radius:6px; padding:10px 14px; margin-bottom:16px;
+      font-size:12px; color:var(--text-muted); display:flex; gap:8px;
+    }
+
+    /* AREA CARDS GRID */
+    .area-grid{
+      display:grid; grid-template-columns:repeat(3,1fr); gap:14px; margin-bottom:8px;
+    }
+    .area-card{
+      background:var(--card2); border:1.5px solid var(--border);
+      border-radius:8px; padding:14px;
+      transition:border-color .2s;
+    }
+    .area-card:focus-within{ border-color:var(--green-accent); }
+    .area-card label{
+      display:flex; align-items:center; gap:6px; margin-bottom:8px;
+      font-size:11px; color:var(--text-label);
+      text-transform:uppercase; letter-spacing:.4px; font-weight:700;
+    }
+    .area-card .dot{ width:9px; height:9px; border-radius:50%; flex-shrink:0; }
+    .area-card input{
+      border:1.5px solid var(--border); border-radius:7px;
+      padding:8px 10px; font-size:13px; font-family:inherit;
+      color:var(--input-color); background:var(--input-bg);
+      outline:none; width:100%;
+      transition:border-color .2s,box-shadow .2s;
+    }
+    .area-card input:focus{
+      border-color:var(--green-accent);
+      box-shadow:0 0 0 3px rgba(126,232,162,.12);
+    }
+    .area-card.total{ border-color:var(--green-mid); background:var(--green-pale); }
+    .area-alert{
+      background:#1a0d0d; border:1px solid #6a2020; border-radius:8px;
+      padding:10px 14px; font-size:12px; color:#f07070;
+      display:none; margin-top:12px; gap:8px;
+    }
+    [data-theme="light"] .area-alert{ background:#fde8e8; border-color:#e8a0a0; color:#8b1a1a; }
+
+    /* LEGEND */
+    .legend-bar{
+      display:flex; gap:16px; flex-wrap:wrap;
+      padding:10px 22px; background:var(--legend-bg);
+      border-top:1px solid var(--border);
+      font-size:11px; color:var(--text-muted); align-items:center;
+    }
+    .legend-bar span{ display:flex; align-items:center; gap:4px; }
+    .dot{ width:8px; height:8px; border-radius:50%; display:inline-block; }
+    .dot-req{ background:var(--red); }
+    .dot-opt{ background:var(--border); }
+
+    /* ACTIONS */
+    .form-actions{
+      display:flex; justify-content:space-between; align-items:center;
+      padding:20px 22px;
+      background:var(--action-bg);
+      border-top:1px solid var(--green-border);
+      border-radius:0 0 var(--radius) var(--radius);
+    }
+    .btn{
+      padding:10px 24px; border-radius:7px;
+      font-size:13px; font-weight:600; border:none; cursor:pointer;
+      transition:all .2s; display:inline-flex; align-items:center; gap:7px;
+      font-family:inherit;
+    }
+    .btn-outline{ background:var(--card); border:1.5px solid var(--green-accent); color:var(--green-accent); }
+    .btn-outline:hover{ background:var(--green-pale); }
+    .btn-danger{ background:var(--card); border:1.5px solid var(--red); color:var(--red); }
+    .btn-danger:hover{ opacity:.85; }
+    .btn-save{
+      background:linear-gradient(135deg, var(--green-mid), var(--green-dark));
+      color:#fff; padding:11px 36px; font-size:14px;
+      box-shadow:0 3px 12px rgba(30,92,56,.4);
+    }
+    .btn-save:hover{ box-shadow:0 5px 18px rgba(30,92,56,.5); transform:translateY(-1px); }
+
+    /* MODAL */
+    .modal-overlay{
+      display:none; position:fixed; inset:0;
+      background:var(--modal-overlay);
+      z-index:500; align-items:flex-start; justify-content:center;
+      padding:24px 16px; overflow-y:auto;
+      backdrop-filter:blur(4px);
+    }
+    .modal-overlay.open{ display:flex; }
+    .modal{
+      background:var(--modal-bg);
+      border-radius:14px;
+      box-shadow:0 10px 60px rgba(0,0,0,.6);
+      width:100%; max-width:1080px;
+      margin:auto;
+      border:1px solid var(--border);
+      overflow:hidden;
+      animation:slideIn .28s cubic-bezier(.4,0,.2,1);
+    }
+    @keyframes slideIn{
+      from{ opacity:0; transform:translateY(-22px) scale(.97); }
+      to  { opacity:1; transform:none; }
+    }
+    .modal-header{
+      background:linear-gradient(135deg, var(--green-dark), var(--green-mid));
+      color:#fff; padding:18px 24px;
+      display:flex; align-items:center; gap:12px;
+    }
+    .modal-header .mh-text h3{ font-size:16px; font-weight:700; color:#fff; }
+    .modal-header .mh-text p { font-size:11px; color:var(--green-accent); margin-top:2px; }
+    .modal-close{
+      margin-left:auto;
+      background:rgba(255,255,255,.12); border:1px solid rgba(255,255,255,.25);
+      border-radius:8px; color:#fff; cursor:pointer;
+      padding:6px 14px; font-size:13px; font-weight:600;
+      display:flex; align-items:center; gap:5px;
+      transition:background .2s;
+    }
+    .modal-close:hover{ background:rgba(255,255,255,.25); }
+    .db-tabs{
+      display:flex; background:var(--legend-bg);
+      border-bottom:2px solid var(--green-mid); padding:0 24px;
+    }
+    .db-tab{
+      padding:11px 20px; font-size:12px; font-weight:600;
+      color:var(--text-muted); cursor:pointer;
+      border-bottom:3px solid transparent; margin-bottom:-2px;
+      transition:color .2s,border-color .2s;
+    }
+    .db-tab.active{ color:var(--green-accent); border-bottom-color:var(--green-accent); }
+    .db-toolbar{
+      padding:14px 24px; background:var(--legend-bg);
+      border-bottom:1px solid var(--border);
+      display:flex; gap:10px; align-items:center; flex-wrap:wrap;
+    }
+    .db-toolbar input{
+      flex:1; min-width:200px;
+      border:1.5px solid var(--border); border-radius:7px;
+      padding:7px 12px; font-size:13px; font-family:inherit;
+      background:var(--input-bg); color:var(--input-color); outline:none;
+      transition:border-color .2s;
+    }
+    .db-toolbar input:focus{ border-color:var(--green-accent); }
+    .db-stat{
+      font-size:11px; color:var(--text-muted); white-space:nowrap;
+      background:var(--card); border:1px solid var(--border);
+      border-radius:6px; padding:4px 10px;
+    }
+    .db-filter-btn{
+      background:var(--green-pale); border:1px solid var(--green-border);
+      border-radius:7px; padding:6px 14px;
+      font-size:12px; font-weight:600; color:var(--green-accent);
+      cursor:pointer; transition:all .2s;
+    }
+    .db-filter-btn:hover, .db-filter-btn.active{ background:var(--green-mid); color:#fff; }
+    .db-table-wrap{ overflow-x:auto; max-height:480px; overflow-y:auto; }
+    table.db-table{ width:100%; border-collapse:collapse; font-size:12.5px; }
+    table.db-table thead th{
+      background:var(--th-bg); color:var(--th-color);
+      padding:10px 14px; text-align:left;
+      font-size:10.5px; font-weight:700;
+      text-transform:uppercase; letter-spacing:.5px;
+      position:sticky; top:0; z-index:2;
+      border-right:1px solid rgba(255,255,255,.06);
+      white-space:nowrap;
+    }
+    table.db-table thead th:last-child{ border-right:none; }
+    table.db-table tbody tr{ transition:background .15s; cursor:pointer; }
+    table.db-table tbody tr:nth-child(even){ background:var(--tr-even); }
+    table.db-table tbody tr:hover{ background:var(--tr-hover); }
+    table.db-table td{
+      padding:9px 14px;
+      border-bottom:1px solid var(--td-border);
+      border-right:1px solid var(--td-border);
+      color:var(--text); vertical-align:middle;
+    }
+    table.db-table td:last-child{ border-right:none; }
+    table.db-table td.mono{ font-family:'Courier New',monospace; font-size:11px; color:var(--green-accent); }
+    .chip{
+      display:inline-block; padding:3px 10px; border-radius:12px;
+      font-size:10px; font-weight:700; letter-spacing:.4px; white-space:nowrap;
+    }
+    .chip-ativa     { background:#0d3a1a; color:#6ddc8a; border:1px solid #2a6a40; }
+    .chip-inativa   { background:#3a1a0d; color:#e8906a; border:1px solid #7a3a20; }
+    .chip-implant   { background:#2a2a0d; color:#e8d86a; border:1px solid #6a5a20; }
+    .chip-suspensa  { background:#2a0d2a; color:#c88ae8; border:1px solid #5a206a; }
+    .chip-regular   { background:#0d2a3a; color:#6ac8e8; border:1px solid #206a80; }
+    [data-theme="light"] .chip-ativa  { background:#d4f5e0; color:#155724; border:1px solid #a8ddb8; }
+    [data-theme="light"] .chip-inativa{ background:#fce8e0; color:#7a2810; border:1px solid #f0b0a0; }
+    [data-theme="light"] .chip-implant{ background:#fff8d0; color:#5a4a08; border:1px solid #d8c060; }
+    [data-theme="light"] .chip-suspensa{background:#f0e0fc; color:#5a1878; border:1px solid #c898e8; }
+    [data-theme="light"] .chip-regular{ background:#d0ecfc; color:#0c4a70; border:1px solid #90c8e8; }
+    .key-badge{
+      display:inline-block; padding:2px 7px; border-radius:4px;
+      font-size:9px; font-weight:800; letter-spacing:.6px;
+    }
+    .kb-pk{ background:var(--badge-pk-bg); color:var(--badge-pk-fg); border:1px solid var(--badge-pk-b); }
+    .kb-fk{ background:var(--badge-fk-bg); color:var(--badge-fk-fg); border:1px solid var(--badge-fk-b); }
+    .kb-uq{ background:var(--badge-uq-bg); color:var(--badge-uq-fg); border:1px solid var(--badge-uq-b); }
+    .record-detail{
+      display:none; padding:20px 24px;
+      background:var(--card2); border-top:2px solid var(--green-mid);
+    }
+    .record-detail.open{ display:block; }
+    .detail-grid{ display:grid; grid-template-columns:repeat(auto-fill,minmax(240px,1fr)); gap:12px; }
+    .detail-item{ background:var(--card); border:1px solid var(--border); border-radius:8px; padding:10px 14px; }
+    .detail-item .di-label{ font-size:10px; font-weight:700; color:var(--text-label); text-transform:uppercase; letter-spacing:.4px; }
+    .detail-item .di-value{ font-size:13px; color:var(--text); margin-top:4px; word-break:break-all; }
+    .detail-item .di-value.mono{ font-family:'Courier New',monospace; font-size:11px; color:var(--green-accent); }
+    .modal-footer{
+      padding:12px 24px; background:var(--legend-bg);
+      border-top:1px solid var(--border);
+      display:flex; align-items:center; justify-content:space-between;
+      font-size:11px; color:var(--text-muted);
+    }
+    .modal-footer strong{ color:var(--green-accent); }
+
+    /* SUCCESS TOAST */
+    .toast{
+      position:fixed; bottom:32px; right:32px;
+      background:var(--green-mid); color:#fff;
+      border-radius:12px; padding:18px 24px;
+      box-shadow:0 8px 32px rgba(0,0,0,.4);
+      display:flex; align-items:center; gap:14px;
+      font-size:14px; font-weight:600;
+      z-index:999; transform:translateY(100px); opacity:0;
+      transition:all .4s cubic-bezier(.175,.885,.32,1.275);
+      max-width:360px;
+    }
+    .toast.show{ transform:none; opacity:1; }
+    .toast-icon{ font-size:24px; flex-shrink:0; }
+    .toast p{ font-size:12px; font-weight:400; color:rgba(255,255,255,.8); margin-top:2px; }
+
+    /* RESPONSIVE */
+    @media(max-width:768px){
+      .g-3,.g-4{ grid-template-columns:repeat(2,1fr); }
+      .span-3,.span-4{ grid-column:span 2; }
+      .steps{ display:none; }
+      header{ padding:0 16px; gap:10px; }
+      .header-badge{ display:none; }
+      .area-grid{ grid-template-columns:repeat(2,1fr); }
+    }
+    @media(max-width:540px){
+      .g-2,.g-3,.g-4{ grid-template-columns:1fr; }
+      .span-2,.span-3,.span-4{ grid-column:span 1; }
+      .wrapper{ padding:0 12px 40px; }
+      .area-grid{ grid-template-columns:1fr; }
+      .tgl-label{ display:none; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ═══ HEADER ═══ -->
+<header>
+  <div class="logo-mark">F</div>
+  <div class="header-text">
+    <h1>FRACTAIS — Sistema de Gestão Agrícola</h1>
+    <p>Módulo GUA · Gestão da Unidade Agrícola</p>
+  </div>
+  <div class="header-controls">
+    <span class="header-badge">gua_fazendas_propriedades</span>
+    <button class="btn-db" id="btnOpenDB">🗄️ <span>Ver Banco de Dados</span></button>
+    <button class="dark-toggle" id="darkToggle" title="Alternar tema">
+      <span id="toggleIcon">☀️</span>
+      <div class="toggle-track"><div class="toggle-thumb"></div></div>
+      <span class="tgl-label">Light</span>
+    </button>
+  </div>
+</header>
+<div class="breadcrumb">
+  Início &rsaquo; GUA &rsaquo; Fazendas e Propriedades &rsaquo; <span class="active">Novo Cadastro</span>
+</div>
+
+<!-- ═══ MODAL — BANCO DE DADOS ═══ -->
+<div class="modal-overlay" id="dbModal">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="mh-text">
+        <h3>🗄️ Banco de Dados — gua_fazendas_propriedades</h3>
+        <p>Registros cadastrados · Clique em uma linha para ver todos os campos</p>
+      </div>
+      <button class="modal-close" id="btnCloseDB">✕ Fechar</button>
+    </div>
+    <div class="db-tabs">
+      <div class="db-tab active" data-tab="registros">📋 Registros</div>
+      <div class="db-tab" data-tab="areas">📐 Áreas</div>
+      <div class="db-tab" data-tab="localizacao">📍 Localização</div>
+      <div class="db-tab" data-tab="documentos">📄 Documentação</div>
+    </div>
+    <div class="db-toolbar">
+      <input type="text" id="dbSearch" placeholder="🔍  Buscar por nome, código, município, responsável..."/>
+      <button class="db-filter-btn active" data-filter="all">Todos</button>
+      <button class="db-filter-btn" data-filter="ATIVA">Ativas</button>
+      <button class="db-filter-btn" data-filter="EM_IMPLANTACAO">Em Implantação</button>
+      <button class="db-filter-btn" data-filter="INATIVA">Inativas</button>
+      <span class="db-stat" id="dbStat">5 registros</span>
+    </div>
+
+    <div id="tab-registros">
+      <div class="db-table-wrap">
+        <table class="db-table" id="tblRegistros">
+          <thead>
+            <tr>
+              <th>#</th><th>Código</th><th>Nome da Fazenda</th><th>Tipo Prop.</th>
+              <th>Tipo Explor.</th><th>Área Total (ha)</th><th>Responsável</th><th>Status</th>
+            </tr>
+          </thead>
+          <tbody id="tbodyRegistros"></tbody>
+        </table>
+      </div>
+      <div class="record-detail" id="recordDetail">
+        <p style="font-size:12px;font-weight:700;color:var(--green-accent);margin-bottom:14px;">
+          📌 Detalhes completos do registro selecionado
+        </p>
+        <div class="detail-grid" id="detailGrid"></div>
+      </div>
+    </div>
+
+    <div id="tab-areas" style="display:none">
+      <div class="db-table-wrap">
+        <table class="db-table">
+          <thead>
+            <tr><th>Código</th><th>Nome</th><th>Área Total (ha)</th><th>Produtiva (ha)</th><th>Reserva Legal (ha)</th><th>APP (ha)</th><th>Pastagem (ha)</th><th>Benfeitorias (ha)</th></tr>
+          </thead>
+          <tbody id="tbodyAreas"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <div id="tab-localizacao" style="display:none">
+      <div class="db-table-wrap">
+        <table class="db-table">
+          <thead>
+            <tr><th>Código</th><th>Nome</th><th>Município</th><th>UF</th><th>CEP</th><th>Bioma</th><th>Latitude</th><th>Longitude</th></tr>
+          </thead>
+          <tbody id="tbodyLoc"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <div id="tab-documentos" style="display:none">
+      <div class="db-table-wrap">
+        <table class="db-table">
+          <thead>
+            <tr><th>Código</th><th>Nome</th><th>CAR</th><th>CCIR/INCRA</th><th>ITR</th><th>Matrícula</th><th>NIRF</th></tr>
+          </thead>
+          <tbody id="tbodyDocs"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="modal-footer">
+      <span>Tabela: <strong>gua_fazendas_propriedades</strong> · Schema: <strong>public</strong></span>
+      <span id="footerCount"><strong>5</strong> registros · Última atualização: <strong>31/03/2026 09:14</strong></span>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ FORMULÁRIO PRINCIPAL ═══ -->
+<div class="wrapper">
+
+  <div class="page-title">
+    <div class="icon">🌾</div>
+    <div>
+      <h2>Cadastro de Fazendas e Propriedades</h2>
+      <p>Preencha todos os campos obrigatórios para registrar a fazenda no sistema.</p>
+    </div>
+  </div>
+
+  <div class="steps">
+    <div class="step active"><span class="snum">1</span>Identificação</div>
+    <div class="step"><span class="snum">2</span>Classificação</div>
+    <div class="step"><span class="snum">3</span>Áreas</div>
+    <div class="step"><span class="snum">4</span>Localização</div>
+    <div class="step"><span class="snum">5</span>Ambiental</div>
+    <div class="step"><span class="snum">6</span>Documentação</div>
+    <div class="step"><span class="snum">7</span>Responsável</div>
+    <div class="step"><span class="snum">8</span>Infraestrutura</div>
+  </div>
+
+  <form id="form-faz" novalidate>
+
+    <!-- ═══ 1 · IDENTIFICAÇÃO ═══ -->
+    <div class="section-card">
+      <div class="section-header">
+        <span class="s-icon">🏷️</span>1 · Identificação da Fazenda
+        <span class="s-tag">Campos 1–5</span>
+      </div>
+      <div class="section-body">
+        <div class="grid g-3">
+          <div class="field">
+            <label>ID da Fazenda <span class="badge-pk">PK</span></label>
+            <input type="text" value="UUID — gerado automaticamente" disabled/>
+            <span class="hint">Gerado pelo sistema (UUID v4)</span>
+          </div>
+          <div class="field">
+            <label>Unidade Agrícola <span class="badge-fk">FK</span> <span class="req">*</span></label>
+            <select id="id_unidade_agricola" required>
+              <option value="">— Selecione a Unidade Agrícola —</option>
+              <option value="ua-001">UA-001 · Fazenda Modelo do Cerrado</option>
+              <option value="ua-002">UA-002 · Grupo Agrícola Norte</option>
+              <option value="ua-003">UA-003 · Cooperativa Sul-Mato-Grossense</option>
+            </select>
+            <span class="hint">FK → gua_unidades_agricolas</span>
+          </div>
+          <div class="field">
+            <label>Código da Fazenda <span class="badge-uq">UQ</span> <span class="req">*</span></label>
+            <input type="text" id="codigo_fazenda" maxlength="20" placeholder="Ex: FZ-001" required/>
+            <span class="hint">Único dentro da unidade · máx. 20 car.</span>
+          </div>
+        </div>
+        <hr class="divider"/>
+        <div class="grid g-2">
+          <div class="field span-2">
+            <label>Nome Completo da Fazenda / Propriedade Rural <span class="req">*</span></label>
+            <input type="text" id="nome_fazenda" maxlength="150" placeholder="Ex: Fazenda Santa Clara" required/>
+            <span class="hint">Nome oficial da propriedade (máx. 150 caracteres)</span>
+          </div>
+          <div class="field">
+            <label>Nome Fantasia / Apelido</label>
+            <input type="text" id="nome_fantasia" maxlength="100" placeholder="Ex: Santa Clara"/>
+            <span class="hint">Como a fazenda é conhecida (máx. 100 caracteres)</span>
+          </div>
+          <div class="field">
+            <label>Status Operacional <span class="req">*</span></label>
+            <select id="status" required>
+              <option value="EM_IMPLANTACAO" selected>Em Implantação</option>
+              <option value="ATIVA">Ativa</option>
+              <option value="INATIVA">Inativa</option>
+              <option value="SUSPENSA">Suspensa</option>
+              <option value="EM_REGULARIZACAO">Em Regularização</option>
+            </select>
+            <span class="hint">Default: Em Implantação</span>
+          </div>
+        </div>
+      </div>
+      <div class="legend-bar">
+        <span><span class="dot dot-req"></span> Campo obrigatório</span>
+        <span><span class="dot dot-opt"></span> Campo opcional</span>
+        <span><span class="key-badge kb-pk">PK</span> Chave primária</span>
+        <span><span class="key-badge kb-fk">FK</span> Chave estrangeira</span>
+        <span><span class="key-badge kb-uq">UQ</span> Valor único</span>
+      </div>
+    </div>
+
+    <!-- ═══ 2 · CLASSIFICAÇÃO ═══ -->
+    <div class="section-card">
+      <div class="section-header">
+        <span class="s-icon">📋</span>2 · Classificação e Regime de Exploração
+        <span class="s-tag">Campos 6–10 + 32–34</span>
+      </div>
+      <div class="section-body">
+        <div class="grid g-2">
+          <div class="field">
+            <label>Tipo de Propriedade <span class="req">*</span></label>
+            <select id="tipo_propriedade" required onchange="toggleContrato()">
+              <option value="">— Selecione —</option>
+              <option value="PROPRIA">Própria</option>
+              <option value="ARRENDADA">Arrendada</option>
+              <option value="PARCERIA">Parceria</option>
+              <option value="COMODATO">Comodato</option>
+              <option value="CONCESSAO">Concessão</option>
+              <option value="POSSE">Posse</option>
+            </select>
+            <span class="hint">Regime de exploração da terra</span>
+          </div>
+          <div class="field">
+            <label>Tipo de Exploração <span class="req">*</span></label>
+            <select id="tipo_exploracao" required>
+              <option value="">— Selecione —</option>
+              <option value="AGRICULTURA">Agricultura</option>
+              <option value="PECUARIA">Pecuária</option>
+              <option value="MISTA">Mista</option>
+              <option value="SILVICULTURA">Silvicultura</option>
+              <option value="AQUICULTURA">Aquicultura</option>
+              <option value="AGROENERGIA">Agroenergia</option>
+            </select>
+            <span class="hint">Atividade principal desenvolvida</span>
+          </div>
+          <div class="field">
+            <label>CNPJ / CPF</label>
+            <input type="text" id="cnpj_cpf" maxlength="18" placeholder="00.000.000/0001-00" oninput="mascCNPJ(this)"/>
+            <span class="hint">Quando diferente da unidade agrícola</span>
+          </div>
+          <div class="field">
+            <label>Inscrição Estadual</label>
+            <input type="text" id="inscricao_estadual" maxlength="20" placeholder="123.456.789.000"/>
+            <span class="hint">Inscrição estadual específica da fazenda</span>
+          </div>
+          <div class="field">
+            <label>Data de Aquisição / Início do Contrato</label>
+            <input type="date" id="data_aquisicao"/>
+            <span class="hint">Data de aquisição ou início do vínculo</span>
+          </div>
+          <div class="field" id="field-fim-contrato" style="display:none">
+            <label>Data de Fim do Contrato <span class="req">*</span></label>
+            <input type="date" id="data_fim_contrato"/>
+            <span class="hint">Obrigatório para arrendamento / parceria / comodato</span>
+          </div>
+          <div class="field" id="field-arrendamento" style="display:none">
+            <label>Valor do Arrendamento Mensal (R$) <span class="req">*</span></label>
+            <input type="number" id="valor_arrendamento_mensal" min="0" step="0.01" placeholder="0,00"/>
+            <span class="hint">Obrigatório quando Tipo = Arrendada</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ 3 · ÁREAS ═══ -->
+    <div class="section-card">
+      <div class="section-header">
+        <span class="s-icon">📐</span>3 · Distribuição de Áreas
+        <span class="s-tag">Campos 11–16</span>
+      </div>
+      <div class="section-body">
+        <div class="note">
+          📏 Todos os valores devem ser informados em <strong>hectares (ha)</strong> com até 4 casas decimais. A soma das sub-áreas não deve exceder a Área Total.
+        </div>
+        <div class="area-grid">
+          <div class="area-card total">
+            <label><span class="dot" style="background:#7ee8a2"></span>Área Total (ha) <span style="color:var(--red);margin-left:2px;">*</span></label>
+            <input type="number" id="area_total_ha" min="0.0001" step="0.0001" placeholder="0.0000" required oninput="calcArea()"/>
+          </div>
+          <div class="area-card">
+            <label><span class="dot" style="background:#52b788"></span>Área Produtiva (ha)</label>
+            <input type="number" id="area_produtiva_ha" min="0" step="0.0001" placeholder="0.0000" oninput="calcArea()"/>
+          </div>
+          <div class="area-card">
+            <label><span class="dot" style="background:#f5c842"></span>Área de Pastagem (ha)</label>
+            <input type="number" id="area_pastagem_ha" min="0" step="0.0001" placeholder="0.0000" oninput="calcArea()"/>
+          </div>
+          <div class="area-card">
+            <label><span class="dot" style="background:#228b22"></span>Reserva Legal (ha)</label>
+            <input type="number" id="area_reserva_legal_ha" min="0" step="0.0001" placeholder="0.0000" oninput="calcArea()"/>
+            <span style="font-size:10px;color:var(--text-muted);margin-top:4px;">Conforme Código Florestal</span>
+          </div>
+          <div class="area-card">
+            <label><span class="dot" style="background:#7dd3e8"></span>APP (ha)</label>
+            <input type="number" id="area_app_ha" min="0" step="0.0001" placeholder="0.0000" oninput="calcArea()"/>
+            <span style="font-size:10px;color:var(--text-muted);margin-top:4px;">Preservação Permanente</span>
+          </div>
+          <div class="area-card">
+            <label><span class="dot" style="background:#f07070"></span>Benfeitorias (ha)</label>
+            <input type="number" id="area_benfeitorias_ha" min="0" step="0.0001" placeholder="0.0000" oninput="calcArea()"/>
+            <span style="font-size:10px;color:var(--text-muted);margin-top:4px;">Sedes, galpões, silos</span>
+          </div>
+        </div>
+        <div class="area-alert" id="areaAlert" style="display:flex; display:none;">
+          <span>⚠️</span><span id="areaAlertMsg"></span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ 4 · LOCALIZAÇÃO ═══ -->
+    <div class="section-card">
+      <div class="section-header">
+        <span class="s-icon">📍</span>4 · Localização
+        <span class="s-tag">Campos 17–24</span>
+      </div>
+      <div class="section-body">
+        <div class="grid g-2">
+          <div class="field span-2">
+            <label>Endereço / Logradouro <span class="req">*</span></label>
+            <input type="text" id="endereco_logradouro" maxlength="200" placeholder="Ex: Rodovia BR-163, km 320, Zona Rural" required/>
+          </div>
+          <div class="field">
+            <label>Município <span class="req">*</span></label>
+            <input type="text" id="municipio" maxlength="100" placeholder="Ex: Sorriso" required/>
+          </div>
+          <div class="field">
+            <label>UF <span class="req">*</span></label>
+            <select id="uf" required>
+              <option value="">— UF —</option>
+              <option>AC</option><option>AL</option><option>AP</option><option>AM</option>
+              <option>BA</option><option>CE</option><option>DF</option><option>ES</option>
+              <option>GO</option><option>MA</option><option>MT</option><option>MS</option>
+              <option>MG</option><option>PA</option><option>PB</option><option>PR</option>
+              <option>PE</option><option>PI</option><option>RJ</option><option>RN</option>
+              <option>RS</option><option>RO</option><option>RR</option><option>SC</option>
+              <option>SP</option><option>SE</option><option>TO</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>CEP</label>
+            <input type="text" id="cep" maxlength="10" placeholder="00000-000" oninput="mascCEP(this)"/>
+          </div>
+        </div>
+        <hr class="divider"/>
+        <p style="font-size:11px;font-weight:700;color:var(--text-label);text-transform:uppercase;letter-spacing:.5px;margin-bottom:12px;">📡 Coordenadas GPS (centro da fazenda)</p>
+        <div class="grid g-3">
+          <div class="field">
+            <label>Latitude</label>
+            <input type="number" id="latitude" step="0.0000001" min="-90" max="90" placeholder="-12.5000000"/>
+            <span class="hint">Range: −90 a +90</span>
+          </div>
+          <div class="field">
+            <label>Longitude</label>
+            <input type="number" id="longitude" step="0.0000001" min="-180" max="180" placeholder="-55.0000000"/>
+            <span class="hint">Range: −180 a +180</span>
+          </div>
+          <div class="field">
+            <label>Altitude Média (m)</label>
+            <input type="number" id="altitude_media_m" step="0.01" placeholder="350.00"/>
+            <span class="hint">Metros acima do nível do mar</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ 5 · AMBIENTAL ═══ -->
+    <div class="section-card">
+      <div class="section-header">
+        <span class="s-icon">🌿</span>5 · Características Ambientais
+        <span class="s-tag">Campos 24–26</span>
+      </div>
+      <div class="section-body">
+        <div class="grid g-3">
+          <div class="field">
+            <label>Bioma</label>
+            <select id="bioma">
+              <option value="">— Selecione —</option>
+              <option value="CERRADO">Cerrado</option>
+              <option value="MATA_ATLANTICA">Mata Atlântica</option>
+              <option value="AMAZONIA">Amazônia</option>
+              <option value="CAATINGA">Caatinga</option>
+              <option value="PAMPA">Pampa</option>
+              <option value="PANTANAL">Pantanal</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>Tipo de Solo Predominante</label>
+            <input type="text" id="tipo_solo_predominante" maxlength="100" placeholder="Ex: Latossolo Vermelho"/>
+            <span class="hint">Classificação pedológica principal</span>
+          </div>
+          <div class="field">
+            <label>Classificação Climática Köppen</label>
+            <input type="text" id="clima_classificacao" maxlength="50" placeholder="Ex: Aw, Cwa, Cfb"/>
+            <span class="hint">Código da classificação climática</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ 6 · DOCUMENTAÇÃO ═══ -->
+    <div class="section-card">
+      <div class="section-header">
+        <span class="s-icon">📄</span>6 · Documentação e Registros Legais
+        <span class="s-tag">Campos 27–35</span>
+      </div>
+      <div class="section-body">
+        <div class="grid g-3">
+          <div class="field">
+            <label>Número do CAR</label>
+            <input type="text" id="numero_car" maxlength="50" placeholder="MT-5107925-XXXXXX"/>
+            <span class="hint">Cadastro Ambiental Rural (SICAR)</span>
+          </div>
+          <div class="field">
+            <label>CCIR / INCRA</label>
+            <input type="text" id="numero_ccir" maxlength="30" placeholder="123456789-0"/>
+            <span class="hint">Certificado de Cadastro de Imóvel Rural</span>
+          </div>
+          <div class="field">
+            <label>Número do ITR</label>
+            <input type="text" id="numero_itr" maxlength="30" placeholder="0000.00.00.0000-0"/>
+            <span class="hint">Imposto Territorial Rural</span>
+          </div>
+          <div class="field">
+            <label>NIRF / CAFIR</label>
+            <input type="text" id="numero_nirf" maxlength="30" placeholder="00.000.000-0"/>
+            <span class="hint">Inscrição do Imóvel Rural — Receita Federal</span>
+          </div>
+          <div class="field span-2">
+            <label>Matrícula do Imóvel</label>
+            <input type="text" id="matricula_imovel" maxlength="50" placeholder="Ex: 12.345 — Cartório de Registro de Imóveis"/>
+            <span class="hint">Número da matrícula no cartório de registro</span>
+          </div>
+        </div>
+        <hr class="divider"/>
+        <div class="note">
+          🌿 O <strong>CAR</strong> é obrigatório por lei para todas as propriedades rurais (Lei 12.651/2012). Certifique-se de cadastrar antes de finalizar o registro.
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ 7 · RESPONSÁVEL ═══ -->
+    <div class="section-card">
+      <div class="section-header">
+        <span class="s-icon">👤</span>7 · Responsável pela Fazenda
+        <span class="s-tag">Campos 35–37</span>
+      </div>
+      <div class="section-body">
+        <div class="grid g-3">
+          <div class="field span-3">
+            <label>Nome do Responsável / Gerente <span class="req">*</span></label>
+            <input type="text" id="responsavel_nome" maxlength="150" placeholder="Ex: João da Silva" required/>
+          </div>
+          <div class="field">
+            <label>Telefone de Contato</label>
+            <input type="text" id="responsavel_telefone" maxlength="20" placeholder="(65) 99999-9999" oninput="mascTel(this)"/>
+          </div>
+          <div class="field">
+            <label>E-mail do Responsável</label>
+            <input type="email" id="responsavel_email" maxlength="100" placeholder="joao@fazenda.com.br"/>
+            <span class="hint">Endereço de e-mail válido</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ 8 · INFRAESTRUTURA ═══ -->
+    <div class="section-card">
+      <div class="section-header">
+        <span class="s-icon">🏗️</span>8 · Infraestrutura e Recursos Hídricos
+        <span class="s-tag">Campos 38–49</span>
+      </div>
+      <div class="section-body">
+        <div class="grid g-3">
+          <div class="field">
+            <label>Capacidade de Armazenamento (t)</label>
+            <input type="number" id="capacidade_armazenamento_ton" min="0" step="0.01" placeholder="0.00"/>
+            <span class="hint">Total de silos + armazéns, em toneladas</span>
+          </div>
+          <div class="field">
+            <label>Fonte d'Água Principal</label>
+            <select id="fonte_agua_principal">
+              <option value="">— Selecione —</option>
+              <option value="RIO">Rio</option>
+              <option value="REPRESA">Represa</option>
+              <option value="POCO_ARTESIANO">Poço Artesiano</option>
+              <option value="NASCENTE">Nascente</option>
+              <option value="CHUVA">Chuva</option>
+              <option value="OUTRA">Outra</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>Possui Sistema de Irrigação? <span class="req">*</span></label>
+            <div class="bool-group">
+              <input type="radio" id="irrig-nao" name="possui_irrigacao" value="false" checked onchange="toggleIrrig()"/>
+              <label for="irrig-nao">Não</label>
+              <div class="bool-sep"></div>
+              <input type="radio" id="irrig-sim" name="possui_irrigacao" value="true" onchange="toggleIrrig()"/>
+              <label for="irrig-sim">Sim</label>
+            </div>
+            <span class="hint">Default: Não</span>
+          </div>
+          <div class="field" id="field-tipo-irrig" style="display:none">
+            <label>Tipo de Irrigação <span class="req">*</span></label>
+            <select id="tipo_irrigacao">
+              <option value="">— Selecione —</option>
+              <option value="PIVO_CENTRAL">Pivô Central</option>
+              <option value="GOTEJAMENTO">Gotejamento</option>
+              <option value="ASPERSAO">Aspersão</option>
+              <option value="SULCO">Sulco</option>
+              <option value="INUNDACAO">Inundação</option>
+              <option value="NENHUM">Nenhum</option>
+            </select>
+            <span class="hint">Obrigatório quando possui irrigação</span>
+          </div>
+        </div>
+        <hr class="divider"/>
+        <div class="grid g-2">
+          <div class="field span-2">
+            <label>URL da Foto Principal / Imagem Aérea</label>
+            <input type="url" id="foto_url" maxlength="500" placeholder="https://..."/>
+            <span class="hint">URL da imagem de capa da fazenda (máx. 500 car.)</span>
+          </div>
+          <div class="field">
+            <label>Observações Gerais</label>
+            <textarea id="observacoes" placeholder="Informações adicionais sobre a fazenda..."></textarea>
+            <span class="hint">Texto livre — campo TEXT sem limite de caracteres</span>
+          </div>
+          <div class="field">
+            <label>GeoJSON do Perímetro</label>
+            <textarea id="geojson_perimetro" placeholder='{"type":"Feature","geometry":{...}}' style="font-family:monospace;font-size:12px;"></textarea>
+            <span class="hint">Polígono georreferenciado para mapeamento</span>
+          </div>
+        </div>
+        <hr class="divider"/>
+        <div class="grid g-2">
+          <div class="field">
+            <label>Registro Ativo <span class="req">*</span></label>
+            <div class="bool-group">
+              <input type="radio" id="ativo-sim" name="ativo" value="true" checked/>
+              <label for="ativo-sim">Ativo</label>
+              <div class="bool-sep"></div>
+              <input type="radio" id="ativo-nao" name="ativo" value="false"/>
+              <label for="ativo-nao">Inativo (soft delete)</label>
+            </div>
+            <span class="hint">Default: Ativo (TRUE)</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- CAMPOS DE SISTEMA (read-only) -->
+      <div class="section-body" style="border-top:1px dashed var(--green-border);padding-top:16px;">
+        <p style="font-size:11px;font-weight:700;color:var(--text-label);text-transform:uppercase;letter-spacing:.5px;margin-bottom:12px;">🔒 Campos de Auditoria — Gerenciados pelo Sistema</p>
+        <div class="grid g-4">
+          <div class="field">
+            <label>Criado em</label>
+            <input type="text" value="NOW() — automático" disabled/>
+          </div>
+          <div class="field">
+            <label>Atualizado em</label>
+            <input type="text" value="ON UPDATE NOW()" disabled/>
+          </div>
+          <div class="field">
+            <label>Criado por <span class="badge-fk">FK</span></label>
+            <input type="text" value="Usuário logado" disabled/>
+            <span class="hint">FK → sys_usuarios</span>
+          </div>
+          <div class="field">
+            <label>Atualizado por <span class="badge-fk">FK</span></label>
+            <input type="text" value="Usuário logado" disabled/>
+            <span class="hint">FK → sys_usuarios</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-actions">
+        <div style="display:flex;gap:10px;">
+          <button type="button" class="btn btn-outline" onclick="document.getElementById('form-faz').reset();toggleContrato();toggleIrrig();">↺ Limpar Campos</button>
+          <button type="button" class="btn btn-danger" onclick="if(confirm('Cancelar o cadastro?'))window.location.reload()">✕ Cancelar</button>
+        </div>
+        <button type="submit" class="btn btn-save">💾 Salvar Cadastro</button>
+      </div>
+    </div>
+
+  </form>
+</div><!-- /wrapper -->
+
+<!-- TOAST -->
+<div class="toast" id="toast">
+  <div class="toast-icon">✅</div>
+  <div>
+    <div id="toastTitle">Fazenda cadastrada com sucesso!</div>
+    <p id="toastSub">Registro salvo em gua_fazendas_propriedades</p>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+  /* ══════════════════════════════════════════════
+     SUPABASE — Configuração
+  ══════════════════════════════════════════════ */
+  const SUPABASE_URL  = 'https://lrykwxazoqntsofgyhzx.supabase.co';
+  const SUPABASE_KEY  = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxyeWt3eGF6b3FudHNvZmd5aHp4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzUwMDQ5ODEsImV4cCI6MjA5MDU4MDk4MX0.7cTY4Cro-aHv_CyRaQznNkRAIblVmwEqxRAlZoouByA';
+  const supabase      = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+  const TABELA        = 'gua_fazendas_propriedades';
+
+  /* ── DARK TOGGLE ── */
+  const htmlEl = document.documentElement;
+  document.getElementById('darkToggle').addEventListener('click', () => {
+    const isLight = htmlEl.getAttribute('data-theme') === 'light';
+    htmlEl.setAttribute('data-theme', isLight ? 'dark' : 'light');
+    document.getElementById('toggleIcon').textContent = isLight ? '☀️' : '🌙';
+    document.querySelector('.tgl-label').textContent   = isLight ? 'Light' : 'Dark';
+  });
+
+  /* ── CAMPOS CONDICIONAIS ── */
+  function toggleContrato() {
+    const tipo = document.getElementById('tipo_propriedade').value;
+    document.getElementById('field-fim-contrato').style.display   = ['ARRENDADA','PARCERIA','COMODATO'].includes(tipo) ? '' : 'none';
+    document.getElementById('field-arrendamento').style.display   = tipo === 'ARRENDADA' ? '' : 'none';
+  }
+  function toggleIrrig() {
+    document.getElementById('field-tipo-irrig').style.display = document.getElementById('irrig-sim').checked ? '' : 'none';
+  }
+
+  /* ── CÁLCULO DE ÁREAS ── */
+  function calcArea() {
+    const total = parseFloat(document.getElementById('area_total_ha').value) || 0;
+    const subs  = ['area_produtiva_ha','area_pastagem_ha','area_reserva_legal_ha','area_app_ha','area_benfeitorias_ha'];
+    const soma  = subs.reduce((acc,id) => acc + (parseFloat(document.getElementById(id).value)||0), 0);
+    const al    = document.getElementById('areaAlert');
+    if (total > 0 && soma > total) {
+      document.getElementById('areaAlertMsg').textContent =
+        `A soma das sub-áreas (${soma.toFixed(4)} ha) ultrapassa a Área Total (${total.toFixed(4)} ha). Verifique os valores.`;
+      al.style.display = 'flex';
+    } else { al.style.display = 'none'; }
+  }
+
+  /* ── MÁSCARAS ── */
+  function mascCNPJ(el) {
+    let v = el.value.replace(/\D/g,'');
+    if (v.length <= 11) {
+      v = v.replace(/(\d{3})(\d)/,'$1.$2').replace(/(\d{3})(\d)/,'$1.$2').replace(/(\d{3})(\d{1,2})$/,'$1-$2');
+    } else {
+      v = v.substring(0,14).replace(/(\d{2})(\d)/,'$1.$2').replace(/(\d{3})(\d)/,'$1.$2').replace(/(\d{3})(\d)/,'$1/$2').replace(/(\d{4})(\d{1,2})$/,'$1-$2');
+    }
+    el.value = v;
+  }
+  function mascCEP(el) {
+    let v = el.value.replace(/\D/g,'').substring(0,8);
+    if (v.length > 5) v = v.replace(/(\d{5})(\d)/,'$1-$2');
+    el.value = v;
+  }
+  function mascTel(el) {
+    let v = el.value.replace(/\D/g,'').substring(0,11);
+    if (v.length > 10) v = v.replace(/(\d{2})(\d{5})(\d{4})/,'($1) $2-$3');
+    else if (v.length > 6) v = v.replace(/(\d{2})(\d{4})(\d{0,4})/,'($1) $2-$3');
+    else if (v.length > 2) v = v.replace(/(\d{2})(\d+)/,'($1) $2');
+    el.value = v;
+  }
+
+  /* ── SUBMIT → INSERT SUPABASE ── */
+  document.getElementById('form-faz').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    if (!validarForm()) return;
+
+    const btn = document.querySelector('.btn-save');
+    btn.disabled = true;
+    btn.innerHTML = '⏳ Salvando...';
+
+    const g = id => document.getElementById(id)?.value?.trim() || null;
+    const n = id => { const v = parseFloat(document.getElementById(id)?.value); return isNaN(v) ? null : v; };
+    const b = name => document.querySelector(`input[name="${name}"]:checked`)?.value === 'true';
+
+    const payload = {
+      id_unidade_agricola:          g('id_unidade_agricola'),
+      codigo_fazenda:               g('codigo_fazenda'),
+      nome_fazenda:                 g('nome_fazenda'),
+      nome_fantasia:                g('nome_fantasia'),
+      tipo_propriedade:             g('tipo_propriedade'),
+      tipo_exploracao:              g('tipo_exploracao'),
+      status:                       g('status') || 'EM_IMPLANTACAO',
+      cnpj_cpf:                     g('cnpj_cpf'),
+      inscricao_estadual:           g('inscricao_estadual'),
+      area_total_ha:                n('area_total_ha'),
+      area_produtiva_ha:            n('area_produtiva_ha'),
+      area_reserva_legal_ha:        n('area_reserva_legal_ha'),
+      area_app_ha:                  n('area_app_ha'),
+      area_pastagem_ha:             n('area_pastagem_ha'),
+      area_benfeitorias_ha:         n('area_benfeitorias_ha'),
+      endereco_logradouro:          g('endereco_logradouro'),
+      municipio:                    g('municipio'),
+      uf:                           g('uf'),
+      cep:                          g('cep'),
+      latitude:                     n('latitude'),
+      longitude:                    n('longitude'),
+      altitude_media_m:             n('altitude_media_m'),
+      bioma:                        g('bioma'),
+      tipo_solo_predominante:       g('tipo_solo_predominante'),
+      clima_classificacao:          g('clima_classificacao'),
+      numero_car:                   g('numero_car'),
+      numero_ccir:                  g('numero_ccir'),
+      numero_itr:                   g('numero_itr'),
+      matricula_imovel:             g('matricula_imovel'),
+      numero_nirf:                  g('numero_nirf'),
+      data_aquisicao:               g('data_aquisicao') || null,
+      data_fim_contrato:            g('data_fim_contrato') || null,
+      valor_arrendamento_mensal:    n('valor_arrendamento_mensal'),
+      responsavel_nome:             g('responsavel_nome'),
+      responsavel_telefone:         g('responsavel_telefone'),
+      responsavel_email:            g('responsavel_email'),
+      capacidade_armazenamento_ton: n('capacidade_armazenamento_ton'),
+      possui_irrigacao:             b('possui_irrigacao'),
+      tipo_irrigacao:               g('tipo_irrigacao'),
+      fonte_agua_principal:         g('fonte_agua_principal'),
+      observacoes:                  g('observacoes'),
+      foto_url:                     g('foto_url'),
+      geojson_perimetro:            g('geojson_perimetro'),
+      ativo:                        b('ativo'),
+    };
+
+    // Remove nulls desnecessários
+    Object.keys(payload).forEach(k => { if (payload[k] === null || payload[k] === '') delete payload[k]; });
+
+    const { data, error } = await supabase.from(TABELA).insert([payload]).select().single();
+
+    btn.disabled = false;
+    btn.innerHTML = '💾 Salvar Cadastro';
+
+    if (error) {
+      showToast('❌', 'Erro ao salvar!', error.message, '#c0392b');
+      console.error('Supabase INSERT error:', error);
+      return;
+    }
+
+    showToast('✅', 'Fazenda cadastrada com sucesso!',
+      `ID: ${data.id_fazenda.toUpperCase().substring(0,18)}… · ${new Date().toLocaleString('pt-BR')}`, null);
+    document.getElementById('form-faz').reset();
+    toggleContrato(); toggleIrrig();
+  });
+
+  function validarForm() {
+    let ok = true;
+    const obrig = [
+      {id:'id_unidade_agricola', msg:'Selecione a unidade agrícola'},
+      {id:'codigo_fazenda',      msg:'Informe o código da fazenda'},
+      {id:'nome_fazenda',        msg:'Informe o nome da fazenda'},
+      {id:'tipo_propriedade',    msg:'Selecione o tipo de propriedade'},
+      {id:'tipo_exploracao',     msg:'Selecione o tipo de exploração'},
+      {id:'area_total_ha',       msg:'Informe a área total (> 0)'},
+      {id:'endereco_logradouro', msg:'Informe o endereço'},
+      {id:'municipio',           msg:'Informe o município'},
+      {id:'uf',                  msg:'Selecione a UF'},
+      {id:'responsavel_nome',    msg:'Informe o nome do responsável'},
+    ];
+    obrig.forEach(f => {
+      const el = document.getElementById(f.id);
+      if (!el) return;
+      const v = el.value.trim ? el.value.trim() : el.value;
+      if (!v || (f.id==='area_total_ha' && parseFloat(v)<=0)) {
+        el.classList.add('err'); ok = false;
+      } else { el.classList.remove('err'); }
+    });
+    if (!ok) {
+      document.querySelector('.field input.err, .field select.err')?.scrollIntoView({behavior:'smooth', block:'center'});
+    }
+    return ok;
+  }
+  // remove .err on input
+  document.querySelectorAll('.field input, .field select').forEach(el => {
+    el.addEventListener('input',  () => el.classList.remove('err'));
+    el.addEventListener('change', () => el.classList.remove('err'));
+  });
+
+  /* ══════════════════════════════════════════════
+     TOAST HELPER
+  ══════════════════════════════════════════════ */
+  function showToast(icon, title, sub, bgColor) {
+    const t = document.getElementById('toast');
+    document.querySelector('.toast-icon').textContent = icon;
+    document.getElementById('toastTitle').textContent = title;
+    document.getElementById('toastSub').textContent   = sub;
+    if (bgColor) t.style.background = bgColor;
+    else t.style.background = '';
+    t.classList.add('show');
+    setTimeout(() => { t.classList.remove('show'); t.style.background=''; }, 5500);
+  }
+
+  /* ══════════════════════════════════════════════
+     STATUS CHIP
+  ══════════════════════════════════════════════ */
+  function chipStatus(s) {
+    const m = {ATIVA:'chip-ativa',INATIVA:'chip-inativa',EM_IMPLANTACAO:'chip-implant',SUSPENSA:'chip-suspensa',EM_REGULARIZACAO:'chip-regular'};
+    const l = {ATIVA:'Ativa',INATIVA:'Inativa',EM_IMPLANTACAO:'Em Implantação',SUSPENSA:'Suspensa',EM_REGULARIZACAO:'Em Regularização'};
+    return `<span class="chip ${m[s]||''}">${l[s]||s}</span>`;
+  }
+
+  function fmt(v, decimals=4) {
+    if (v === null || v === undefined || v === '') return '—';
+    const n = parseFloat(v);
+    return isNaN(n) ? String(v) : n.toFixed(decimals);
+  }
+
+  /* ══════════════════════════════════════════════
+     CARREGAR DADOS DO SUPABASE → MODAL
+  ══════════════════════════════════════════════ */
+  let dbCache = [];
+
+  async function carregarDados() {
+    const loadRow = `<tr><td colspan="8" style="text-align:center;padding:20px;color:var(--text-muted)">⏳ Carregando dados do Supabase...</td></tr>`;
+    document.getElementById('tbodyRegistros').innerHTML = loadRow;
+
+    const { data, error } = await supabase
+      .from(TABELA)
+      .select('*')
+      .order('criado_em', { ascending: false });
+
+    if (error) {
+      console.error('Supabase SELECT error:', error);
+      document.getElementById('tbodyRegistros').innerHTML =
+        `<tr><td colspan="8" style="text-align:center;padding:20px;color:var(--red)">❌ Erro ao carregar: ${error.message}</td></tr>`;
+      return;
+    }
+
+    dbCache = data || [];
+    renderTables();
+  }
+
+  function renderTables(filter='all', search='') {
+    const filtered = dbCache.filter(r => {
+      const matchF = filter === 'all' || r.status === filter;
+      const q      = search.toLowerCase();
+      const matchS = !q ||
+        (r.nome_fazenda||'').toLowerCase().includes(q) ||
+        (r.codigo_fazenda||'').toLowerCase().includes(q) ||
+        (r.municipio||'').toLowerCase().includes(q) ||
+        (r.responsavel_nome||'').toLowerCase().includes(q);
+      return matchF && matchS;
+    });
+
+    const total = filtered.length;
+    document.getElementById('dbStat').textContent = `${total} registro${total!==1?'s':''}`;
+    document.getElementById('footerCount').innerHTML =
+      `<strong>${total}</strong> registro${total!==1?'s':''} · Última atualização: <strong>${new Date().toLocaleString('pt-BR')}</strong>`;
+
+    if (total === 0) {
+      const empty = `<tr><td colspan="8" style="text-align:center;padding:24px;color:var(--text-muted)">Nenhum registro encontrado.</td></tr>`;
+      document.getElementById('tbodyRegistros').innerHTML = empty;
+      document.getElementById('tbodyAreas').innerHTML     = empty;
+      document.getElementById('tbodyLoc').innerHTML       = empty;
+      document.getElementById('tbodyDocs').innerHTML      = empty;
+      return;
+    }
+
+    // ── Registros ──
+    document.getElementById('tbodyRegistros').innerHTML = filtered.map((r,i) =>
+      `<tr onclick="selectRow(this,'${r.id_fazenda}')">
+        <td>${i+1}</td>
+        <td class="mono">${r.codigo_fazenda||'—'}</td>
+        <td>${r.nome_fazenda||'—'}</td>
+        <td>${r.tipo_propriedade||'—'}</td>
+        <td>${r.tipo_exploracao||'—'}</td>
+        <td class="mono">${r.area_total_ha ? parseFloat(r.area_total_ha).toLocaleString('pt-BR',{minimumFractionDigits:4}) + ' ha' : '—'}</td>
+        <td>${r.responsavel_nome||'—'}</td>
+        <td>${chipStatus(r.status)}</td>
+      </tr>`).join('');
+
+    // ── Áreas ──
+    document.getElementById('tbodyAreas').innerHTML = filtered.map(r =>
+      `<tr>
+        <td class="mono">${r.codigo_fazenda||'—'}</td>
+        <td>${r.nome_fazenda||'—'}</td>
+        <td class="mono">${fmt(r.area_total_ha)}</td>
+        <td class="mono">${fmt(r.area_produtiva_ha)}</td>
+        <td class="mono">${fmt(r.area_reserva_legal_ha)}</td>
+        <td class="mono">${fmt(r.area_app_ha)}</td>
+        <td class="mono">${fmt(r.area_pastagem_ha)}</td>
+        <td class="mono">${fmt(r.area_benfeitorias_ha)}</td>
+      </tr>`).join('');
+
+    // ── Localização ──
+    document.getElementById('tbodyLoc').innerHTML = filtered.map(r =>
+      `<tr>
+        <td class="mono">${r.codigo_fazenda||'—'}</td>
+        <td>${r.nome_fazenda||'—'}</td>
+        <td>${r.municipio||'—'}</td>
+        <td>${r.uf||'—'}</td>
+        <td>${r.cep||'—'}</td>
+        <td>${r.bioma||'—'}</td>
+        <td class="mono">${fmt(r.latitude,7)}</td>
+        <td class="mono">${fmt(r.longitude,7)}</td>
+      </tr>`).join('');
+
+    // ── Documentação ──
+    document.getElementById('tbodyDocs').innerHTML = filtered.map(r =>
+      `<tr>
+        <td class="mono">${r.codigo_fazenda||'—'}</td>
+        <td>${r.nome_fazenda||'—'}</td>
+        <td class="mono">${r.numero_car||'—'}</td>
+        <td class="mono">${r.numero_ccir||'—'}</td>
+        <td class="mono">${r.numero_itr||'—'}</td>
+        <td class="mono">${r.matricula_imovel||'—'}</td>
+        <td class="mono">${r.numero_nirf||'—'}</td>
+      </tr>`).join('');
+  }
+
+  function selectRow(tr, id) {
+    document.querySelectorAll('#tbodyRegistros tr').forEach(r => r.style.background='');
+    tr.style.background = 'var(--tr-hover)';
+    const r = dbCache.find(x => x.id_fazenda === id);
+    if (!r) return;
+    const d = document.getElementById('recordDetail');
+    d.classList.add('open');
+    document.getElementById('detailGrid').innerHTML = [
+      ['ID da Fazenda', r.id_fazenda],
+      ['Código', r.codigo_fazenda],
+      ['Nome da Fazenda', r.nome_fazenda],
+      ['Nome Fantasia', r.nome_fantasia],
+      ['Tipo Propriedade', r.tipo_propriedade],
+      ['Tipo Exploração', r.tipo_exploracao],
+      ['Status', r.status],
+      ['Área Total (ha)', r.area_total_ha],
+      ['Responsável', r.responsavel_nome],
+      ['Telefone', r.responsavel_telefone],
+      ['E-mail', r.responsavel_email],
+      ['Município', r.municipio],
+      ['UF', r.uf],
+      ['Bioma', r.bioma],
+      ['CAR', r.numero_car],
+      ['CCIR', r.numero_ccir],
+      ['ITR', r.numero_itr],
+      ['Matrícula', r.matricula_imovel],
+      ['Possui Irrigação', r.possui_irrigacao ? 'Sim' : 'Não'],
+      ['Tipo Irrigação', r.tipo_irrigacao],
+      ['Fonte d\'Água', r.fonte_agua_principal],
+      ['Criado em', r.criado_em ? new Date(r.criado_em).toLocaleString('pt-BR') : null],
+    ].map(([l,v]) =>
+      `<div class="detail-item">
+        <div class="di-label">${l}</div>
+        <div class="di-value${l==='ID da Fazenda'?' mono':''}">${v||'—'}</div>
+      </div>`
+    ).join('');
+  }
+
+  /* DB MODAL */
+  document.getElementById('btnOpenDB').addEventListener('click', () => {
+    document.getElementById('dbModal').classList.add('open');
+    carregarDados();
+  });
+  document.getElementById('btnCloseDB').addEventListener('click', () => {
+    document.getElementById('dbModal').classList.remove('open');
+  });
+  document.getElementById('dbModal').addEventListener('click', e => {
+    if (e.target === document.getElementById('dbModal'))
+      document.getElementById('dbModal').classList.remove('open');
+  });
+
+  /* DB TABS */
+  document.querySelectorAll('.db-tab').forEach(tab => {
+    tab.addEventListener('click', () => {
+      document.querySelectorAll('.db-tab').forEach(t => t.classList.remove('active'));
+      tab.classList.add('active');
+      ['registros','areas','localizacao','documentos'].forEach(id => {
+        document.getElementById('tab-'+id).style.display = id === tab.dataset.tab ? '' : 'none';
+      });
+    });
+  });
+
+  /* DB FILTERS + SEARCH */
+  document.querySelectorAll('.db-filter-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.db-filter-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      renderTables(btn.dataset.filter, document.getElementById('dbSearch').value);
+    });
+  });
+  document.getElementById('dbSearch').addEventListener('input', e => {
+    const activeFilter = document.querySelector('.db-filter-btn.active')?.dataset.filter || 'all';
+    renderTables(activeFilter, e.target.value);
+  });
+</script>
+</body>
+</html>

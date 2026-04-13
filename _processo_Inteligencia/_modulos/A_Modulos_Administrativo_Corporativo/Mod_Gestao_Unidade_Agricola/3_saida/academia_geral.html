@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Genius Academia - Centro de Excelência</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #0b1016;
+            --sidebar-width: 280px;
+            --accent-color: #00ff88;
+            --glass-bg: rgba(255, 255, 255, 0.03);
+            --glass-border: rgba(255, 255, 255, 0.08);
+            --text-main: #e0e6ed;
+            --text-dim: #94a3b8;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            font-family: 'Outfit', sans-serif;
+            margin: 0; display: flex;
+        }
+
+        /* SIDEBAR (Standard) */
+        .sidebar { width: var(--sidebar-width); height: 100vh; background: rgba(15, 18, 24, 0.95); backdrop-filter: blur(20px); border-right: 1px solid var(--glass-border); position: fixed; display: flex; flex-direction: column; z-index: 100; }
+        .sidebar-header { padding: 40px 30px; }
+        .sidebar-header h2 { font-size: 1.2rem; margin: 0; letter-spacing: 2px; color: var(--accent-color); text-transform: uppercase; }
+        .nav-menu { list-style: none; padding: 0; margin: 0; flex: 1; }
+        .nav-item { padding: 12px 30px; display: flex; align-items: center; gap: 15px; color: var(--text-dim); text-decoration: none; transition: 0.3s; font-size: 0.9rem; }
+        .nav-item:hover { background: rgba(255, 255, 255, 0.05); color: #fff; }
+        .nav-item.active { background: rgba(0, 255, 136, 0.1); color: var(--accent-color); border-left: 4px solid var(--accent-color); }
+        .sidebar-footer { padding: 20px 0; border-top: 1px solid var(--glass-border); }
+
+        .main-content { margin-left: var(--sidebar-width); flex: 1; padding: 60px 40px; }
+        
+        header { margin-bottom: 60px; }
+        header h1 { font-size: 2.5rem; margin: 0; letter-spacing: -1px; }
+        header p { color: var(--text-dim); font-size: 1.1rem; }
+
+        /* CHAT SIDEBAR (Right) */
+        .chat-sidebar { position: fixed; right: 0; top: 0; width: 400px; height: 100vh; background: rgba(15, 18, 24, 0.98); backdrop-filter: blur(30px); border-left: 1px solid var(--glass-border); z-index: 1000; transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1); display: flex; flex-direction: column; transform: translateX(100%); }
+        .chat-sidebar.active { transform: translateX(0); }
+        .chat-toggle-tab { position: absolute; left: -60px; top: 50%; transform: translateY(-50%); width: 60px; height: 60px; background: var(--accent-color); color: #000; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; cursor: pointer; border-radius: 15px 0 0 15px; box-shadow: -10px 0 20px rgba(0,0,0,0.3); }
+        .chat-header { padding: 30px; border-bottom: 1px solid var(--glass-border); display: flex; align-items: center; gap: 15px; }
+        .chat-body { flex: 1; padding: 30px; overflow-y: auto; display: flex; flex-direction: column; gap: 20px; }
+        .chat-message { padding: 12px 18px; border-radius: 15px; font-size: 0.85rem; line-height: 1.5; max-width: 85%; }
+        .agent-msg { background: rgba(255,255,255,0.05); color: var(--text-main); align-self: flex-start; border-bottom-left-radius: 2px; }
+        .user-msg { background: var(--accent-color); color: #000; align-self: flex-end; border-bottom-right-radius: 2px; font-weight: 500; }
+        .chat-input-area { padding: 30px; border-top: 1px solid var(--glass-border); background: rgba(0,0,0,0.2); display: flex; gap: 15px; }
+        .chat-input-area input { flex: 1; background: none; border: none; color: #fff; font-family: inherit; font-size: 0.85rem; outline: none; }
+
+        /* SIDEBAR DIVIDER */
+        .nav-divider { height: 1px; background: var(--glass-border); margin: 15px 30px; opacity: 0.5; }
+
+        .section-title { font-size: 1.5rem; margin: 60px 0 30px 0; display: flex; align-items: center; gap: 15px; }
+        .section-title::after { content: ''; flex: 1; height: 1px; background: var(--glass-border); }
+
+        /* COURSE GRID */
+        .course-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; }
+        .course-card { background: var(--glass-bg); border: 1px solid var(--glass-border); border-radius: 20px; overflow: hidden; transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); position: relative; }
+        .course-card:hover { transform: translateY(-10px); border-color: var(--accent-color); box-shadow: 0 20px 40px rgba(0,0,0,0.4); }
+        
+        .course-image { height: 180px; width: 100%; background-size: cover; background-position: center; position: relative; }
+        .course-image::after { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(0deg, rgba(11,16,22,1) 0%, rgba(11,16,22,0) 100%); }
+        
+        .course-info { padding: 25px; }
+        .course-info h3 { margin: 0 0 10px 0; font-size: 1.1rem; color: #fff; }
+        .course-info p { margin: 0 0 20px 0; font-size: 0.85rem; color: var(--text-dim); line-height: 1.5; }
+        
+        .btn-enter { width: 100%; padding: 12px; background: rgba(255,255,255,0.05); border: 1px solid var(--glass-border); border-radius: 12px; color: var(--accent-color); font-weight: 600; cursor: pointer; transition: 0.3s; text-transform: uppercase; letter-spacing: 1px; font-size: 0.75rem; }
+        .btn-enter:hover { background: var(--accent-color); color: #000; box-shadow: 0 0 20px rgba(0,255,136,0.3); }
+
+        .badge-course { position: absolute; top: 20px; right: 20px; padding: 4px 10px; background: rgba(0,0,0,0.6); backdrop-filter: blur(5px); border-radius: 20px; font-size: 0.65rem; color: var(--accent-color); z-index: 2; border: 1px solid rgba(0,255,136,0.3); }
+    </style>
+</head>
+<body>
+
+<aside class="sidebar">
+    <div class="sidebar-header">
+        <h2>GENIUS Master</h2>
+    </div>
+    <ul class="nav-menu">
+        <li><a href="portal_visual_unidade_agricola.html" class="nav-item">🏢 Submódulos</a></li>
+        <li><a href="dashboard_geral.html" class="nav-item">📊 Dashboards Geral</a></li>
+        <li><a href="cadastro_geral.html" class="nav-item">➕ Cadastros Geral</a></li>
+        <li><a href="agentes_geral.html" class="nav-item">🤖 Agentes Geral</a></li>
+        <li><a href="fractais_geral.html" class="nav-item">💠 Fractais Geral</a></li>
+        <li><a href="banco_dados_geral.html" class="nav-item">🗄️ Banco de Dados Geral</a></li>
+        <li class="nav-divider"></li>
+        <li><a href="academia_geral.html" class="nav-item active">🎓 Academia Genius</a></li>
+    </ul>
+</aside>
+
+<!-- Sidebar de Chat (Direita) -->
+<div id="chatSidebar" class="chat-sidebar">
+    <div class="chat-toggle-tab" onclick="toggleChat()">🤖</div>
+    <div class="chat-header">
+        <div style="width: 40px; height: 40px; background: rgba(0,255,136,0.1); border: 1px solid var(--accent-color); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.2rem;">🤖</div>
+        <div>
+            <div style="font-size:0.9rem; font-weight:600;">Genius Academy Guardian</div>
+            <div style="font-size:0.65rem; color: var(--accent-color);">MODO EDUCACIONAL</div>
+        </div>
+    </div>
+    <div id="chatBody" class="chat-body">
+        <div class="chat-message agent-msg">
+            Bem-vindo à Academia, Roberto. Deseja que eu resuma algum módulo técnico para você?
+        </div>
+    </div>
+    <div class="chat-input-area">
+        <input type="text" placeholder="Comando..." id="chatInput">
+        <button onclick="enviarMensagem()" style="background:none; border:none; color:var(--accent-color); cursor:pointer;">➔</button>
+    </div>
+</div>
+
+<main class="main-content">
+    <header>
+        <h1>Academia Genius</h1>
+        <p>Centro de Excelência em Agronegócio e Governança Digital.</p>
+    </header>
+
+    <!-- HUB DE SELEÇÃO DE TRILHAS -->
+    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 40px; margin-top: 20px;">
+        
+        <!-- CARD MASTER SUPERIORES -->
+        <div class="course-card" onclick="window.location.href='academia_superiores.html'" style="cursor: pointer; height: 500px;">
+            <div class="course-image" style="height: 300px; background-image: url('https://images.unsplash.com/photo-1523348837708-15d4a09cfac2?auto=format&fit=crop&w=600&q=80')"></div>
+            <div class="course-info" style="text-align: center; padding: 40px;">
+                <span style="font-size: 3rem; display: block; margin-bottom: 20px;">🎓</span>
+                <h2 style="font-size: 1.8rem; margin: 0; color: var(--accent-color);">Cursos Superiores</h2>
+                <p style="margin-top: 15px; font-size: 1rem;">Graduações, Especializações e Engenharias de alto nível.</p>
+                <div style="margin-top: 25px; font-size: 0.8rem; color: var(--accent-color); font-weight: 800; letter-spacing: 2px;">6 CURSOS DISPONÍVEIS ➔</div>
+            </div>
+        </div>
+
+        <!-- CARD MASTER TÉCNICOS -->
+        <div class="course-card" onclick="window.location.href='academia_tecnicos.html'" style="cursor: pointer; height: 500px;">
+            <div class="course-image" style="height: 300px; background-image: url('https://images.unsplash.com/photo-1586771107445-d3ca888129ff?auto=format&fit=crop&w=600&q=80')"></div>
+            <div class="course-info" style="text-align: center; padding: 40px;">
+                <span style="font-size: 3rem; display: block; margin-bottom: 20px;">🔧</span>
+                <h2 style="font-size: 1.8rem; margin: 0; color: var(--accent-color);">Cursos Técnicos</h2>
+                <p style="margin-top: 15px; font-size: 1rem;">Capacitação prática e operacional para o campo moderno.</p>
+                <div style="margin-top: 25px; font-size: 0.8rem; color: var(--accent-color); font-weight: 800; letter-spacing: 2px;">6 CURSOS DISPONÍVEIS ➔</div>
+            </div>
+        </div>
+
+        <!-- CARD MASTER MASTERY -->
+        <div class="course-card" onclick="window.location.href='academia_mastery.html'" style="cursor: pointer; height: 500px;">
+            <div class="course-image" style="height: 300px; background-image: url('https://images.unsplash.com/photo-1550751827-4bd374c3f58b?auto=format&fit=crop&w=600&q=80')"></div>
+            <div class="course-info" style="text-align: center; padding: 40px;">
+                <span style="font-size: 3rem; display: block; margin-bottom: 20px;">📘</span>
+                <h2 style="font-size: 1.8rem; margin: 0; color: var(--accent-color);">Genius Mastery</h2>
+                <p style="margin-top: 15px; font-size: 1rem;">Domínio absoluto da arquitetura e protocolos do Ecossistema.</p>
+                <div style="margin-top: 25px; font-size: 0.8rem; color: var(--accent-color); font-weight: 800; letter-spacing: 2px;">6 CURSOS DISPONÍVEIS ➔</div>
+            </div>
+        </div>
+
+    </div>
+
+</main>
+
+<script>
+    function cursar(nome, medalha) {
+        alert('INICIANDO TREINAMENTO: ' + nome + '\n\nO Genius está processando sua carga horária e módulos técnicos...');
+        
+        setTimeout(() => {
+            const medals = JSON.parse(localStorage.getItem('genius_medals') || '[]');
+            if(!medals.includes(medalha)) {
+                medals.push(medalha);
+                localStorage.setItem('genius_medals', JSON.stringify(medals));
+                alert('🏆 CERTIFICAÇÃO CONCLUÍDA!\n\nParabéns! Você conquistou a medalha: ' + medalha + '.\nVerifique seu Mural de Conquistas no Portal Mestre.');
+            } else {
+                alert('📚 REVISÃO CONCLUÍDA!\n\nVocê já possui esta certificação no seu Mural.');
+            }
+        }, 3000);
+    }
+
+    function toggleChat() {
+        document.getElementById('chatSidebar').classList.toggle('active');
+    }
+
+    function enviarMensagem() {
+        const input = document.getElementById('chatInput');
+        if(!input.value) return;
+        const body = document.getElementById('chatBody');
+        
+        const userMsg = document.createElement('div');
+        userMsg.className = 'chat-message user-msg';
+        userMsg.innerText = input.value;
+        body.appendChild(userMsg);
+        input.value = '';
+        body.scrollTop = body.scrollHeight;
+    }
+</script>
+
+</body>
+</html>

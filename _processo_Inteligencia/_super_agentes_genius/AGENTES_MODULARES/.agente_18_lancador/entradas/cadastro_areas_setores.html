@@ -1,0 +1,891 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AGROGIS — Cadastro de Áreas e Setores</title>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:      #080B0F;
+      --panel:   #0D1219;
+      --card:    #111A26;
+      --alt:     #0E1520;
+      --border:  #1A2A3A;
+      --border2: #243448;
+      --t1: #E4EDF6; --t2: #6E8FAF; --t3: #374F66; --t4: #1E3048;
+      --grn: #34CF84; --blu: #38A0F8; --amb: #F8C030; --sna: #BC6E3C;
+      --act: #2460E0; --act2: #3070F0;
+      --grn-bg: #0D3020; --blu-bg: #0A2248; --amb-bg: #3C2C08; --sna-bg: #2C1A0A;
+      --sidebar-w: 240px; --header-h: 72px; --radius: 10px;
+      --font-mono: 'IBM Plex Mono', monospace;
+      --font-ui:   'Inter', sans-serif;
+    }
+
+    html, body { height: 100%; background: var(--bg); color: var(--t1); font-family: var(--font-ui); font-size: 14px; overflow: hidden; }
+
+    /* ── Scrollbar global ─── */
+    ::-webkit-scrollbar       { width: 8px; height: 8px; }
+    ::-webkit-scrollbar-track { background: #0A0F17; }
+    ::-webkit-scrollbar-thumb { background: #1E3450; border-radius: 4px; border: 2px solid #0A0F17; }
+    ::-webkit-scrollbar-thumb:hover { background: #2A4870; }
+    ::-webkit-scrollbar-corner { background: #0A0F17; }
+    * { scrollbar-width: thin; scrollbar-color: #1E3450 #0A0F17; }
+
+    /* Layout */
+    .shell { display: grid; grid-template-columns: var(--sidebar-w) 1fr; height: 100vh; overflow: hidden; }
+
+    /* Sidebar */
+    .sidebar { background: var(--panel); border-right: 1px solid var(--border); display: flex; flex-direction: column; overflow: hidden; min-height: 0; }
+    .nav { padding: 4px 10px; flex: 1; overflow-y: auto; }
+    .sidebar-logo { padding: 20px; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 12px; }
+    .logo-mark svg { width: 36px; height: 36px; }
+    .logo-text .brand { font-size: 15px; font-weight: 700; color: var(--t1); letter-spacing: .04em; }
+    .logo-text .sub   { font-size: 11px; color: var(--grn); font-family: var(--font-mono); }
+    .sidebar-section-label { padding: 18px 20px 6px; font-size: 10px; font-family: var(--font-mono); letter-spacing: .1em; color: var(--t4); text-transform: uppercase; }
+    .nav { padding: 4px 10px; flex: 1; }
+    .nav-item { display: flex; align-items: center; gap: 10px; padding: 10px 12px; border-radius: 8px; cursor: pointer; color: var(--t3); font-size: 13.5px; font-weight: 500; transition: .15s; position: relative; }
+    .nav-item:hover { background: #14202E; color: var(--t2); }
+    .nav-item.active { background: #142030; color: var(--t1); }
+    .nav-item.active::before { content: ''; position: absolute; left: 0; top: 20%; bottom: 20%; width: 3px; border-radius: 2px; background: var(--act2); }
+    .nav-item.active .nav-icon { color: var(--grn); }
+    .nav-icon { font-size: 14px; width: 18px; text-align: center; }
+    .nav-divider { height: 1px; background: var(--border); margin: 8px 10px; }
+    .sidebar-footer { padding: 14px 20px; border-top: 1px solid var(--border); background: #090D13; display: flex; align-items: center; gap: 10px; }
+    .avatar { width: 32px; height: 32px; border-radius: 50%; background: var(--act); display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; color: #fff; flex-shrink: 0; }
+    .footer-info .name { font-size: 13px; font-weight: 600; }
+    .footer-info .role { font-size: 11px; color: var(--t3); font-family: var(--font-mono); }
+
+    /* Main */
+    .main { display: flex; flex-direction: column; overflow: hidden; min-height: 0; }
+    .header { height: var(--header-h); background: #090D13; border-bottom: 1px solid var(--border); padding: 0 28px; display: flex; align-items: center; justify-content: space-between; flex-shrink: 0; }
+    .header-left { display: flex; flex-direction: column; gap: 2px; }
+    .breadcrumb { font-size: 11px; color: var(--t3); font-family: var(--font-mono); }
+    .page-title { font-size: 18px; font-weight: 700; }
+    .header-right { display: flex; align-items: center; gap: 10px; }
+    .date-badge { font-size: 12px; font-family: var(--font-mono); color: var(--t2); background: var(--card); border: 1px solid var(--border); padding: 5px 12px; border-radius: 6px; }
+    .btn { display: inline-flex; align-items: center; gap: 6px; padding: 7px 14px; border-radius: 7px; font-size: 13px; font-weight: 500; cursor: pointer; border: 1px solid var(--border); background: var(--card); color: var(--t2); transition: .15s; font-family: var(--font-ui); }
+    .btn:hover { background: var(--border); color: var(--t1); }
+    .btn-primary { background: var(--act); border-color: var(--act); color: #fff; }
+    .btn-primary:hover { background: var(--act2); border-color: var(--act2); }
+    .btn-success { background: #0D3020; border-color: rgba(52,207,132,.3); color: var(--grn); }
+    .btn-success:hover { background: #143828; }
+    .btn-danger  { background: #2C1A0A; border-color: rgba(188,110,60,.3); color: var(--sna); }
+    .btn-danger:hover  { background: #3A2210; }
+
+    .content { flex: 1; min-height: 0; overflow-y: auto; padding: 24px 28px; display: flex; flex-direction: column; gap: 20px; }
+
+    /* Stats */
+    .stats-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 14px; }
+    .stat-card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 18px 20px 16px; position: relative; overflow: hidden; transition: border-color .2s; }
+    .stat-card:hover { border-color: var(--border2); }
+    .stat-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; border-radius: var(--radius) var(--radius) 0 0; }
+    .stat-card.grn::before { background: var(--grn); }
+    .stat-card.blu::before { background: var(--blu); }
+    .stat-card.amb::before { background: var(--amb); }
+    .stat-card.sna::before { background: var(--sna); }
+    .stat-icon { width: 34px; height: 34px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 15px; margin-bottom: 14px; }
+    .stat-icon.grn { background: var(--grn-bg); color: var(--grn); }
+    .stat-icon.blu { background: var(--blu-bg); color: var(--blu); }
+    .stat-icon.amb { background: var(--amb-bg); color: var(--amb); }
+    .stat-value { font-size: 32px; font-weight: 700; line-height: 1; margin-bottom: 8px; }
+    .stat-label { font-size: 11px; color: var(--t2); letter-spacing: .04em; text-transform: uppercase; font-weight: 500; }
+    .stat-sub   { font-size: 11px; color: var(--t4); margin-top: 2px; font-family: var(--font-mono); }
+
+    /* Toolbar */
+    .toolbar { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+    .search-box { position: relative; flex: 1; min-width: 200px; max-width: 300px; }
+    .search-box input { width: 100%; background: var(--card); border: 1px solid var(--border); border-radius: 8px; padding: 8px 12px 8px 34px; color: var(--t1); font-size: 13px; font-family: var(--font-ui); outline: none; transition: .15s; }
+    .search-box input::placeholder { color: var(--t3); }
+    .search-box input:focus { border-color: var(--border2); }
+    .search-icon { position: absolute; left: 11px; top: 50%; transform: translateY(-50%); color: var(--t3); }
+    .filter-chips { display: flex; gap: 6px; }
+    .chip { padding: 6px 12px; border-radius: 20px; font-size: 12px; font-weight: 500; cursor: pointer; border: 1px solid var(--border); background: var(--card); color: var(--t2); transition: .15s; font-family: var(--font-mono); }
+    .chip:hover { border-color: var(--border2); color: var(--t1); }
+    .chip.grn.active-filter { background: var(--grn-bg); border-color: rgba(52,207,132,.3); color: var(--grn); }
+    .chip.blu.active-filter { background: var(--blu-bg); border-color: rgba(56,160,248,.3); color: var(--blu); }
+    .chip.amb.active-filter { background: var(--amb-bg); border-color: rgba(248,192,48,.3); color: var(--amb); }
+    .chip.sna.active-filter { background: var(--sna-bg); border-color: rgba(188,110,60,.3); color: var(--sna); }
+    .chip.all.active-filter { background: #152030; border-color: rgba(36,96,224,.3); color: var(--blu); }
+    .ml-auto { margin-left: auto; }
+    .record-count { font-size: 12px; color: var(--t3); font-family: var(--font-mono); white-space: nowrap; }
+
+    /* Table */
+    .table-wrap {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      display: flex;
+      flex-direction: column;
+      min-height: 0;
+      flex-shrink: 0;
+    }
+    .table-scroll {
+      overflow: auto;
+      flex: 1;
+      min-height: 0;
+    }
+    table { width: 100%; border-collapse: collapse; min-width: 1100px; }
+    thead tr { background: #0C1520; }
+    thead th {
+      padding: 12px 14px;
+      font-size: 11px; font-family: var(--font-mono);
+      letter-spacing: .06em; color: var(--t3);
+      text-align: left; white-space: nowrap;
+      border-bottom: 1px solid var(--border2);
+      font-weight: 500;
+      position: sticky; top: 0; z-index: 2;
+      background: #0C1520;
+    }
+    thead th.right { text-align: right; }
+    tbody tr { border-bottom: 1px solid var(--border); transition: background .1s; }
+    tbody tr:last-child { border-bottom: none; }
+    tbody tr:hover { background: #111E2E !important; }
+    tbody tr.even { background: var(--alt); }
+    tbody td { padding: 10px 14px; font-size: 13px; white-space: nowrap; vertical-align: middle; }
+    tbody td.right { text-align: right; }
+    tbody td.muted { color: var(--t2); }
+    tbody td.mono  { font-family: var(--font-mono); font-size: 12px; }
+    .accent-cell { width: 4px; padding: 0 !important; }
+    .accent-bar  { width: 3px; height: 36px; border-radius: 2px; display: block; }
+    .badge { display: inline-flex; align-items: center; padding: 3px 10px; border-radius: 20px; font-size: 11px; font-weight: 600; font-family: var(--font-mono); white-space: nowrap; }
+    .badge.grn { background: var(--grn-bg); color: var(--grn); }
+    .badge.blu { background: var(--blu-bg); color: var(--blu); }
+    .badge.amb { background: var(--amb-bg); color: var(--amb); }
+    .badge.sna { background: var(--sna-bg); color: var(--sna); }
+    .badge.gray { background: #1A2838; color: var(--t3); }
+    .cap-dot { display: inline-flex; align-items: center; gap: 5px; font-size: 12px; font-family: var(--font-mono); }
+    .cap-dot::before { content: '●'; font-size: 8px; }
+    .cap-dot.grn { color: var(--grn); } .cap-dot.grn::before { color: var(--grn); }
+    .cap-dot.amb { color: var(--amb); } .cap-dot.amb::before { color: var(--amb); }
+    .cap-dot.sna { color: var(--sna); } .cap-dot.sna::before { color: var(--sna); }
+    .cap-dot.blu { color: var(--blu); } .cap-dot.blu::before { color: var(--blu); }
+    .cap-dot.gray { color: var(--t3); } .cap-dot.gray::before { color: var(--t3); }
+    .hier-indent { padding-left: 18px; color: var(--t2); }
+    .hier-mark { color: var(--t3); margin-right: 4px; font-family: var(--font-mono); }
+    .action-btns { display: flex; gap: 6px; }
+    .icon-btn { width: 28px; height: 28px; border-radius: 6px; border: 1px solid var(--border); background: transparent; cursor: pointer; font-size: 13px; display: flex; align-items: center; justify-content: center; color: var(--t3); transition: .15s; }
+    .icon-btn:hover.edit  { background: var(--blu-bg); border-color: rgba(56,160,248,.3); color: var(--blu); }
+    .icon-btn:hover.del   { background: var(--sna-bg); border-color: rgba(188,110,60,.3); color: var(--sna); }
+
+    /* Table Footer */
+    .table-footer { padding: 10px 16px; display: flex; align-items: center; justify-content: space-between; border-top: 1px solid var(--border2); background: #0C1520; flex-wrap: wrap; gap: 8px; }
+    .footer-left { font-size: 12px; color: var(--t3); font-family: var(--font-mono); }
+    .footer-chips { display: flex; gap: 8px; flex-wrap: wrap; }
+    .footer-chip { font-size: 11px; padding: 3px 10px; border-radius: 5px; font-family: var(--font-mono); font-weight: 500; border-left: 3px solid; }
+    .footer-chip.grn { background: var(--grn-bg); color: var(--grn); border-color: var(--grn); }
+    .footer-chip.blu { background: var(--blu-bg); color: var(--blu); border-color: var(--blu); }
+    .footer-chip.amb { background: var(--amb-bg); color: var(--amb); border-color: var(--amb); }
+    .footer-chip.sna { background: var(--sna-bg); color: var(--sna); border-color: var(--sna); }
+
+    /* Loading */
+    .state-row td { text-align: center; padding: 40px; color: var(--t3); font-family: var(--font-mono); }
+    .spinner { display: inline-block; width: 14px; height: 14px; border: 2px solid var(--border2); border-top-color: var(--act2); border-radius: 50%; animation: spin .7s linear infinite; margin-right: 6px; vertical-align: middle; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .conn-badge { display: flex; align-items: center; gap: 6px; font-size: 11px; color: var(--t3); font-family: var(--font-mono); }
+    .conn-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--t3); }
+    .conn-dot.live { background: var(--grn); box-shadow: 0 0 6px rgba(52,207,132,.5); }
+
+    /* ══ MODAL ════════════════════════════════════════════ */
+    .modal-overlay {
+      position: fixed; inset: 0; z-index: 100;
+      background: rgba(4,7,11,.85);
+      backdrop-filter: blur(4px);
+      display: flex; align-items: center; justify-content: center;
+      opacity: 0; pointer-events: none;
+      transition: opacity .2s;
+    }
+    .modal-overlay.open { opacity: 1; pointer-events: all; }
+
+    .modal {
+      background: var(--panel);
+      border: 1px solid var(--border2);
+      border-radius: 14px;
+      width: 680px;
+      max-width: 96vw;
+      max-height: 90vh;
+      overflow-y: auto;
+      transform: translateY(16px);
+      transition: transform .2s;
+      box-shadow: 0 24px 64px rgba(0,0,0,.6);
+    }
+    .modal-overlay.open .modal { transform: translateY(0); }
+    .modal::-webkit-scrollbar { width: 5px; }
+    .modal::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 3px; }
+
+    .modal-header {
+      padding: 22px 24px 18px;
+      border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: space-between;
+      position: sticky; top: 0; background: var(--panel); z-index: 1;
+    }
+    .modal-title { font-size: 16px; font-weight: 700; color: var(--t1); }
+    .modal-subtitle { font-size: 12px; color: var(--t3); font-family: var(--font-mono); margin-top: 2px; }
+    .modal-close { width: 30px; height: 30px; border-radius: 7px; border: 1px solid var(--border); background: transparent; cursor: pointer; color: var(--t3); font-size: 16px; display: flex; align-items: center; justify-content: center; transition: .15s; }
+    .modal-close:hover { background: var(--border); color: var(--t1); }
+
+    .modal-body { padding: 20px 24px; }
+
+    /* Form */
+    .form-section { margin-bottom: 20px; }
+    .form-section-title { font-size: 11px; font-family: var(--font-mono); letter-spacing: .08em; color: var(--t3); text-transform: uppercase; margin-bottom: 12px; padding-bottom: 8px; border-bottom: 1px solid var(--border); }
+    .form-grid { display: grid; gap: 14px; }
+    .form-grid.cols2 { grid-template-columns: 1fr 1fr; }
+    .form-grid.cols3 { grid-template-columns: 1fr 1fr 1fr; }
+
+    .form-field { display: flex; flex-direction: column; gap: 6px; }
+    .form-field.span2 { grid-column: span 2; }
+    .form-field.span3 { grid-column: span 3; }
+    label { font-size: 12px; font-weight: 500; color: var(--t2); }
+    label span.req { color: var(--sna); margin-left: 2px; }
+
+    input[type=text], input[type=number], select, textarea {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 9px 12px;
+      color: var(--t1);
+      font-size: 13px;
+      font-family: var(--font-ui);
+      outline: none;
+      transition: border-color .15s;
+      width: 100%;
+    }
+    input:focus, select:focus, textarea:focus { border-color: var(--act2); }
+    input::placeholder, textarea::placeholder { color: var(--t3); }
+    select { cursor: pointer; appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%23374F66' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 12px center; padding-right: 32px; }
+    select option { background: #111A26; }
+    textarea { resize: vertical; min-height: 68px; }
+
+    .form-hint { font-size: 11px; color: var(--t4); font-family: var(--font-mono); margin-top: 2px; }
+
+    /* Modal footer */
+    .modal-footer { padding: 16px 24px; border-top: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; gap: 10px; background: #090D13; border-radius: 0 0 14px 14px; }
+    .modal-footer-left { font-size: 12px; color: var(--t3); font-family: var(--font-mono); }
+    .modal-footer-right { display: flex; gap: 10px; }
+
+    /* Toast */
+    .toast {
+      position: fixed; bottom: 24px; right: 24px; z-index: 200;
+      background: var(--panel); border: 1px solid var(--border2);
+      border-radius: 10px; padding: 12px 18px;
+      display: flex; align-items: center; gap: 10px;
+      font-size: 13px; color: var(--t1);
+      box-shadow: 0 8px 24px rgba(0,0,0,.5);
+      transform: translateY(80px); opacity: 0;
+      transition: all .3s cubic-bezier(.16,1,.3,1);
+      max-width: 360px;
+    }
+    .toast.show { transform: translateY(0); opacity: 1; }
+    .toast.success { border-color: rgba(52,207,132,.3); }
+    .toast.error   { border-color: rgba(188,110,60,.4); }
+    .toast-icon { font-size: 16px; flex-shrink: 0; }
+    .toast-msg { line-height: 1.4; }
+
+    /* Edit row highlight */
+    tbody tr.editing { background: #102030 !important; outline: 1px solid rgba(56,160,248,.3); }
+  </style>
+</head>
+<body>
+
+<!-- ══ TOAST ══════════════════════════════════════════════ -->
+<div class="toast" id="toast">
+  <span class="toast-icon" id="toastIcon"></span>
+  <span class="toast-msg"  id="toastMsg"></span>
+</div>
+
+<!-- ══ MODAL — NOVO / EDITAR REGISTRO ══════════════════════ -->
+<div class="modal-overlay" id="modalOverlay" onclick="closeModalOnOverlay(event)">
+  <div class="modal" id="modal">
+    <div class="modal-header">
+      <div>
+        <div class="modal-title" id="modalTitle">Novo Registro</div>
+        <div class="modal-subtitle" id="modalSubtitle">Preencha os campos para cadastrar uma nova área ou setor</div>
+      </div>
+      <button class="modal-close" onclick="closeModal()">✕</button>
+    </div>
+
+    <div class="modal-body">
+      <form id="areaForm" onsubmit="submitForm(event)">
+        <input type="hidden" id="editId" value="" />
+
+        <!-- Identificação -->
+        <div class="form-section">
+          <div class="form-section-title">Identificação</div>
+          <div class="form-grid cols3">
+            <div class="form-field">
+              <label>Código<span class="req">*</span></label>
+              <input type="text" id="f_codigo" placeholder="AS-016" required />
+              <span class="form-hint">Ex: AS-016</span>
+            </div>
+            <div class="form-field span2">
+              <label>Nome da Área / Setor<span class="req">*</span></label>
+              <input type="text" id="f_nome" placeholder="Ex: Lavoura Norte T3" required />
+            </div>
+          </div>
+        </div>
+
+        <!-- Classificação -->
+        <div class="form-section">
+          <div class="form-section-title">Classificação</div>
+          <div class="form-grid cols2">
+            <div class="form-field">
+              <label>Tipo de Área<span class="req">*</span></label>
+              <select id="f_tipo" required>
+                <option value="">Selecione…</option>
+                <option>Área Produtiva</option>
+                <option>Área de Preservação</option>
+                <option>Área de Infraestrutura</option>
+                <option>Área em Descanso</option>
+              </select>
+            </div>
+            <div class="form-field">
+              <label>Categoria Funcional<span class="req">*</span></label>
+              <select id="f_categoria" required>
+                <option value="">Selecione…</option>
+                <option>Lavoura Anual</option>
+                <option>Lavoura Irrigada</option>
+                <option>Pecuária</option>
+                <option>Fruticultura</option>
+                <option>Horticultura</option>
+                <option>Reserva Legal</option>
+                <option>APP</option>
+                <option>Pousio</option>
+                <option>Infraestrutura Operacional</option>
+                <option>Sede/Escritório</option>
+              </select>
+            </div>
+            <div class="form-field">
+              <label>Status<span class="req">*</span></label>
+              <select id="f_status" required>
+                <option value="Ativo">Ativo</option>
+                <option value="Inativo">Inativo</option>
+                <option value="Em Análise">Em Análise</option>
+              </select>
+            </div>
+            <div class="form-field">
+              <label>Capacidade Operacional<span class="req">*</span></label>
+              <select id="f_capacidade" required>
+                <option value="Não se aplica">Não se aplica</option>
+                <option value="Muito Alta">Muito Alta</option>
+                <option value="Alta">Alta</option>
+                <option value="Média">Média</option>
+                <option value="Baixa">Baixa</option>
+                <option value="Operacional">Operacional</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <!-- Vínculo -->
+        <div class="form-section">
+          <div class="form-section-title">Vínculo Territorial</div>
+          <div class="form-grid cols2">
+            <div class="form-field">
+              <label>Unidade Vinculada<span class="req">*</span></label>
+              <select id="f_unidade" required>
+                <option value="">Selecione…</option>
+                <option>Unidade Oeste</option>
+                <option>Unidade Leste</option>
+                <option>Unidade Norte</option>
+                <option>Unidade Sul</option>
+              </select>
+            </div>
+            <div class="form-field">
+              <label>Propriedade Vinculada<span class="req">*</span></label>
+              <select id="f_propriedade" required>
+                <option value="">Selecione…</option>
+                <option>Fazenda Santa Rita</option>
+                <option>Fazenda Boa Vista</option>
+                <option>Sítio Primavera</option>
+                <option>Fazenda Horizonte Verde</option>
+              </select>
+            </div>
+            <div class="form-field">
+              <label>Área Pai (opcional)</label>
+              <select id="f_pai">
+                <option value="">Nenhuma (Nível 1)</option>
+              </select>
+            </div>
+            <div class="form-field">
+              <label>Uso Atual</label>
+              <input type="text" id="f_uso" placeholder="Ex: Plantio de Soja" />
+            </div>
+          </div>
+        </div>
+
+        <!-- Dimensões -->
+        <div class="form-section">
+          <div class="form-section-title">Dimensões e Localização</div>
+          <div class="form-grid cols3">
+            <div class="form-field">
+              <label>Área Total (ha)</label>
+              <input type="number" id="f_area_total" placeholder="0.00" step="0.01" min="0" />
+            </div>
+            <div class="form-field">
+              <label>Área Útil (ha)</label>
+              <input type="number" id="f_area_util" placeholder="0.00" step="0.01" min="0" />
+            </div>
+            <div class="form-field">
+              <label>Perímetro (m)</label>
+              <input type="number" id="f_perimetro" placeholder="0" min="0" />
+            </div>
+            <div class="form-field">
+              <label>Coordenadas</label>
+              <input type="text" id="f_coords" placeholder="-15.8231, -47.9291" />
+            </div>
+            <div class="form-field">
+              <label>Geometria / Polígono</label>
+              <input type="text" id="f_geo" placeholder="Polígono X1" />
+            </div>
+          </div>
+        </div>
+
+        <!-- Complemento -->
+        <div class="form-section">
+          <div class="form-section-title">Informações Complementares</div>
+          <div class="form-grid cols2">
+            <div class="form-field">
+              <label>Restrições de Uso</label>
+              <textarea id="f_restricoes" placeholder="Descreva restrições..."></textarea>
+            </div>
+            <div class="form-field">
+              <label>Observações</label>
+              <textarea id="f_obs" placeholder="Observações adicionais..."></textarea>
+            </div>
+            <div class="form-field span2">
+              <label>Documentos Vinculados</label>
+              <input type="text" id="f_docs" placeholder="DOC-001, LIC-005, CAR-001" />
+              <span class="form-hint">Separe os documentos por vírgula</span>
+            </div>
+          </div>
+        </div>
+
+      </form>
+    </div>
+
+    <div class="modal-footer">
+      <div class="modal-footer-left" id="modalFooterMsg"></div>
+      <div class="modal-footer-right">
+        <button class="btn" onclick="closeModal()">Cancelar</button>
+        <button class="btn btn-success" onclick="submitForm()" id="submitBtn">
+          <span id="submitIcon">＋</span> <span id="submitLabel">Salvar Registro</span>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ SHELL ═══════════════════════════════════════════════ -->
+<div class="shell">
+
+  <aside class="sidebar">
+    <div class="sidebar-logo">
+      <svg viewBox="0 0 36 36" fill="none" width="36" height="36">
+        <polygon points="18,2 34,18 18,34 2,18" fill="#34CF84"/>
+        <polygon points="18,10 26,18 18,26 10,18" fill="#0D1219"/>
+      </svg>
+      <div class="logo-text">
+        <div class="brand">AGROGIS</div>
+        <div class="sub">FRACTAIS · v2.4</div>
+      </div>
+    </div>
+    <div class="sidebar-section-label">Módulos</div>
+    <nav class="nav">
+      <div class="nav-item"><span class="nav-icon">◈</span> Dashboard</div>
+      <div class="nav-item active"><span class="nav-icon">▤</span> Áreas e Setores</div>
+      <div class="nav-item"><span class="nav-icon">⬡</span> Propriedades</div>
+      <div class="nav-item"><span class="nav-icon">◎</span> Unidades</div>
+      <div class="nav-divider"></div>
+      <div class="nav-item"><span class="nav-icon">⊞</span> Documentos</div>
+      <div class="nav-item"><span class="nav-icon">◉</span> Relatórios</div>
+    </nav>
+    <div class="sidebar-footer">
+      <div class="avatar">RB</div>
+      <div class="footer-info">
+        <div class="name">Roberto Barrós</div>
+        <div class="role">Administrador</div>
+      </div>
+    </div>
+  </aside>
+
+  <div class="main">
+    <header class="header">
+      <div class="header-left">
+        <div class="breadcrumb">Sistema de Gestão › Cadastros › Áreas e Setores</div>
+        <div class="page-title">Cadastro de Áreas e Setores</div>
+      </div>
+      <div class="header-right">
+        <div class="conn-badge">
+          <div class="conn-dot" id="connDot"></div>
+          <span id="connLabel">Conectando…</span>
+        </div>
+        <div class="date-badge" id="dateDisplay"></div>
+        <button class="btn" onclick="loadData()">↻</button>
+        <button class="btn btn-success" onclick="openModal()">＋ Novo Registro</button>
+      </div>
+    </header>
+
+    <div class="content">
+
+      <!-- Stats -->
+      <div class="stats-grid">
+        <div class="stat-card grn">
+          <div class="stat-icon grn">▣</div>
+          <div class="stat-value" id="statTotal">—</div>
+          <div class="stat-label">Total de Áreas</div>
+          <div class="stat-sub" id="statTotalSub">carregando…</div>
+        </div>
+        <div class="stat-card blu">
+          <div class="stat-icon blu">◤</div>
+          <div class="stat-value" id="statArea">—</div>
+          <div class="stat-label">Área Total</div>
+          <div class="stat-sub">hectares mapeados</div>
+        </div>
+        <div class="stat-card grn">
+          <div class="stat-icon grn">●</div>
+          <div class="stat-value" id="statAtivos">—</div>
+          <div class="stat-label">Setores Ativos</div>
+          <div class="stat-sub">em operação</div>
+        </div>
+        <div class="stat-card amb">
+          <div class="stat-icon amb">◈</div>
+          <div class="stat-value" id="statProd">—</div>
+          <div class="stat-label">Tipo Produtivo</div>
+          <div class="stat-sub">setores produtivos</div>
+        </div>
+      </div>
+
+      <!-- Toolbar -->
+      <div class="toolbar">
+        <div class="search-box">
+          <span class="search-icon">⌕</span>
+          <input type="text" id="searchInput" placeholder="Buscar área ou setor…" oninput="applyFilters()" />
+        </div>
+        <div class="filter-chips">
+          <span class="chip all active-filter" onclick="setFilter(this,'')">Todos</span>
+          <span class="chip grn" onclick="setFilter(this,'Área Produtiva')">Produtiva</span>
+          <span class="chip blu" onclick="setFilter(this,'Área de Preservação')">Preservação</span>
+          <span class="chip amb" onclick="setFilter(this,'Área de Infraestrutura')">Infraestrutura</span>
+          <span class="chip sna" onclick="setFilter(this,'Área em Descanso')">Descanso</span>
+        </div>
+        <span class="ml-auto record-count" id="recordCount">— registros</span>
+      </div>
+
+      <!-- Table -->
+      <div class="table-wrap">
+        <div class="table-scroll">
+          <table>
+            <thead>
+              <tr>
+                <th style="width:4px;padding:0"></th>
+                <th>ID</th>
+                <th>Código</th>
+                <th>Nome da Área</th>
+                <th>Tipo</th>
+                <th>Unidade</th>
+                <th class="right">Total ha</th>
+                <th class="right">Útil ha</th>
+                <th>Status</th>
+                <th>Capacidade</th>
+                <th>Ações</th>
+              </tr>
+            </thead>
+            <tbody id="tableBody">
+              <tr class="state-row"><td colspan="11"><span class="spinner"></span> Carregando dados do Supabase…</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="table-footer">
+          <div class="footer-left" id="footerLeft">—</div>
+          <div class="footer-chips" id="footerChips"></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<script>
+const SUPA_URL = 'https://lrykwxazoqntsofgyhzx.supabase.co'
+const SUPA_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxyeWt3eGF6b3FudHNvZmd5aHp4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzUwMDQ5ODEsImV4cCI6MjA5MDU4MDk4MX0.7cTY4Cro-aHv_CyRaQznNkRAIblVmwEqxRAlZoouByA'
+const { createClient } = supabase
+const db = createClient(SUPA_URL, SUPA_KEY)
+
+let allData = [], activeFilter = '', editingId = null
+
+// ── Color helpers ────────────────────────────────────────
+const tipo2c = t => ({'Área Produtiva':'grn','Área de Preservação':'blu','Área de Infraestrutura':'amb','Área em Descanso':'sna'}[t]||'gray')
+const cap2c  = c => ({'Alta':'grn','Muito Alta':'grn','Média':'amb','Baixa':'sna','Operacional':'blu','Não se aplica':'gray'}[c]||'gray')
+const short  = t => t.replace('Área de ','').replace('Área em ','').replace('Área ','')
+const fmtHa  = n => Number(n||0).toLocaleString('pt-BR',{minimumFractionDigits:1,maximumFractionDigits:1})
+
+// ── Date ──────────────────────────────────────────────────
+document.getElementById('dateDisplay').textContent =
+  new Date().toLocaleDateString('pt-BR',{day:'2-digit',month:'short',year:'numeric'}).toUpperCase()
+
+// ── Toast ─────────────────────────────────────────────────
+function toast(msg, type='success') {
+  const el = document.getElementById('toast')
+  el.className = `toast ${type}`
+  document.getElementById('toastIcon').textContent = type==='success' ? '✓' : '⚠'
+  document.getElementById('toastMsg').textContent  = msg
+  el.classList.add('show')
+  setTimeout(() => el.classList.remove('show'), 3200)
+}
+
+// ── Connection ────────────────────────────────────────────
+function setConn(ok) {
+  document.getElementById('connDot').className  = ok ? 'conn-dot live' : 'conn-dot'
+  document.getElementById('connLabel').textContent = ok ? 'Supabase · ao vivo' : 'Desconectado'
+}
+
+// ── Load ─────────────────────────────────────────────────
+async function loadData() {
+  document.getElementById('tableBody').innerHTML =
+    `<tr class="state-row"><td colspan="11"><span class="spinner"></span> Carregando…</td></tr>`
+  try {
+    const { data, error } = await db.from('areas_setores').select('*').order('area_setor_id')
+    if (error) throw error
+    allData = data
+    updateStats(data)
+    populatePaiSelect(data)
+    applyFilters()
+    setConn(true)
+  } catch(e) { setConn(false); showError(e.message) }
+}
+
+// ── Stats ─────────────────────────────────────────────────
+function updateStats(data) {
+  const tot  = data.length
+  const ativ = data.filter(r=>r.status==='Ativo').length
+  const prod = data.filter(r=>r.tipo_area==='Área Produtiva').length
+  const ha   = data.reduce((s,r)=>s+Number(r.area_total_ha||0),0)
+  document.getElementById('statTotal').textContent = tot
+  document.getElementById('statTotalSub').textContent = 'setores cadastrados'
+  document.getElementById('statArea').textContent  = fmtHa(ha)
+  document.getElementById('statAtivos').textContent= `${ativ}/${tot}`
+  document.getElementById('statProd').textContent  = `${prod}/${tot}`
+}
+
+// ── Filter ────────────────────────────────────────────────
+function setFilter(el, tipo) {
+  activeFilter = tipo
+  document.querySelectorAll('.chip').forEach(c=>c.classList.remove('active-filter'))
+  el.classList.add('active-filter')
+  applyFilters()
+}
+
+function applyFilters() {
+  const q = document.getElementById('searchInput').value.toLowerCase()
+  let rows = allData
+  if (activeFilter) rows = rows.filter(r=>r.tipo_area===activeFilter)
+  if (q) rows = rows.filter(r=>
+    r.nome_area_setor?.toLowerCase().includes(q)||
+    r.codigo_area_setor?.toLowerCase().includes(q)||
+    r.unidade_vinculada?.toLowerCase().includes(q)||
+    r.uso_atual?.toLowerCase().includes(q)
+  )
+  renderTable(rows)
+  document.getElementById('recordCount').textContent = `${rows.length} registro${rows.length!==1?'s':''}`
+  updateFooter(rows)
+}
+
+// ── Render ────────────────────────────────────────────────
+function renderTable(rows) {
+  const tb = document.getElementById('tableBody')
+  if (!rows.length) {
+    tb.innerHTML = `<tr class="state-row"><td colspan="11">Nenhum registro encontrado.</td></tr>`
+    return
+  }
+  tb.innerHTML = rows.map((r,i) => {
+    const c  = tipo2c(r.tipo_area)
+    const cc = cap2c(r.cap_operacional)
+    const name = r.nivel_hierarquico > 1
+      ? `<span class="hier-indent"><span class="hier-mark">└─</span>${r.nome_area_setor}</span>`
+      : r.nome_area_setor
+    return `<tr class="${i%2===0?'even':''}" id="row-${r.area_setor_id}">
+      <td class="accent-cell"><span class="accent-bar" style="background:var(--${c})"></span></td>
+      <td class="mono muted">${String(r.area_setor_id).padStart(2,'0')}</td>
+      <td class="mono" style="color:var(--blu);font-weight:600">${r.codigo_area_setor}</td>
+      <td>${name}</td>
+      <td><span class="badge ${c}">${short(r.tipo_area)}</span></td>
+      <td class="muted">${r.unidade_vinculada}</td>
+      <td class="right mono">${fmtHa(r.area_total_ha)}</td>
+      <td class="right mono muted">${fmtHa(r.area_util_ha)}</td>
+      <td><span class="badge ${r.status==='Ativo'?'grn':'sna'}">${r.status}</span></td>
+      <td><span class="cap-dot ${cc}">${r.cap_operacional}</span></td>
+      <td>
+        <div class="action-btns">
+          <button class="icon-btn edit" title="Editar" onclick="openEditModal(${r.area_setor_id})">✎</button>
+          <button class="icon-btn del"  title="Excluir" onclick="deleteRecord(${r.area_setor_id},'${r.codigo_area_setor}')">✕</button>
+        </div>
+      </td>
+    </tr>`
+  }).join('')
+}
+
+function updateFooter(rows) {
+  const grouped = rows.reduce((a,r)=>{ a[r.tipo_area]=(a[r.tipo_area]||0)+Number(r.area_total_ha||0); return a },{})
+  document.getElementById('footerChips').innerHTML = Object.entries(grouped)
+    .map(([t,ha])=>`<span class="footer-chip ${tipo2c(t)}">${short(t)}: ${fmtHa(ha)} ha</span>`).join('')
+  const tot = rows.reduce((s,r)=>s+Number(r.area_total_ha||0),0)
+  document.getElementById('footerLeft').textContent = `${rows.length} registros · ${fmtHa(tot)} ha total`
+}
+
+function showError(msg) {
+  document.getElementById('tableBody').innerHTML =
+    `<tr class="state-row"><td colspan="11">⚠ Erro: ${msg}</td></tr>`
+}
+
+// ── Pai select populate ───────────────────────────────────
+function populatePaiSelect(data) {
+  const sel = document.getElementById('f_pai')
+  const current = sel.value
+  sel.innerHTML = '<option value="">Nenhuma (Nível 1)</option>'
+  data.filter(r=>r.nivel_hierarquico===1).forEach(r => {
+    const o = document.createElement('option')
+    o.value = r.area_setor_id
+    o.textContent = `${r.codigo_area_setor} — ${r.nome_area_setor}`
+    sel.appendChild(o)
+  })
+  if (current) sel.value = current
+}
+
+// ── Modal open/close ──────────────────────────────────────
+function openModal() {
+  editingId = null
+  document.getElementById('modalTitle').textContent    = 'Novo Registro'
+  document.getElementById('modalSubtitle').textContent = 'Preencha os campos para cadastrar uma nova área ou setor'
+  document.getElementById('submitLabel').textContent   = 'Salvar Registro'
+  document.getElementById('submitIcon').textContent    = '＋'
+  document.getElementById('modalFooterMsg').textContent= ''
+  document.getElementById('editId').value = ''
+  document.getElementById('areaForm').reset()
+  document.getElementById('modalOverlay').classList.add('open')
+}
+
+function openEditModal(id) {
+  const r = allData.find(x=>x.area_setor_id===id)
+  if (!r) return
+  editingId = id
+  document.getElementById('modalTitle').textContent    = `Editar Registro`
+  document.getElementById('modalSubtitle').textContent = `${r.codigo_area_setor} — ${r.nome_area_setor}`
+  document.getElementById('submitLabel').textContent   = 'Salvar Alterações'
+  document.getElementById('submitIcon').textContent    = '✓'
+  document.getElementById('modalFooterMsg').textContent= `ID: ${id}`
+  document.getElementById('editId').value = id
+
+  document.getElementById('f_codigo').value     = r.codigo_area_setor || ''
+  document.getElementById('f_nome').value       = r.nome_area_setor || ''
+  document.getElementById('f_tipo').value       = r.tipo_area || ''
+  document.getElementById('f_categoria').value  = r.categoria_func || ''
+  document.getElementById('f_status').value     = r.status || 'Ativo'
+  document.getElementById('f_capacidade').value = r.cap_operacional || 'Não se aplica'
+  document.getElementById('f_unidade').value    = r.unidade_vinculada || ''
+  document.getElementById('f_propriedade').value= r.propriedade_vinculada || ''
+  document.getElementById('f_pai').value        = r.area_pai_id || ''
+  document.getElementById('f_uso').value        = r.uso_atual || ''
+  document.getElementById('f_area_total').value = r.area_total_ha || ''
+  document.getElementById('f_area_util').value  = r.area_util_ha || ''
+  document.getElementById('f_perimetro').value  = r.perimetro_m || ''
+  document.getElementById('f_coords').value     = r.coordenadas || ''
+  document.getElementById('f_geo').value        = r.geometria_poligono || ''
+  document.getElementById('f_restricoes').value = r.restricoes_uso || ''
+  document.getElementById('f_obs').value        = r.observacoes || ''
+  document.getElementById('f_docs').value       = r.documentos_vinculados || ''
+
+  document.getElementById('modalOverlay').classList.add('open')
+  document.querySelectorAll('tbody tr').forEach(tr=>tr.classList.remove('editing'))
+  const row = document.getElementById(`row-${id}`)
+  if (row) row.classList.add('editing')
+}
+
+function closeModal() {
+  document.getElementById('modalOverlay').classList.remove('open')
+  document.querySelectorAll('tbody tr').forEach(tr=>tr.classList.remove('editing'))
+  editingId = null
+}
+
+function closeModalOnOverlay(e) {
+  if (e.target===document.getElementById('modalOverlay')) closeModal()
+}
+
+// ── Submit (insert or update) ─────────────────────────────
+async function submitForm(e) {
+  if (e) e.preventDefault()
+  const btn = document.getElementById('submitBtn')
+  btn.disabled = true
+  btn.innerHTML = `<span class="spinner"></span> Salvando…`
+
+  const paiVal = document.getElementById('f_pai').value
+  const payload = {
+    codigo_area_setor:     document.getElementById('f_codigo').value.trim(),
+    nome_area_setor:       document.getElementById('f_nome').value.trim(),
+    tipo_area:             document.getElementById('f_tipo').value,
+    categoria_func:        document.getElementById('f_categoria').value,
+    status:                document.getElementById('f_status').value,
+    cap_operacional:       document.getElementById('f_capacidade').value,
+    unidade_vinculada:     document.getElementById('f_unidade').value,
+    propriedade_vinculada: document.getElementById('f_propriedade').value,
+    area_pai_id:           paiVal ? parseInt(paiVal) : null,
+    nivel_hierarquico:     paiVal ? 2 : 1,
+    uso_atual:             document.getElementById('f_uso').value.trim() || null,
+    area_total_ha:         parseFloat(document.getElementById('f_area_total').value) || null,
+    area_util_ha:          parseFloat(document.getElementById('f_area_util').value) || null,
+    perimetro_m:           parseFloat(document.getElementById('f_perimetro').value) || null,
+    coordenadas:           document.getElementById('f_coords').value.trim() || null,
+    geometria_poligono:    document.getElementById('f_geo').value.trim() || null,
+    restricoes_uso:        document.getElementById('f_restricoes').value.trim() || null,
+    observacoes:           document.getElementById('f_obs').value.trim() || null,
+    documentos_vinculados: document.getElementById('f_docs').value.trim() || null,
+  }
+
+  try {
+    let error
+    if (editingId) {
+      ;({ error } = await db.from('areas_setores').update(payload).eq('area_setor_id', editingId))
+    } else {
+      ;({ error } = await db.from('areas_setores').insert(payload))
+    }
+    if (error) throw error
+
+    closeModal()
+    await loadData()
+    toast(editingId ? `Registro atualizado com sucesso.` : `Novo registro "${payload.codigo_area_setor}" criado!`, 'success')
+  } catch(err) {
+    toast(`Erro: ${err.message}`, 'error')
+  } finally {
+    btn.disabled = false
+    document.getElementById('submitIcon').textContent  = editingId ? '✓' : '＋'
+    document.getElementById('submitLabel').textContent = editingId ? 'Salvar Alterações' : 'Salvar Registro'
+  }
+}
+
+// ── Delete ────────────────────────────────────────────────
+async function deleteRecord(id, codigo) {
+  if (!confirm(`Excluir o registro "${codigo}"?\n\nEsta ação não pode ser desfeita.`)) return
+  try {
+    const { error } = await db.from('areas_setores').delete().eq('area_setor_id', id)
+    if (error) throw error
+    await loadData()
+    toast(`Registro "${codigo}" excluído.`, 'success')
+  } catch(e) { toast(`Erro ao excluir: ${e.message}`, 'error') }
+}
+
+// ── Keyboard ──────────────────────────────────────────────
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') closeModal()
+  if ((e.ctrlKey||e.metaKey) && e.key==='k') { openModal(); e.preventDefault() }
+})
+
+// ── Init ──────────────────────────────────────────────────
+loadData()
+</script>
+</body>
+</html>

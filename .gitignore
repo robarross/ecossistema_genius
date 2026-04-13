@@ -1,0 +1,11 @@
+# Windows system files
+[Dd]esktop.ini
+Thumbs.db
+$RECYCLE.BIN/
+
+# Visual Studio Code
+.vscode/
+
+# Temporary files
+*.tmp
+*.log

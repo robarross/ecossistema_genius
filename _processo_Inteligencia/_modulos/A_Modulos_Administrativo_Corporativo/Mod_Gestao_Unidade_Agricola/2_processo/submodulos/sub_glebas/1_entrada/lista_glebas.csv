@@ -1,0 +1,5 @@
+ID_Gleba;ID_Fazenda;Nome_Gleba;Hectares;Tipo_Solo;Topografia;Status_Uso
+GLB-001;FZ-001;Gleba Norte A;450.00;Latossolo Vermelho;Plano;Producao Soja
+GLB-002;FZ-001;Gleba Encosta;120.50;Argissolo;Ondulado;Reserva Legal
+GLB-003;FZ-002;Gleba Baixada;320.00;Hidromorfico;Declivoso;Pasto
+GLB-004;FZ-003;Gleba Planalto;850.00;Cerrado;Plano;Cana-de-Acucar

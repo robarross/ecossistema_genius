@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Genius - Agentes Glebas</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #0b0d11;
+            --sidebar-bg: rgba(255, 255, 255, 0.02);
+            --accent-color: #fab1a0;
+            --glass-border: rgba(255, 255, 255, 0.08);
+            --text-main: #e0e0e0;
+            --text-dim: #a0a0a0;
+            --sidebar-width: 260px;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            font-family: 'Outfit', sans-serif;
+            margin: 0; display: flex; min-height: 100vh;
+        }
+
+        .sidebar {
+            width: var(--sidebar-width);
+            background: var(--sidebar-bg);
+            backdrop-filter: blur(20px);
+            border-right: 1px solid var(--glass-border);
+            display: flex; flex-direction: column;
+            position: fixed; height: 100vh;
+        }
+
+        .sidebar-header { padding: 30px; border-bottom: 1px solid var(--glass-border); }
+        .sidebar-header h2 { font-size: 1.2rem; margin: 0; color: var(--accent-color); letter-spacing: 1px; }
+
+        .nav-menu { flex: 1; padding: 20px 0; list-style: none; margin: 0; }
+        .nav-item { padding: 12px 30px; display: flex; align-items: center; gap: 15px; color: var(--text-dim); text-decoration: none; transition: 0.3s; font-size: 0.9rem; }
+        .nav-item:hover, .nav-item.active { background: rgba(250, 177, 160, 0.05); color: #fff; border-left: 4px solid var(--accent-color); padding-left: 26px; }
+
+        .nav-footer { padding: 20px; border-top: 1px solid var(--glass-border); }
+        .back-main { text-decoration: none; color: var(--text-dim); font-size: 0.75rem; text-transform: uppercase; }
+
+        .main-content { margin-left: var(--sidebar-width); flex: 1; padding: 40px; animation: fadeIn 0.6s ease-out; }
+        header { margin-bottom: 40px; }
+        h1 { font-size: 2.2rem; margin: 0; letter-spacing: -1px; }
+        .breadcrumb { font-size: 0.8rem; color: var(--text-dim); text-transform: uppercase; margin-bottom: 10px; }
+
+        .agent-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; margin-top: 30px; }
+        .agent-card { background: rgba(255,255,255,0.03); border: 1px solid var(--glass-border); border-radius: 20px; padding: 30px; text-align: center; transition: 0.3s; }
+        .agent-card:hover { border-color: var(--accent-color); transform: translateY(-5px); }
+        .agent-icon { font-size: 2.5rem; margin-bottom: 15px; display: block; }
+        .agent-role { font-size: 1.1rem; font-weight: 600; color: #fff; margin-bottom: 8px; display: block; }
+        .agent-dna { font-size: 0.7rem; color: var(--accent-color); text-transform: uppercase; border: 1px solid var(--accent-color); padding: 2px 10px; border-radius: 15px; display: inline-block; margin-bottom: 15px; }
+        .agent-desc { font-size: 0.85rem; color: var(--text-dim); line-height: 1.5; }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    </style>
+</head>
+<body>
+
+<aside class="sidebar">
+    <div class="sidebar-header">
+        <h2>GENIUS Zonal</h2>
+    </div>
+    <ul class="nav-menu">
+        <li><a href="portal_sub_glebas.html" class="nav-item">📊 Dashboards</a></li>
+        <li><a href="cadastro_glebas.html" class="nav-item">➕ Cadastros</a></li>
+        <li><a href="agentes_glebas.html" class="nav-item active">🤖 Agentes</a></li>
+        <li><a href="processo_glebas.html" class="nav-item">🧠 Processos</a></li>
+        <li><a href="ferramentas_glebas.html" class="nav-item">🛠️ Ferramentas</a></li>
+        <li><a href="fractais_glebas.html" class="nav-item">💠 Fractais</a></li>
+        <li><a href="banco_dados_glebas.html" class="nav-item">🗄️ Banco de Dados</a></li>
+    </ul>
+    <div class="nav-footer">
+        <a href="../../../../3_saida/portal_visual_unidade_agricola.html" class="back-main">← Dashboard Mestre</a>
+    </div>
+</aside>
+
+<main class="main-content">
+    <header>
+        <div class="breadcrumb">Submódulo #03 / Inteligência</div>
+        <h1>Equipe Digital: Glebas</h1>
+    </header>
+
+    <div class="agent-grid">
+        <div class="agent-card">
+            <span class="agent-icon">🏟️</span>
+            <span class="agent-role">Agente Guardião</span>
+            <span class="agent-dna">DNA: Limites & Divisas</span>
+            <p class="agent-desc">Zela pela integridade das divisas internas das glebas e evita sobreposições de metros quadrados produtivos.</p>
+        </div>
+        <div class="agent-card">
+            <span class="agent-icon">🪵</span>
+            <span class="agent-role">Agente Gerente</span>
+            <span class="agent-dna">DNA: Uso do Solo</span>
+            <p class="agent-desc">Planeja a rotação de culturas no nível macro das glebas e coordena a recuperação de áreas degradadas.</p>
+        </div>
+        <div class="agent-card">
+            <span class="agent-icon">🏜️</span>
+            <span class="agent-role">Agente Técnico</span>
+            <span class="agent-dna">DNA: Pedologia & Topo</span>
+            <p class="agent-desc">Especialista em análise de curvas de nível, declividade e saúde química das camadas do solo zonais.</p>
+        </div>
+        <div class="agent-card">
+            <span class="agent-icon">🚧</span>
+            <span class="agent-role">Agente Secretária</span>
+            <span class="agent-dna">DNA: Infra & Acessos</span>
+            <p class="agent-desc">Controla o cronograma de manutenção de carreadores, pontes e bueiros internos de cada gleba.</p>
+        </div>
+        <div class="agent-card">
+            <span class="agent-icon">📖</span>
+            <span class="agent-role">Agente Bibliotecária</span>
+            <span class="agent-dna">DNA: Histórico Territorial</span>
+            <p class="agent-desc">Mantém o arquivo de mapas, memoriais descritivos e laudos ambientais de conformidade zonal.</p>
+        </div>
+    </div>
+</main>
+
+</body>
+</html>

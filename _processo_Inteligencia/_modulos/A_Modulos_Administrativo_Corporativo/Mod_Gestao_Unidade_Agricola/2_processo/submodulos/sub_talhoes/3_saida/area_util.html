@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Genius - Calculador de Área Útil (Fractal #02)</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #0b0d11;
+            --accent-color: #0fbcf9;
+            --glass-bg: rgba(255, 255, 255, 0.03);
+            --glass-border: rgba(255, 255, 255, 0.08);
+            --text-main: #e0e0e0;
+            --text-dim: #a0a0a0;
+        }
+
+        body {
+            background: #0b0d11;
+            color: var(--text-main);
+            font-family: 'Outfit', sans-serif;
+            padding: 0; margin: 0;
+        }
+
+        .container { max-width: 1000px; margin: 0 auto; padding: 60px 20px; }
+
+        header { margin-bottom: 50px; }
+        .back-link { text-decoration: none; color: var(--text-dim); font-size: 0.8rem; text-transform: uppercase; }
+        h1 { font-size: 2.22rem; margin: 10px 0; }
+        .fractal-id { color: var(--accent-color); font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 2px; }
+
+        .content-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 40px;
+            margin-top: 30px;
+        }
+
+        .area-viz {
+            height: 300px; width: 100%; 
+            background: linear-gradient(45deg, #00b894 0%, #00b894 70%, #d63031 70%, #d63031 100%);
+            border-radius: 15px; margin: 30px 0; position: relative;
+        }
+        .area-viz::after {
+            content: 'Verde: Área Útil (92%) | Vermelho: Perdas/Manchas (8%)';
+            position: absolute; bottom: 20px; left: 20px;
+            background: rgba(0,0,0,0.6); color: #fff; padding: 6px 15px; border-radius: 6px; font-size: 0.8rem;
+        }
+
+        .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; }
+        .item h4 { color: var(--accent-color); font-size: 0.85rem; text-transform: uppercase; margin-bottom: 10px; }
+        .item p { font-size: 0.95rem; color: var(--text-dim); line-height: 1.6; }
+
+        .footer { margin-top: 60px; text-align: center; font-size: 0.7rem; color: var(--text-dim); }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <a href="./portal_sub_talhoes.html" class="back-link">← Voltar</a>
+        <div class="fractal-id">Fractal #02 - Talhões</div>
+        <h1>Cálculo de Área Útil (Liquid Area)</h1>
+    </header>
+
+    <div class="content-card">
+        <h3>Depuração de Metragem Plantável</h3>
+        <p style="color: var(--text-dim);">Auditoria técnica para otimização de insumos e sementes.</p>
+        
+        <div class="area-viz"></div>
+
+        <div class="info-grid">
+            <div class="item">
+                <h4>O que é a Liquid Area?</h4>
+                <p>É a métrica real de produção. Descontamos carreadores, torres de energia e manchas de solo infértil para que o cálculo de fertilizantes seja 100% preciso.</p>
+            </div>
+            <div class="item">
+                <h4>Impacto Financeiro</h4>
+                <p>Otimização média de <b>8% a 12%</b> na economia de insumos ao aplicar apenas na área biologicamente ativa.</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer">
+        © Genius Precision Agriculture - Economia Orientada por Dados
+    </div>
+</div>
+
+</body>
+</html>

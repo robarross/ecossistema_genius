@@ -1,0 +1,4 @@
+Entidade;Documento;Tipo;Status_Receita;Vencimento_CND;Alertas
+Agro Silva;12.345.678/0001-00;CNPJ;Regular;20-12-2026;Nenhum
+Roberto Silva;123.456.789-00;CPF;Regular;01-01-2030;Recadastramento pendente
+Invest Rural;98.765.432/0001-99;CNPJ;Pendente;15-05-2026;Divida Ativa detectada

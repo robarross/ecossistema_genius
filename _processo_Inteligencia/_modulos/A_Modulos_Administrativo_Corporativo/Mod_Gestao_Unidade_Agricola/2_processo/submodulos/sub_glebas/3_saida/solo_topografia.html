@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Genius - Arquiteto de Solo (Fractal #01)</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #0b0d11;
+            --accent-color: #fab1a0;
+            --glass-bg: rgba(255, 255, 255, 0.03);
+            --glass-border: rgba(255, 255, 255, 0.08);
+            --text-main: #e0e0e0;
+            --text-dim: #a0a0a0;
+        }
+
+        body {
+            background: #0b0d11;
+            color: var(--text-main);
+            font-family: 'Outfit', sans-serif;
+            margin: 0; padding: 0;
+        }
+
+        .container { max-width: 1000px; margin: 0 auto; padding: 60px 20px; }
+
+        header { margin-bottom: 50px; }
+        .back-link { text-decoration: none; color: var(--text-dim); font-size: 0.8rem; text-transform: uppercase; }
+        h1 { font-size: 2.22rem; margin: 10px 0; }
+        .fractal-id { color: var(--accent-color); font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 2px; }
+
+        .content-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 40px;
+            margin-top: 30px;
+        }
+
+        .soil-viz {
+            height: 300px; width: 100%; 
+            background: linear-gradient(180deg, #d35400 0%, #e67e22 30%, #f39c12 60%, #bdc3c7 90%);
+            border-radius: 15px; margin: 30px 0; position: relative;
+            overflow: hidden;
+        }
+        .soil-viz::after {
+            content: 'Perfil Geológico Estimado'; position: absolute; bottom: 20px; left: 20px;
+            color: #fff; font-size: 0.8rem; font-weight: 700; background: rgba(0,0,0,0.5); padding: 5px 12px; border-radius: 5px;
+        }
+
+        .grid-info { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; }
+        .info-box h3 { font-size: 0.9rem; color: var(--accent-color); margin-bottom: 15px; }
+        .info-box p { font-size: 0.95rem; color: var(--text-dim); line-height: 1.6; }
+
+        .footer { margin-top: 60px; text-align: center; font-size: 0.7rem; color: var(--text-dim); }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <a href="./portal_sub_glebas.html" class="back-link">← Voltar ao Submódulo</a>
+        <div class="fractal-id">Fractal #01 - Glebas</div>
+        <h1>Arquiteto de Solo e Topografia</h1>
+    </header>
+
+    <div class="content-card">
+        <h3>Visão de Perfil Subterrâneo</h3>
+        <p>Monitoramento ativo da composição pedológica. Integração de dados de sensores terrestres e histórico de perfuração.</p>
+        
+        <div class="soil-viz"></div>
+
+        <div class="grid-info">
+            <div class="info-box">
+                <h3>Composição Predominante</h3>
+                <p><b>Latossolo Vermelho:</b> Alta porosidade e capacidade de drenagem. Ideal para grandes culturas mecanizadas.</p>
+            </div>
+            <div class="info-box">
+                <h3>Status de Relevo</h3>
+                <p><b>Zonagem Plana:</b> 85% do território macro adequado para operações de alta velocidade sem interrupções geológicas.</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer">
+        © Genius Geo-Intelligence - Perícia de Ativo Rural
+    </div>
+</div>
+
+</body>
+</html>

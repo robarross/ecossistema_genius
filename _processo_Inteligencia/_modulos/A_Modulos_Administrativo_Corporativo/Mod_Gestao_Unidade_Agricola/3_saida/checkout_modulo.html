@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Genius - Checkout Unidade Agrícola</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #0b1016;
+            --accent-color: #00ff88;
+            --glass-border: rgba(255, 255, 255, 0.08);
+            --text-main: #e0e6ed;
+            --text-dim: #94a3b8;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            font-family: 'Outfit', sans-serif;
+            margin: 0; padding: 60px 0;
+            display: flex; justify-content: center;
+        }
+
+        .checkout-container { width: 1000px; display: grid; grid-template-columns: 1.5fr 1fr; gap: 40px; }
+
+        /* FORM SIDE */
+        .payment-form { background: rgba(255,255,255,0.02); border: 1px solid var(--glass-border); border-radius: 30px; padding: 50px; }
+        h2 { font-size: 1.8rem; margin: 0 0 30px 0; letter-spacing: -1px; }
+
+        .form-group { margin-bottom: 25px; }
+        label { display: block; font-size: 0.7rem; color: var(--text-dim); text-transform: uppercase; margin-bottom: 8px; letter-spacing: 1px; }
+        input { width: 100%; padding: 15px; background: rgba(0,0,0,0.3); border: 1px solid var(--glass-border); border-radius: 12px; color: #fff; outline: none; transition: 0.3s; box-sizing: border-box; }
+        input:focus { border-color: var(--accent-color); box-shadow: 0 0 10px rgba(0,255,136,0.1); }
+
+        .card-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+
+        /* SUMMARY SIDE */
+        .order-summary { padding: 40px; background: rgba(0, 255, 136, 0.03); border: 1px solid rgba(0, 255, 136, 0.1); border-radius: 30px; height: fit-content; }
+        .summary-title { font-size: 1.1rem; font-weight: 600; margin-bottom: 20px; padding-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.05); }
+        
+        .product-item { display: flex; justify-content: space-between; margin-bottom: 15px; }
+        .product-info h4 { margin: 0; font-size: 0.9rem; color: #fff; }
+        .product-info p { margin: 5px 0 0 0; font-size: 0.75rem; color: var(--text-dim); }
+        .price { font-weight: 700; color: #fff; }
+
+        .total-row { border-top: 1px solid rgba(255,255,255,0.05); padding-top: 20px; margin-top: 20px; display: flex; justify-content: space-between; align-items: center; }
+        .total-label { font-size: 1.1rem; font-weight: 400; color: var(--text-dim); }
+        .total-price { font-size: 2rem; font-weight: 800; color: var(--accent-color); }
+
+        .btn-confirm { width: 100%; padding: 20px; background: var(--accent-color); color: #000; border: none; border-radius: 15px; font-weight: 800; font-size: 1rem; cursor: pointer; transition: 0.3s; margin-top: 40px; text-transform: uppercase; letter-spacing: 1px; }
+        .btn-confirm:hover { filter: brightness(1.1); box-shadow: 0 15px 40px rgba(0, 255, 136, 0.3); transform: translateY(-3px); }
+
+        .security-badge { text-align: center; margin-top: 20px; color: var(--text-dim); font-size: 0.75rem; display: flex; align-items: center; justify-content: center; gap: 10px; }
+
+        /* EMAIL MODAL SIMULATION */
+        .email-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); backdrop-filter: blur(10px); display: none; align-items: center; justify-content: center; z-index: 1000; }
+        .email-modal { width: 600px; background: #1a1f26; border: 1px solid var(--glass-border); border-radius: 20px; overflow: hidden; animation: slideIn 0.5s ease-out; box-shadow: 0 50px 100px rgba(0,0,0,0.5); }
+        .email-header { padding: 20px 30px; background: rgba(0,255,136,0.1); border-bottom: 1px solid rgba(0,255,136,0.2); display: flex; align-items: center; gap: 15px; }
+        .email-body { padding: 40px; }
+        .email-body h1 { font-size: 1.5rem; color: #fff; margin-bottom: 20px; }
+        .email-body p { font-size: 0.95rem; color: var(--text-dim); margin-bottom: 15px; line-height: 1.6; }
+        .email-footer { padding: 20px 40px; background: rgba(255,255,255,0.02); text-align: center; font-size: 0.8rem; color: rgba(255,255,255,0.3); }
+
+        @keyframes slideIn { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+    </style>
+</head>
+<body>
+
+<!-- Simulação de E-mail de Boas-Vindas -->
+<div id="emailOverlay" class="email-overlay">
+    <div class="email-modal">
+        <div class="email-header">
+            <span style="font-size: 1.5rem;">📩</span>
+            <div>
+                <strong style="display:block; font-size: 0.9rem; color: #fff;">De: Agente Arquiteto (Genius Central)</strong>
+                <span style="font-size: 0.75rem; color: var(--accent-color);">Assunto: BEM-VINDO AO COMANDO DA UNIDADE AGRÍCOLA!</span>
+            </div>
+        </div>
+        <div class="email-body">
+            <h1>Sua infraestrutura já está pronta, Roberto!</h1>
+            <p>Parabéns pela aquisição. Os Agentes Digitais acabaram de provisionar o seu acesso master ao Módulo Unidade Agrícola.</p>
+            <p>Sua malha de <b>Homeostase</b> e o <b>Centro de Notificações</b> foram ativados com prioridade máxima.</p>
+            <div style="background: rgba(0,255,136,0.05); border: 1px dashed var(--accent-color); padding: 20px; border-radius: 12px; margin: 20px 0;">
+                <p style="margin:0; font-weight: 600; color: #fff;">Próximos Passos:</p>
+                <ol style="font-size: 0.85rem; padding-left: 20px; color: var(--text-dim);">
+                    <li>Acessar o Painel Mestre</li>
+                    <li>Verificar o Pulso do Painel de Saúde</li>
+                    <li>Iniciar o primeiro zoneamento de Glebas</li>
+                </ol>
+            </div>
+            <button class="btn-confirm" onclick="window.location.href='portal_visual_unidade_agricola.html'">ENTRAR NO COCKPIT AGORA</button>
+        </div>
+        <div class="email-footer">
+            Você recebeu este e-mail por ser um cliente corporativo Genius Systems Architecture.
+        </div>
+    </div>
+</div>
+
+<div class="checkout-container">
+    <div class="payment-form">
+        <h2>Ativar Assinatura Mestre</h2>
+        <form>
+            <div class="form-group">
+                <label>Nome no Cartão</label>
+                <input type="text" placeholder="Nome Impresso">
+            </div>
+            <div class="form-group">
+                <label>Número do Cartão</label>
+                <input type="text" placeholder="0000 0000 0000 0000">
+            </div>
+            <div class="card-grid">
+                <div class="form-group">
+                    <label>Validade</label>
+                    <input type="text" placeholder="MM/AA">
+                </div>
+                <div class="form-group">
+                    <label>CVC (Segurança)</label>
+                    <input type="text" placeholder="***">
+                </div>
+            </div>
+            <div class="form-group">
+                <label>Endereço de Cobrança (ZIP/CEP)</label>
+                <input type="text" placeholder="00000-000">
+            </div>
+            <button type="button" class="btn-confirm" onclick="validarPagamento()">Confirmar e Ativar Agora</button>
+            <div class="security-badge">
+                <span>🔒 Pagamento Processado via Genius Pay (SSL 256-bit)</span>
+            </div>
+        </form>
+    </div>
+
+    <div class="order-summary">
+        <div class="summary-title">Resumo do Pedido</div>
+        
+        <div class="product-item">
+            <div class="product-info">
+                <h4>Módulo Unidade Agrícola</h4>
+                <p>Licença Corporativa Vitalícia</p>
+                <p>• 4 Agentes Digitais Ativos</p>
+                <p>• Auditoria de Homeostase</p>
+            </div>
+            <div class="price">R$ 1.250,00</div>
+        </div>
+
+        <div class="product-item">
+            <div class="product-info">
+                <h4>Pack Infraestrutura Digital</h4>
+                <p>Armazenamento em Nuvem Genius</p>
+            </div>
+            <div class="price">R$ 0,00</div>
+        </div>
+
+        <div class="total-row">
+            <div class="total-label">Total</div>
+            <div class="total-price">R$ 1.250</div>
+        </div>
+        
+        <div style="margin-top: 30px; font-size: 0.8rem; color: var(--text-dim); line-height: 1.5; background: rgba(255,255,255,0.02); padding: 20px; border-radius: 12px;">
+            A liberação do ambiente é imediata após a confirmação do pagamento. Os scripts de <b>Autocura</b> e o <b>Centro de Notificações</b> serão habilitados no seu Painel Mestre.
+        </div>
+    </div>
+</div>
+
+<script>
+    function validarPagamento() {
+        const btn = document.querySelector('.btn-confirm');
+        const overlay = document.getElementById('emailOverlay');
+        
+        btn.innerText = 'VALIDANDO PROTOCOLOS...';
+        btn.disabled = true;
+        btn.style.opacity = '0.5';
+
+        // Simulação de Latência de Rede Bancária
+        setTimeout(() => {
+            overlay.style.display = 'flex';
+        }, 2000);
+    }
+</script>
+
+</body>
+</html>
