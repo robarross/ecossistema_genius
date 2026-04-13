@@ -17,7 +17,7 @@ jobs:
       - name: Setup Supabase CLI
         uses: supabase/setup-cli@v1
         with:
-          version: latest
+          version:  1.150.0 # Fixed version known to support --project-ref
 
       - name: Deploy Database Migrations
         run: |

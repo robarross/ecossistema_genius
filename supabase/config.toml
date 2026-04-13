@@ -1,4 +1,4 @@
-project_id = "" # To be filled by the user in GitHub Secrets
+project_id = "eajbrkypndqlumrmuoag" # Updated by agent
 
 [api]
 port = 54321
