@@ -135,13 +135,88 @@ BEGIN
     END IF;
 
     ---------------------------------------------------------------------------
-    -- #18 Criador de Coda (Sistemas Relacionais)
+    -- #18 Lançador
     ---------------------------------------------------------------------------
     SELECT id INTO v_agent_id FROM agents WHERE display_id = '#18';
     IF v_agent_id IS NOT NULL THEN
         INSERT INTO skills (agent_id, name, description, category, version)
         VALUES 
-        (v_agent_id, 'Modelagem Relacional Coda', 'Criação de bases de dados relacionais e painéis no Coda.', 'Tecnica', '1.0.0')
+        (v_agent_id, 'Criador de Landing Pages', 'Design de páginas de alta conversão para produtos digitais.', 'Marketing', '1.0.0'),
+        (v_agent_id, 'Gestão de Redes Sociais', 'Planejamento e execução de presença digital em múltiplas plataformas.', 'Marketing', '1.0.0'),
+        (v_agent_id, 'Fábrica de Sites', 'Desenvolvimento de sites institucionais e portais de conteúdo.', 'Marketing', '1.0.0'),
+        (v_agent_id, 'Editor de Vídeos', 'Pós-produção de vídeos focados em anúncios e aulas curtas.', 'Criacao', '1.0.0')
+        ON CONFLICT (agent_id, name) DO UPDATE SET description = EXCLUDED.description;
+    END IF;
+
+    ---------------------------------------------------------------------------
+    -- #20 Professor
+    ---------------------------------------------------------------------------
+    SELECT id INTO v_agent_id FROM agents WHERE display_id = '#20';
+    IF v_agent_id IS NOT NULL THEN
+        INSERT INTO skills (agent_id, name, description, category, version)
+        VALUES 
+        -- Category: Texto Base
+        (v_agent_id, 'Escritor de Projetos Científicos', 'Elaboração de projetos de pesquisa e captação de recursos.', 'Academica', '1.0.0'),
+        (v_agent_id, 'Escritor de Artigos Científicos', 'Redação e submissão de artigos para periódicos de alto impacto.', 'Academica', '1.0.0'),
+        (v_agent_id, 'Escritor de Livros', 'Concepção e estruturação de obras literárias e técnicas de longa duração.', 'Criacao', '1.0.0'),
+        (v_agent_id, 'Escritor de Apostilas', 'Design instrucional e redação de materiais didáticos complementares.', 'Didatica', '1.0.0'),
+        (v_agent_id, 'Escritor de Aulas', 'Planejamento e design instrucional para aulas individuais.', 'Didatica', '1.0.0'),
+        (v_agent_id, 'Escritor de Cursos Técnicos', 'Estruturação de currículos e módulos para ensino profissionalizante.', 'Didatica', '1.0.0'),
+        (v_agent_id, 'Escritor de Cursos Superiores', 'Design de disciplinas e programas de graduação e pós-graduação.', 'Didatica', '1.0.0'),
+        
+        -- Category: Modulado de Conteúdo
+        (v_agent_id, 'Escritor de Resumos e Síntese', 'Destilação de conhecimento complexo em sínteses precisas.', 'Academica', '1.0.0'),
+        (v_agent_id, 'Escritor de Slides', 'Design de apresentações visuais que suportam a narrativa pedagógica.', 'Criacao', '1.0.0'),
+        (v_agent_id, 'Escritor de Infográficos', 'Transformação de dados e processos em narrativas visuais.', 'Criacao', '1.0.0'),
+        (v_agent_id, 'Escritor de Mapas Mentais', 'Estruturação visual de ideias para memorização e raciocínio.', 'Cognitiva', '1.0.0'),
+        (v_agent_id, 'Escritor de Perguntas e Respostas', 'Criação de bancos de questões e avaliações diagnósticas.', 'Didatica', '1.0.0'),
+        (v_agent_id, 'Escritor de Tabelas', 'Organização de dados complexos em estruturas relacionais claras.', 'Tecnica', '1.0.0'),
+        (v_agent_id, 'Escritor de Cartões Didáticos', 'Criação de micro-unidades de estudo para repetição espaçada.', 'Didatica', '1.0.0'),
+
+        -- Category: Apresentações
+        (v_agent_id, 'Escritor de Vídeos Raiz', 'Roteirização de vídeos de longa duração para construção de autoridade.', 'Midia', '1.0.0'),
+        (v_agent_id, 'Escritor de Vídeos Corte', 'Roteirização de vlogs e cortes focados em engajamento rápido.', 'Midia', '1.0.0'),
+        (v_agent_id, 'Escritor de Palestras', 'Criação de roteiros para apresentações de palco e eventos.', 'Midia', '1.0.0'),
+        (v_agent_id, 'Escritor de Seminários', 'Estruturação de debates e apresentações acadêmicas em grupo.', 'Academica', '1.0.0'),
+        (v_agent_id, 'Escritor de Resumos em Áudio', 'Roteirização de sínteses para consumo auditivo.', 'Midia', '1.0.0'),
+        (v_agent_id, 'Escritor de Podcasts', 'Planejamento de episódios de programas de áudio educativos.', 'Midia', '1.0.0'),
+        (v_agent_id, 'Escritor de Simulação 3D', 'Roteirização de cenários interativos e demonstrações virtuais.', 'Tecnica', '1.0.0'),
+        (v_agent_id, 'Escritor de Jogos 3D', 'Design de mecânicas de jogo focadas em gamificação.', 'Didatica', '1.0.0'),
+        (v_agent_id, 'Escritor de Desenho Animado', 'Roteirização de animações para explicação de conceitos.', 'Midia', '1.0.0')
+        ON CONFLICT (agent_id, name) DO UPDATE SET description = EXCLUDED.description;
+    END IF;
+
+    ---------------------------------------------------------------------------
+    -- #21 Gestor de Marketing
+    ---------------------------------------------------------------------------
+    SELECT id INTO v_agent_id FROM agents WHERE display_id = '#21';
+    IF v_agent_id IS NOT NULL THEN
+        INSERT INTO skills (agent_id, name, description, category, version)
+        VALUES 
+        (v_agent_id, 'Geração de Demanda', 'Estratégias para atração de leads e criação de interesse no mercado.', 'Marketing', '1.0.0'),
+        (v_agent_id, 'Interface Frontend', 'Design de interfaces de usuário que otimizam a experiência de compra.', 'Criacao', '1.0.0')
+        ON CONFLICT (agent_id, name) DO UPDATE SET description = EXCLUDED.description;
+    END IF;
+
+    ---------------------------------------------------------------------------
+    -- #22 Gestor Agronômico
+    ---------------------------------------------------------------------------
+    SELECT id INTO v_agent_id FROM agents WHERE display_id = '#22';
+    IF v_agent_id IS NOT NULL THEN
+        INSERT INTO skills (agent_id, name, description, category, version)
+        VALUES 
+        (v_agent_id, 'Agronomia de Precisão', 'Gestão baseada em dados para otimização da produção rural.', 'Tecnica', '1.0.0')
+        ON CONFLICT (agent_id, name) DO UPDATE SET description = EXCLUDED.description;
+    END IF;
+
+    ---------------------------------------------------------------------------
+    -- #23 Técnico em Solo e Nutrição
+    ---------------------------------------------------------------------------
+    SELECT id INTO v_agent_id FROM agents WHERE display_id = '#23';
+    IF v_agent_id IS NOT NULL THEN
+        INSERT INTO skills (agent_id, name, description, category, version)
+        VALUES 
+        (v_agent_id, 'Análise Química de Solos', 'Interpretação de laudos e recomendação de fertilização.', 'Tecnica', '1.0.0')
         ON CONFLICT (agent_id, name) DO UPDATE SET description = EXCLUDED.description;
     END IF;
 

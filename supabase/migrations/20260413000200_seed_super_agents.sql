@@ -25,7 +25,13 @@ BEGIN
     ('#15', 'Criador de 2º Cérebro', 'Fábrica de Memória e Obsidian', 'Super', 'Online', v_creator_id),
     ('#16', 'Criador de ERP', 'Fábrica de Sistemas de Gestão', 'Super', 'Online', v_creator_id),
     ('#17', 'Criador de Plataformas', 'Fábrica de Ecossistemas Digitais', 'Super', 'Online', v_creator_id),
-    ('#18', 'Criador de Coda', 'Fábrica de Sistemas Relacionais (Coda)', 'Super', 'Online', v_creator_id)
+    ('#18', 'Lançador', 'Especialista em Lançamentos e Marketing Digital', 'Modular', 'Online', v_creator_id),
+    ('#19', 'Inventor', 'Especialista em P&D e Novas Tecnologias', 'Modular', 'Online', v_creator_id),
+    ('#20', 'Professor', 'Especialista em Didática e Treinamento', 'Modular', 'Online', v_creator_id),
+    ('#21', 'Gestor de Marketing', 'Especialista em Estratégias de Mercado', 'Modular', 'Online', v_creator_id),
+    ('#22', 'Gestor Agronômico', 'Especialista em Gestão de Produção Rural', 'Modular', 'Online', v_creator_id),
+    ('#23', 'Técnico em Solo e Nutrição', 'Especialista em Fertilidade e Solo', 'Modular', 'Online', v_creator_id),
+    ('#24', 'Secretaria de Gestão Administrativa', 'Apoio Administrativo e Processos', 'Modular', 'Online', v_creator_id)
     ON CONFLICT (display_id) DO NOTHING;
 
 END $$;
