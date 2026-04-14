@@ -59,6 +59,9 @@
 
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
     </style>
+    <!-- SUPABASE & GENIUS BUS INTEGRATION -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="../../../../_sistemas/genius_bus_system/genius_bus.js"></script>
 </head>
 <body>
 
@@ -91,8 +94,9 @@
             <h3>📏 Conversor de Hectares</h3>
             <p style="font-size: 0.8rem; color: var(--text-dim); margin-bottom: 15px;">Converta metragem em hectares para alqueires (Paulista e Mineiro).</p>
             <input type="number" id="haIn" class="tool-input" placeholder="Área em Hectares (ha)">
-            <button class="tool-btn" onclick="convertArea()">Converter Área</button>
+            <button class="tool-btn" id="btnConvert" onclick="convertArea()">Converter Área</button>
             <div id="resArea" class="res-box"></div>
+            <div id="xpToast" style="display:none; font-size:0.7rem; color:var(--accent-color); margin-top:10px; text-align:center; animation: bounce 1s infinite;">✨ +50 XP Adquiridos!</div>
         </div>
         <div class="tool-card">
             <h3>🧩 Validador de Centro de Lucro</h3>
@@ -105,22 +109,67 @@
 </main>
 
 <script>
-    function convertArea() {
+    // --- GENIUS BUS INITIALIZATION ---
+    // Placeholder keys - User must replace these or they can be injected via a config file
+    const SUPABASE_URL = "https://your-project.supabase.co";
+    const SUPABASE_KEY = "your-anon-key";
+    
+    let bus;
+    const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+    window.onload = async () => {
+        bus = new window.GeniusBus(supabase);
+        await bus.init();
+        console.log("🛠️ Ferramenta Conectada ao Genius Bus.");
+    };
+
+    async function convertArea() {
         const ha = document.getElementById('haIn').value;
         const res = document.getElementById('resArea');
-        if(ha) {
+        const xpToast = document.getElementById('xpToast');
+        const btn = document.getElementById('btnConvert');
+
+        if(ha && ha > 0) {
+            btn.disabled = true;
+            btn.innerText = "PROCESSANDO...";
+
             const paulista = ha / 2.42;
             const mineiro = ha / 4.84;
+            
             res.innerHTML = `Alqueire Paulista: <b>${paulista.toFixed(2)}</b><br>Alqueire Mineiro: <b>${mineiro.toFixed(2)}</b>`;
             res.style.display = 'block';
+
+            // --- GENIUS BUS INTEGRATION ---
+            if(bus && bus.isInitialized) {
+                // 1. Grant XP
+                await bus.grantXP(50, `Conversão de ${ha} hectares`);
+                
+                // 2. Emit Telemetry Event
+                await bus.emitEvent('TOOL_USAGE', { 
+                    tool_id: 'TOOL-01-03-01', 
+                    input: ha, 
+                    result: { paulista, mineiro } 
+                });
+
+                // 3. UI Feedback
+                xpToast.style.display = 'block';
+                setTimeout(() => { xpToast.style.display = 'none'; }, 3000);
+            }
+
+            btn.disabled = false;
+            btn.innerText = "Converter Área";
         }
     }
+
     function checkCL() {
         const id = document.getElementById('idCL').value;
         const res = document.getElementById('resCL');
         if(id.includes('-CL-')) {
             res.innerHTML = `ID <b>${id}</b> é Autêntico e estruturado.`;
             res.style.display = 'block';
+            
+            // Minor XP For Validation
+            if(bus && bus.isInitialized) bus.grantXP(10, "Validação de Centro de Lucro");
         } else {
             res.innerHTML = `Padrão Inválido (Deve conter -CL-).`;
             res.style.color = '#ff4757'; res.style.borderColor = '#ff4757';
