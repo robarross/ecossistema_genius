@@ -258,6 +258,18 @@ BEGIN
     END IF;
 
     ---------------------------------------------------------------------------
+    -- #19 Inventor
+    ---------------------------------------------------------------------------
+    SELECT id INTO v_agent_id FROM agents WHERE display_id = '#19';
+    IF v_agent_id IS NOT NULL THEN
+        INSERT INTO skills (agent_id, name, description, category, version)
+        VALUES 
+        (v_agent_id, 'P&D e Inovação', 'Pesquisa e desenvolvimento de novas tecnologias e métodos para o ecossistema.', 'Tecnica', '1.0.0'),
+        (v_agent_id, 'Mapeamento de Tendências', 'Identificação de rupturas tecnológicas e oportunidades de mercado.', 'Estrategica', '1.0.0')
+        ON CONFLICT (agent_id, name) DO UPDATE SET description = EXCLUDED.description;
+    END IF;
+
+    ---------------------------------------------------------------------------
     -- #20 Professor
     ---------------------------------------------------------------------------
     SELECT id INTO v_agent_id FROM agents WHERE display_id = '#20';
@@ -314,7 +326,10 @@ BEGIN
     IF v_agent_id IS NOT NULL THEN
         INSERT INTO skills (agent_id, name, description, category, version)
         VALUES 
-        (v_agent_id, 'Agronomia de Precisão', 'Gestão baseada em dados para otimização da produção rural.', 'Tecnica', '1.0.0')
+        (v_agent_id, 'Agronomia de Precisão', 'Gestão baseada em dados para otimização da produção rural.', 'Tecnica', '1.0.0'),
+        (v_agent_id, 'Direção Estratégica Agrícola', 'Planejamento de longo prazo para ciclos de safra e expansão de área.', 'Estrategica', '1.0.0'),
+        (v_agent_id, 'Gestão Módulo IN', 'Administração da inteligência de entrada de dados agronômicos.', 'Gestao', '1.0.0'),
+        (v_agent_id, 'Leitura de Campo', 'Capacidade de interpretar sinais físicos e biológicos da plantação.', 'Tecnica', '1.0.0')
         ON CONFLICT (agent_id, name) DO UPDATE SET description = EXCLUDED.description;
     END IF;
 
@@ -325,7 +340,20 @@ BEGIN
     IF v_agent_id IS NOT NULL THEN
         INSERT INTO skills (agent_id, name, description, category, version)
         VALUES 
-        (v_agent_id, 'Análise Química de Solos', 'Interpretação de laudos e recomendação de fertilização.', 'Tecnica', '1.0.0')
+        (v_agent_id, 'Análise Química de Solos', 'Interpretação de laudos e recomendação de fertilização.', 'Tecnica', '1.0.0'),
+        (v_agent_id, 'Nutrição Vegetal', 'Monitoramento da saúde e suprimento mineral das culturas.', 'Tecnica', '1.0.0')
+        ON CONFLICT (agent_id, name) DO UPDATE SET description = EXCLUDED.description;
+    END IF;
+
+    ---------------------------------------------------------------------------
+    -- #24 Secretaria de Gestão Administrativa
+    ---------------------------------------------------------------------------
+    SELECT id INTO v_agent_id FROM agents WHERE display_id = '#24';
+    IF v_agent_id IS NOT NULL THEN
+        INSERT INTO skills (agent_id, name, description, category, version)
+        VALUES 
+        (v_agent_id, 'Apoio Administrativo', 'Execução de tarefas de back-office e suporte à gestão.', 'Gestao', '1.0.0'),
+        (v_agent_id, 'Gestão de Processos', 'Documentação e acompanhamento de fluxos de trabalho administrativos.', 'Gestao', '1.0.0')
         ON CONFLICT (agent_id, name) DO UPDATE SET description = EXCLUDED.description;
     END IF;
 
