@@ -7,13 +7,21 @@ DO $$
 BEGIN
     IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'skill_category_type') THEN
         CREATE TYPE skill_category_type AS ENUM (
+            'Academica',
             'Analise', 
             'Automacao', 
+            'Cognitiva',
             'Comunicacao', 
+            'Criacao',
+            'Didatica',
+            'Estrategica',
             'Gestao', 
-            'Criacao', 
-            'Tecnica', 
-            'Estrategica'
+            'Governanca',
+            'Marketing',
+            'Midia',
+            'Proatividade',
+            'Seguranca',
+            'Tecnica'
         );
     END IF;
 END $$;
