@@ -17,6 +17,19 @@ BEGIN
         (v_agent_id, 'Governança Cognitiva', 'Monitoramento da evolução da inteligência do sistema.', 'Gestao', '1.0.0')
         ON CONFLICT (agent_id, name) DO UPDATE SET description = EXCLUDED.description;
     END IF;
+    ---------------------------------------------------------------------------
+    -- #02 Genius Hub
+    ---------------------------------------------------------------------------
+    SELECT id INTO v_agent_id FROM agents WHERE display_id = '#02';
+    IF v_agent_id IS NOT NULL THEN
+        INSERT INTO skills (agent_id, name, description, category, version)
+        VALUES 
+        (v_agent_id, 'Gestão do Módulo Hub', 'Gerenciamento da infraestrutura física e lógica central.', 'Gestao', '1.0.0'),
+        (v_agent_id, 'Registro Central', 'Gerenciamento do livro de registro global e identidades agênticas.', 'Tecnica', '1.0.0'),
+        (v_agent_id, 'Roteamento de Mensagens', 'Distribuição inteligente de tráfego e intenções no ecossistema.', 'Tecnica', '1.0.0')
+        ON CONFLICT (agent_id, name) DO UPDATE SET description = EXCLUDED.description;
+    END IF;
+
 
     ---------------------------------------------------------------------------
     -- #03 Archon
@@ -25,8 +38,30 @@ BEGIN
     IF v_agent_id IS NOT NULL THEN
         INSERT INTO skills (agent_id, name, description, category, version)
         VALUES 
+        -- Decagon of Mastery & Extensions
         (v_agent_id, 'Arquitetura Meta-Agêntica', 'Design de estruturas autogovernadas e fractais.', 'Criacao', '1.0.0'),
-        (v_agent_id, 'Orquestra de Agentes', 'Gestão de interações complexas entre múltiplos agentes.', 'Gestao', '1.0.0')
+        (v_agent_id, 'Orquestra de Agentes', 'Gestão de interações complexas entre múltiplos agentes.', 'Gestao', '1.0.0'),
+        (v_agent_id, 'Sincronização de Valores', 'Alinhamento de propósitos e guardrails éticos do sistema.', 'Estrategica', '1.0.0'),
+        (v_agent_id, 'Síntese Atlas', 'Arquitetura de inovação e mapeamento de cenários futuros.', 'Estrategica', '1.0.0'),
+        (v_agent_id, 'Sincronicidade Cronos', 'Gestão de tempo, delay e orquestração temporal de tarefas.', 'Gestao', '1.0.0'),
+        (v_agent_id, 'Auto-Documentação', 'Capacidade de explicar e documentar a própria evolução sistêmica.', 'Gestao', '1.0.0'),
+        (v_agent_id, 'Delegação de Enxames', 'Gestão de identidade e autoridade em clusters de agentes.', 'Gestao', '1.0.0'),
+        (v_agent_id, 'Gestão de Conectores', 'Integração de ferramentas externas e APIs ao ecossistema.', 'Tecnica', '1.0.0'),
+        (v_agent_id, 'Mapeamento de Fluxos', 'Design de percursos de dados entre agentes especialistas.', 'Tecnica', '1.0.0'),
+        (v_agent_id, 'Interoperabilidade', 'Garantia de que diferentes tipos de agentes falem a mesma língua.', 'Tecnica', '1.0.0'),
+        (v_agent_id, 'Observabilidade Global', 'Monitoramento em tempo real da saúde do ecossistema.', 'Gestao', '1.0.0'),
+        (v_agent_id, 'Interface Dinâmica', 'Auto-geração de painéis visuais para o usuário humano.', 'Criacao', '1.0.0'),
+        (v_agent_id, 'Raciocínio Heurístico', 'Capacidade de aplicar intuição sistêmica a problemas complexos.', 'Cognitiva', '1.0.0'),
+        (v_agent_id, 'Julgamento Crítico', 'Avaliação e retificação de erros em cascata nos agentes.', 'Cognitiva', '1.0.0'),
+        (v_agent_id, 'Gestão de Legado', 'Preservação de conhecimento e manutenção de homeostase.', 'Estrategica', '1.0.0'),
+        (v_agent_id, 'Maestria do Propósito', 'Garantia de que cada ação serve ao objetivo final do criador.', 'Estrategica', '1.0.0'),
+        (v_agent_id, 'Memória Coletiva', 'Persistência de aprendizados transversais em todo o sistema.', 'Cognitiva', '1.0.0'),
+        (v_agent_id, 'Sinfonia de Modelos', 'Escolha dinâmica do melhor LLM para cada subtarefa.', 'Tecnica', '1.0.0'),
+        (v_agent_id, 'Integração Universal', 'Fusão das competências em uma inteligência holística soberana.', 'Estrategica', '1.0.0'),
+        (v_agent_id, 'Auto-evolução', 'Otimização contínua e refatoração de processos agênticos.', 'Criacao', '1.0.0'),
+        (v_agent_id, 'Radiância Proativa', 'Iniciativa autônoma para sugerir melhorias e insights.', 'Proatividade', '1.0.0'),
+        (v_agent_id, 'Imunidade Sistêmica', 'Proteção contra injeções, vazamentos e ameaças externas.', 'Seguranca', '1.0.0'),
+        (v_agent_id, 'Simulação Agêntica', 'Prototipagem de agentes em sandboxes antes do deploy real.', 'Criacao', '1.0.0')
         ON CONFLICT (agent_id, name) DO UPDATE SET description = EXCLUDED.description;
     END IF;
 
@@ -38,9 +73,59 @@ BEGIN
         INSERT INTO skills (agent_id, name, description, category, version)
         VALUES 
         (v_agent_id, 'Fábrica de Sistemas', 'Geração automatizada de infraestrutura SQL e arquivos.', 'Automacao', '1.0.0'),
-        (v_agent_id, 'Governança de Código', 'Auditoria de integridade de scripts e migrações.', 'Tecnica', '1.0.0')
+        (v_agent_id, 'Governança de Código', 'Auditoria de integridade de scripts e migrações.', 'Tecnica', '1.0.0'),
+        (v_agent_id, 'Arquitetura 11-Step', 'Orquestração do ciclo de vida completo de novos sistemas.', 'Criacao', '1.0.0'),
+        (v_agent_id, 'Gestão Demurgos', 'Manutenção da saúde e performance de sistemas ativos.', 'Gestao', '1.0.0'),
+        (v_agent_id, 'Auto-Gestão Estrutural', 'Gerenciamento do próprio Super Módulo Genius Systems.', 'Gestao', '1.0.0')
         ON CONFLICT (agent_id, name) DO UPDATE SET description = EXCLUDED.description;
     END IF;
+
+    ---------------------------------------------------------------------------
+    -- #100 Genius Ecossistema
+    ---------------------------------------------------------------------------
+    SELECT id INTO v_agent_id FROM agents WHERE display_id = '#100';
+    IF v_agent_id IS NOT NULL THEN
+        INSERT INTO skills (agent_id, name, description, category, version)
+        VALUES 
+        (v_agent_id, 'Intervenção de Domínio', 'Autoridade para suspender ou reiniciar processos em crise.', 'Governanca', '1.0.0'),
+        (v_agent_id, 'Monitoramento de Entropia', 'Análise de fluxos em busca de padrões de falha e instabilidade.', 'Governanca', '1.0.0')
+        ON CONFLICT (agent_id, name) DO UPDATE SET description = EXCLUDED.description;
+    END IF;
+
+
+    ---------------------------------------------------------------------------
+    -- #08 Criador de Gerentes
+    ---------------------------------------------------------------------------
+    SELECT id INTO v_agent_id FROM agents WHERE display_id = '#08';
+    IF v_agent_id IS NOT NULL THEN
+        INSERT INTO skills (agent_id, name, description, category, version)
+        VALUES 
+        (v_agent_id, 'Instanciação Gerencial', 'Arquitetura e criação de agentes de nível tático para middle-management.', 'Gestao', '1.0.0')
+        ON CONFLICT (agent_id, name) DO UPDATE SET description = EXCLUDED.description;
+    END IF;
+
+    ---------------------------------------------------------------------------
+    -- #09 Criador de Diretores
+    ---------------------------------------------------------------------------
+    SELECT id INTO v_agent_id FROM agents WHERE display_id = '#09';
+    IF v_agent_id IS NOT NULL THEN
+        INSERT INTO skills (agent_id, name, description, category, version)
+        VALUES 
+        (v_agent_id, 'Arquitetura de Liderança', 'Projeto de cérebros-mestres para governança estratégica de sistemas.', 'Gestao', '1.0.0')
+        ON CONFLICT (agent_id, name) DO UPDATE SET description = EXCLUDED.description;
+    END IF;
+
+    ---------------------------------------------------------------------------
+    -- #10 Criador de Técnicos
+    ---------------------------------------------------------------------------
+    SELECT id INTO v_agent_id FROM agents WHERE display_id = '#10';
+    IF v_agent_id IS NOT NULL THEN
+        INSERT INTO skills (agent_id, name, description, category, version)
+        VALUES 
+        (v_agent_id, 'Tradução Operacional', 'Conversão de demandas em skills e workflows para agentes técnicos.', 'Tecnica', '1.0.0')
+        ON CONFLICT (agent_id, name) DO UPDATE SET description = EXCLUDED.description;
+    END IF;
+
 
     ---------------------------------------------------------------------------
     -- #05 Criador de Agentes
@@ -87,6 +172,29 @@ BEGIN
         INSERT INTO skills (agent_id, name, description, category, version)
         VALUES 
         (v_agent_id, 'Arquitetura de RPA', 'Criação de robôs focados em automação de tarefas repetitivas.', 'Automacao', '1.0.0')
+        ON CONFLICT (agent_id, name) DO UPDATE SET description = EXCLUDED.description;
+    END IF;
+
+
+    ---------------------------------------------------------------------------
+    -- #12 Criador de Professores
+    ---------------------------------------------------------------------------
+    SELECT id INTO v_agent_id FROM agents WHERE display_id = '#12';
+    IF v_agent_id IS NOT NULL THEN
+        INSERT INTO skills (agent_id, name, description, category, version)
+        VALUES 
+        (v_agent_id, 'Arquitetura Pedagógica', 'Criação de mentes focadas em transmissão de saber e trilhas de conhecimento.', 'Didatica', '1.0.0')
+        ON CONFLICT (agent_id, name) DO UPDATE SET description = EXCLUDED.description;
+    END IF;
+
+    ---------------------------------------------------------------------------
+    -- #13 Criador de Gestores
+    ---------------------------------------------------------------------------
+    SELECT id INTO v_agent_id FROM agents WHERE display_id = '#13';
+    IF v_agent_id IS NOT NULL THEN
+        INSERT INTO skills (agent_id, name, description, category, version)
+        VALUES 
+        (v_agent_id, 'Engenharia da Preservação', 'Transformação de dados brutos em sistemas de conhecimento estruturados.', 'Gestao', '1.0.0')
         ON CONFLICT (agent_id, name) DO UPDATE SET description = EXCLUDED.description;
     END IF;
 
@@ -144,7 +252,8 @@ BEGIN
         (v_agent_id, 'Criador de Landing Pages', 'Design de páginas de alta conversão para produtos digitais.', 'Marketing', '1.0.0'),
         (v_agent_id, 'Gestão de Redes Sociais', 'Planejamento e execução de presença digital em múltiplas plataformas.', 'Marketing', '1.0.0'),
         (v_agent_id, 'Fábrica de Sites', 'Desenvolvimento de sites institucionais e portais de conteúdo.', 'Marketing', '1.0.0'),
-        (v_agent_id, 'Editor de Vídeos', 'Pós-produção de vídeos focados em anúncios e aulas curtas.', 'Criacao', '1.0.0')
+        (v_agent_id, 'Editor de Vídeos', 'Pós-produção de vídeos focados em anúncios e aulas curtas.', 'Criacao', '1.0.0'),
+        (v_agent_id, 'Arquitetura de Dados Coda', 'Design de infraestrutura de dados relacional e normalização sistêmica.', 'Tecnica', '1.0.0')
         ON CONFLICT (agent_id, name) DO UPDATE SET description = EXCLUDED.description;
     END IF;
 
