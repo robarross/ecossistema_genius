@@ -1,0 +1,107 @@
+﻿{
+    "schema_version":  "1.0",
+    "module_name":  "Mod_Gestao_Alimentos",
+    "module_title":  "Gestao Alimentos",
+    "module_kind":  "modular",
+    "description":  "Modulo plug and play do ecossistema Genius responsavel por Gestao Alimentos, integrado as plataformas: 06_Plataforma_Genius_AgroProducao, 07_Plataforma_Genius_Mercado_Rural.",
+    "path":  "E:\\Diretorios\\Diretorio_Agentes\\_processo_Inteligencia\\_sistemas_estruturais\\genius_systems_modulares\\05_E_Modulos_Produtivo\\07_Mod_Gestao_Alimentos",
+    "standard_structure":  {
+                               "input":  "0_IN_Entrada",
+                               "process":  "1_DNA_Processo",
+                               "output":  "2_OUT_Saida",
+                               "library":  "3_LIB_Biblioteca",
+                               "submodules_path":  "1_DNA_Processo/submodulos"
+                           },
+    "platforms":  [
+                      "06_Plataforma_Genius_AgroProducao",
+                      "07_Plataforma_Genius_Mercado_Rural"
+                  ],
+    "submodules":  [
+                       "01_sub_cadastro_alimentos_produtos",
+                       "02_sub_fichas_tecnicas_nutricionais",
+                       "03_sub_requisitos_qualidade_alimentos",
+                       "04_sub_seguranca_alimentar_sanitaria",
+                       "05_sub_rastreabilidade_lotes_alimentos",
+                       "06_sub_armazenamento_conservacao_alimentos",
+                       "07_sub_rotulagem_informacoes_obrigatorias",
+                       "08_sub_conformidade_normas_alimentares",
+                       "09_sub_liberacao_produtos_consumo_venda",
+                       "10_sub_integracao_agroindustria_marketplace"
+                   ],
+    "expected_inputs":  [
+                            "Demandas recebidas via Mod_Gestao_Genius_In",
+                            "Dados e documentos enviados por usuarios, agentes ou modulos relacionados",
+                            "Cadastros, status, evidencias e historicos vinculados ao dominio do modulo",
+                            "Eventos e atualizacoes vindos de integracoes/APIs autorizadas"
+                        ],
+    "generated_outputs":  [
+                              "Registros processados e padronizados para o dominio do modulo",
+                              "Eventos de status para Mod_Gestao_Genius_Hub",
+                              "Dados tratados para Mod_Gestao_Dados_DataLake",
+                              "Indicadores e metricas para Mod_Gestao_Dashboards_BI",
+                              "Solicitacoes ou encaminhamentos para modulos dependentes"
+                          ],
+    "depends_on":  [
+                       "Mod_Gestao_Genius_In",
+                       "Mod_Gestao_Genius_Hub",
+                       "Mod_Gestao_Dados_DataLake",
+                       "Mod_Gestao_Integracoes_APIs",
+                       "Mod_Gestao_Dashboards_BI",
+                       "Mod_Gestao_Automacoes",
+                       "Mod_Gestao_Seguranca_Informacao",
+                       "Mod_Gestao_Genius_Cloud"
+                   ],
+    "depended_by":  [
+                        "Plataforma: 06_Plataforma_Genius_AgroProducao",
+                        "Plataforma: 07_Plataforma_Genius_Mercado_Rural"
+                    ],
+    "publishes_events":  [
+                             "Mod_Gestao_Alimentos.evento.criado",
+                             "Mod_Gestao_Alimentos.evento.atualizado",
+                             "Mod_Gestao_Alimentos.evento.status_alterado",
+                             "Mod_Gestao_Alimentos.evento.finalizado"
+                         ],
+    "consumes_events":  [
+                            "Mod_Gestao_Genius_In.evento.demanda_recebida",
+                            "Mod_Gestao_Genius_Hub.evento.fluxo_encaminhado",
+                            "Mod_Gestao_Integracoes_APIs.evento.sincronizacao_recebida"
+                        ],
+    "api_contract":  {
+                         "base_route":  "/api/modulos/Mod_Gestao_Alimentos",
+                         "reads":  [
+                                       "GET /status",
+                                       "GET /submodulos",
+                                       "GET /registros"
+                                   ],
+                         "writes":  [
+                                        "POST /entrada",
+                                        "POST /evento",
+                                        "PATCH /status"
+                                    ],
+                         "integration_owner":  "Mod_Gestao_Integracoes_APIs"
+                     },
+    "permissions_profiles":  [
+                                 "admin_ecossistema",
+                                 "gestor_modulo",
+                                 "operador_modulo",
+                                 "leitor_modulo",
+                                 "agente_ia_autorizado"
+                             ],
+    "dashboards":  [
+                       "Mod_Gestao_Alimentos.dashboard_operacional",
+                       "Mod_Gestao_Alimentos.dashboard_indicadores",
+                       "Mod_Gestao_Alimentos.dashboard_alertas"
+                   ],
+    "datalake_integration":  {
+                                 "raw_layer":  "raw/Mod_Gestao_Alimentos",
+                                 "trusted_layer":  "trusted/Mod_Gestao_Alimentos",
+                                 "analytics_layer":  "analytics/Mod_Gestao_Alimentos",
+                                 "lineage_required":  true
+                             },
+    "hub_integration":  {
+                            "show_in_hub":  true,
+                            "receives_from_genius_in":  true,
+                            "publishes_status_to_hub":  true
+                        },
+    "plug_and_play_status":  "estrutura_padronizada_contrato_inicial_criado"
+}

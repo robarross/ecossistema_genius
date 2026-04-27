@@ -1,7 +1,0 @@
-ID_Ativo,Categoria,Descricao,Fazenda_Vinculo,Area_Documental,Vencimento_Status
-MAT-001,Matricula,Matricula Original Sede - Cartorio Unico,Fazenda Machadinho,850.20,Valida/Registrada
-CAR-001,Ambiental,Cadastro Ambiental Rural (Sincronizado),Fazenda Machadinho,1250.00,Homologado
-ITR-2025,Imposto,Imposto Territorial Rural - Exercicio 2025,Socio Consolidado,N/A,Pago
-CCIR-2025,Imposto,Certificado de Cadastro de Imovel Rural,Fazenda Machadinho,1250.00,Emitido
-OTG-W01,Outorga,Outorga de Agua - Poco Artesiano Sul,Fazenda Machadinho,N/A,Vence: 20/08/2028
-LIC-D01,Licenca,Licenca de Supressao Vegetal (Desmate),Fazenda Recanto,12.50,Valida ate 2027

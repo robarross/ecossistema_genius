@@ -1,0 +1,107 @@
+﻿{
+    "schema_version":  "1.0",
+    "module_name":  "Mod_Gestao_Financeira",
+    "module_title":  "Gestao Financeira",
+    "module_kind":  "modular",
+    "description":  "Modulo plug and play do ecossistema Genius responsavel por Gestao Financeira, integrado as plataformas: 03_Plataforma_Genius_AgroGestao, 07_Plataforma_Genius_Mercado_Rural.",
+    "path":  "E:\\Diretorios\\Diretorio_Agentes\\_processo_Inteligencia\\_sistemas_estruturais\\genius_systems_modulares\\01_A_Modulos_Administrativo_Corporativo\\06_Mod_Gestao_Financeira",
+    "standard_structure":  {
+                               "input":  "0_IN_Entrada",
+                               "process":  "1_DNA_Processo",
+                               "output":  "2_OUT_Saida",
+                               "library":  "3_LIB_Biblioteca",
+                               "submodules_path":  "1_DNA_Processo/submodulos"
+                           },
+    "platforms":  [
+                      "03_Plataforma_Genius_AgroGestao",
+                      "07_Plataforma_Genius_Mercado_Rural"
+                  ],
+    "submodules":  [
+                       "01_sub_parametros_financeiros",
+                       "02_sub_orcamento_planejamento_financeiro",
+                       "03_sub_contas_pagar",
+                       "04_sub_contas_receber",
+                       "05_sub_fluxo_caixa",
+                       "06_sub_pagamentos_recebimentos",
+                       "07_sub_conciliacao_financeira",
+                       "08_sub_cobranca_inadimplencia",
+                       "09_sub_indicadores_financeiros",
+                       "10_sub_prestacao_contas_financeira"
+                   ],
+    "expected_inputs":  [
+                            "Demandas recebidas via Mod_Gestao_Genius_In",
+                            "Dados e documentos enviados por usuarios, agentes ou modulos relacionados",
+                            "Cadastros, status, evidencias e historicos vinculados ao dominio do modulo",
+                            "Eventos e atualizacoes vindos de integracoes/APIs autorizadas"
+                        ],
+    "generated_outputs":  [
+                              "Registros processados e padronizados para o dominio do modulo",
+                              "Eventos de status para Mod_Gestao_Genius_Hub",
+                              "Dados tratados para Mod_Gestao_Dados_DataLake",
+                              "Indicadores e metricas para Mod_Gestao_Dashboards_BI",
+                              "Solicitacoes ou encaminhamentos para modulos dependentes"
+                          ],
+    "depends_on":  [
+                       "Mod_Gestao_Genius_In",
+                       "Mod_Gestao_Genius_Hub",
+                       "Mod_Gestao_Dados_DataLake",
+                       "Mod_Gestao_Integracoes_APIs",
+                       "Mod_Gestao_Dashboards_BI",
+                       "Mod_Gestao_Automacoes",
+                       "Mod_Gestao_Seguranca_Informacao",
+                       "Mod_Gestao_Genius_Cloud"
+                   ],
+    "depended_by":  [
+                        "Plataforma: 03_Plataforma_Genius_AgroGestao",
+                        "Plataforma: 07_Plataforma_Genius_Mercado_Rural"
+                    ],
+    "publishes_events":  [
+                             "Mod_Gestao_Financeira.evento.criado",
+                             "Mod_Gestao_Financeira.evento.atualizado",
+                             "Mod_Gestao_Financeira.evento.status_alterado",
+                             "Mod_Gestao_Financeira.evento.finalizado"
+                         ],
+    "consumes_events":  [
+                            "Mod_Gestao_Genius_In.evento.demanda_recebida",
+                            "Mod_Gestao_Genius_Hub.evento.fluxo_encaminhado",
+                            "Mod_Gestao_Integracoes_APIs.evento.sincronizacao_recebida"
+                        ],
+    "api_contract":  {
+                         "base_route":  "/api/modulos/Mod_Gestao_Financeira",
+                         "reads":  [
+                                       "GET /status",
+                                       "GET /submodulos",
+                                       "GET /registros"
+                                   ],
+                         "writes":  [
+                                        "POST /entrada",
+                                        "POST /evento",
+                                        "PATCH /status"
+                                    ],
+                         "integration_owner":  "Mod_Gestao_Integracoes_APIs"
+                     },
+    "permissions_profiles":  [
+                                 "admin_ecossistema",
+                                 "gestor_modulo",
+                                 "operador_modulo",
+                                 "leitor_modulo",
+                                 "agente_ia_autorizado"
+                             ],
+    "dashboards":  [
+                       "Mod_Gestao_Financeira.dashboard_operacional",
+                       "Mod_Gestao_Financeira.dashboard_indicadores",
+                       "Mod_Gestao_Financeira.dashboard_alertas"
+                   ],
+    "datalake_integration":  {
+                                 "raw_layer":  "raw/Mod_Gestao_Financeira",
+                                 "trusted_layer":  "trusted/Mod_Gestao_Financeira",
+                                 "analytics_layer":  "analytics/Mod_Gestao_Financeira",
+                                 "lineage_required":  true
+                             },
+    "hub_integration":  {
+                            "show_in_hub":  true,
+                            "receives_from_genius_in":  true,
+                            "publishes_status_to_hub":  true
+                        },
+    "plug_and_play_status":  "estrutura_padronizada_contrato_inicial_criado"
+}

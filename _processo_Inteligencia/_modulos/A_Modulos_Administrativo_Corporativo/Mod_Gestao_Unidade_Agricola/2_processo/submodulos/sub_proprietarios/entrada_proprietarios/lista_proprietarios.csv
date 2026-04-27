@@ -1,4 +1,0 @@
-ID_Sociedade;Nome_Entidade;Tipo_Documento;Numero;Participacao_Percentual;Status_Fiscal;Vinculo_Holding
-SOC-001;Agropecuaria Silva LTDA;CNPJ;12.345.678/0001-00;100.00;Regular;Holding Silva Matriz
-SOC-002;Roberto Silva;CPF;123.456.789-00;Direto;Regular;N/A
-SOC-003;Invest Rural Participacoes;CNPJ;98.765.432/0001-99;45.50;Pendente;Holding Silva Matriz

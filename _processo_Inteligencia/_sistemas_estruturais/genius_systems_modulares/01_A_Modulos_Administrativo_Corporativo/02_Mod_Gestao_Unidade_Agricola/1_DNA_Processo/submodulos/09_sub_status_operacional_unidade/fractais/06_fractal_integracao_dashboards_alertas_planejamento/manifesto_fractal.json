@@ -1,0 +1,40 @@
+{
+  "nome_fractal": "06_fractal_integracao_dashboards_alertas_planejamento",
+  "titulo": "Integracao dashboards alertas planejamento",
+  "descricao": "Publica status para dashboards, alertas, planejamento, tarefas e agentes.",
+  "status": "proposto",
+  "versao": "0.1.0",
+  "escopo": "fractal_submodulo",
+  "modulo_pai": "Mod_Gestao_Unidade_Agricola",
+  "submodulo_pai": "09_sub_status_operacional_unidade",
+  "plug_and_play": true,
+  "entradas_esperadas": [
+    "dados_origem",
+    "id_unidade_agricola",
+    "id_usuario_responsavel",
+    "contexto_operacional"
+  ],
+  "saidas_geradas": [
+    "registro_validado",
+    "evento_publicado",
+    "indicador_atualizado"
+  ],
+  "depende_de": [
+    "Mod_Gestao_Genius_Hub",
+    "Mod_Gestao_Dados_DataLake"
+  ],
+  "integra_com": [
+    "Mod_Gestao_Dashboards_BI",
+    "Mod_Gestao_Integracoes_APIs",
+    "Mod_Gestao_Unidade_Agricola"
+  ],
+  "permissoes_perfis": [
+    "admin_ecossistema",
+    "gestor_unidade_agricola",
+    "operador_autorizado"
+  ],
+  "dashboards_proprios": [
+    "dashboard_status_fractal",
+    "dashboard_pendencias_fractal"
+  ]
+}

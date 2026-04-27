@@ -1,0 +1,106 @@
+﻿{
+    "schema_version":  "1.0",
+    "module_name":  "Mod_Gestao_Genius_In",
+    "module_title":  "Gestao Genius In",
+    "module_kind":  "core",
+    "description":  "Modulo plug and play do ecossistema Genius responsavel por Gestao Genius In, integrado as plataformas: 01_Plataforma_Genius_System, 02_Plataforma_Genius_TechOps.",
+    "path":  "E:\\Diretorios\\Diretorio_Agentes\\_processo_Inteligencia\\_sistemas_estruturais\\0_sistema_core\\01_Mod_Gestao_Genius_In",
+    "standard_structure":  {
+                               "input":  "0_IN_Entrada",
+                               "process":  "1_DNA_Processo",
+                               "output":  "2_OUT_Saida",
+                               "library":  "3_LIB_Biblioteca",
+                               "submodules_path":  "1_DNA_Processo/submodulos"
+                           },
+    "platforms":  [
+                      "01_Plataforma_Genius_System",
+                      "02_Plataforma_Genius_TechOps"
+                  ],
+    "submodules":  [
+                       "01_sub_canais_entrada_ecossistema",
+                       "02_sub_captura_demandas_documentos_dados",
+                       "03_sub_triagem_classificacao_inteligente",
+                       "04_sub_identificacao_modulo_fluxo_destino",
+                       "05_sub_validacao_completude_entrada",
+                       "06_sub_enriquecimento_contexto_dados",
+                       "07_sub_encaminhamento_orquestrado_modulos",
+                       "08_sub_acompanhamento_status_entrada",
+                       "09_sub_historico_rastreabilidade_entradas",
+                       "10_sub_integracao_core_hub_datalake"
+                   ],
+    "expected_inputs":  [
+                            "Demandas recebidas via Mod_Gestao_Genius_In",
+                            "Dados e documentos enviados por usuarios, agentes ou modulos relacionados",
+                            "Cadastros, status, evidencias e historicos vinculados ao dominio do modulo",
+                            "Eventos e atualizacoes vindos de integracoes/APIs autorizadas"
+                        ],
+    "generated_outputs":  [
+                              "Registros processados e padronizados para o dominio do modulo",
+                              "Eventos de status para Mod_Gestao_Genius_Hub",
+                              "Dados tratados para Mod_Gestao_Dados_DataLake",
+                              "Indicadores e metricas para Mod_Gestao_Dashboards_BI",
+                              "Solicitacoes ou encaminhamentos para modulos dependentes"
+                          ],
+    "depends_on":  [
+                       "Mod_Gestao_Genius_Hub",
+                       "Mod_Gestao_Dados_DataLake",
+                       "Mod_Gestao_Integracoes_APIs",
+                       "Mod_Gestao_Dashboards_BI",
+                       "Mod_Gestao_Automacoes",
+                       "Mod_Gestao_Seguranca_Informacao",
+                       "Mod_Gestao_Genius_Cloud"
+                   ],
+    "depended_by":  [
+                        "Plataforma: 01_Plataforma_Genius_System",
+                        "Plataforma: 02_Plataforma_Genius_TechOps"
+                    ],
+    "publishes_events":  [
+                             "Mod_Gestao_Genius_In.evento.criado",
+                             "Mod_Gestao_Genius_In.evento.atualizado",
+                             "Mod_Gestao_Genius_In.evento.status_alterado",
+                             "Mod_Gestao_Genius_In.evento.finalizado"
+                         ],
+    "consumes_events":  [
+                            "Mod_Gestao_Genius_In.evento.demanda_recebida",
+                            "Mod_Gestao_Genius_Hub.evento.fluxo_encaminhado",
+                            "Mod_Gestao_Integracoes_APIs.evento.sincronizacao_recebida"
+                        ],
+    "api_contract":  {
+                         "base_route":  "/api/modulos/Mod_Gestao_Genius_In",
+                         "reads":  [
+                                       "GET /status",
+                                       "GET /submodulos",
+                                       "GET /registros"
+                                   ],
+                         "writes":  [
+                                        "POST /entrada",
+                                        "POST /evento",
+                                        "PATCH /status"
+                                    ],
+                         "integration_owner":  "Mod_Gestao_Integracoes_APIs"
+                     },
+    "permissions_profiles":  [
+                                 "admin_ecossistema",
+                                 "gestor_modulo",
+                                 "operador_modulo",
+                                 "leitor_modulo",
+                                 "agente_ia_autorizado"
+                             ],
+    "dashboards":  [
+                       "Mod_Gestao_Genius_In.dashboard_operacional",
+                       "Mod_Gestao_Genius_In.dashboard_indicadores",
+                       "Mod_Gestao_Genius_In.dashboard_alertas"
+                   ],
+    "datalake_integration":  {
+                                 "raw_layer":  "raw/Mod_Gestao_Genius_In",
+                                 "trusted_layer":  "trusted/Mod_Gestao_Genius_In",
+                                 "analytics_layer":  "analytics/Mod_Gestao_Genius_In",
+                                 "lineage_required":  true
+                             },
+    "hub_integration":  {
+                            "show_in_hub":  true,
+                            "receives_from_genius_in":  true,
+                            "publishes_status_to_hub":  true
+                        },
+    "plug_and_play_status":  "estrutura_padronizada_contrato_inicial_criado"
+}

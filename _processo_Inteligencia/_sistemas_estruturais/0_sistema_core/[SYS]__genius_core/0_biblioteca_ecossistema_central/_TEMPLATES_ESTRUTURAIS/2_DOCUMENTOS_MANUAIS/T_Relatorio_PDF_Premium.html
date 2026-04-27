@@ -1,0 +1,83 @@
+<!-- 
+# 🧬 Template: Relatório Executivo PDF (Premium)
+# ID: T-DOC-PDF-01
+# Estilo: Industrial / Minimalista Profissional
+-->
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Relatório Genius - {{ID_RELATORIO}}</title>
+    <style>
+        @page { size: A4; margin: 2cm; }
+        body { font-family: 'Helvetica', 'Arial', sans-serif; color: #333; line-height: 1.6; }
+        
+        .header { border-bottom: 2px solid #00f2ff; padding-bottom: 20px; margin-bottom: 40px; display: flex; justify-content: space-between; align-items: flex-end; }
+        .logo { font-size: 24px; font-weight: bold; color: #000; letter-spacing: 2px; }
+        .meta { text-align: right; font-size: 12px; color: #666; }
+
+        h1 { font-size: 28px; color: #000; margin-bottom: 10px; }
+        .subtitle { font-size: 14px; color: #00f2ff; font-weight: bold; text-transform: uppercase; margin-bottom: 30px; }
+
+        .summary-box { background: #f9f9f9; border-left: 5px solid #00f2ff; padding: 20px; margin-bottom: 40px; }
+        
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th { background: #eee; text-align: left; padding: 12px; border: 1px solid #ddd; font-size: 12px; }
+        td { padding: 12px; border: 1px solid #ddd; font-size: 12px; }
+
+        .footer { position: fixed; bottom: 0; width: 100%; border-top: 1px solid #eee; padding-top: 10px; font-size: 10px; color: #aaa; text-align: center; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="logo">GENIUS_SYSTEMS</div>
+        <div class="meta">
+            Gerado em: {{DATA_GERACAO}}<br>
+            Responsável: {{AGENTE_EMISSOR}}
+        </div>
+    </div>
+
+    <h1>Relatório de {{TITULO_DO_RELATORIO}}</h1>
+    <div class="subtitle">Sistema {{SISTEMA}} | Módulo {{MODULO}}</div>
+
+    <div class="summary-box">
+        <strong>Resumo Executivo:</strong><br>
+        {{RESUMO_CONSOLIDADO}}
+    </div>
+
+    <h3>Dados Processados</h3>
+    <table>
+        <thead>
+            <tr>
+                <th>Indicador</th>
+                <th>Valor Atual</th>
+                <th>Variação</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>{{INDICADOR_1}}</td>
+                <td>{{VALOR_1}}</td>
+                <td>{{VAR_1}}</td>
+                <td>{{STATUS_1}}</td>
+            </tr>
+            <tr>
+                <td>{{INDICADOR_2}}</td>
+                <td>{{VALOR_2}}</td>
+                <td>{{VAR_2}}</td>
+                <td>{{STATUS_2}}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div style="margin-top: 50px;">
+        <h3>Parecer do Board</h3>
+        <p>{{PARECER_FINAL}}</p>
+    </div>
+
+    <div class="footer">
+        Confidencial | Ecossistema Genius | Página 1 de 1
+    </div>
+</body>
+</html>

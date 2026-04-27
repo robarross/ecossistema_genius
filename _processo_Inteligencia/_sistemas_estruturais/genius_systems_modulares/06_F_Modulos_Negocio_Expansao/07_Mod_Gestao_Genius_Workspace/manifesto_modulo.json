@@ -1,0 +1,113 @@
+﻿{
+    "schema_version":  "1.0",
+    "module_name":  "Mod_Gestao_Genius_Workspace",
+    "module_title":  "Gestao Genius Workspace",
+    "module_kind":  "modular",
+    "description":  "Modulo plug and play do ecossistema Genius responsavel por Gestao Genius Workspace, integrado as plataformas: 09_Plataforma_Genius_3D_Experience, 03_Plataforma_Genius_AgroGestao, 08_Plataforma_Genius_Conhecimento, 05_Plataforma_Genius_InfraRural, 01_Plataforma_Genius_System.",
+    "path":  "E:\\Diretorios\\Diretorio_Agentes\\_processo_Inteligencia\\_sistemas_estruturais\\genius_systems_modulares\\06_F_Modulos_Negocio_Expansao\\07_Mod_Gestao_Genius_Workspace",
+    "standard_structure":  {
+                               "input":  "0_IN_Entrada",
+                               "process":  "1_DNA_Processo",
+                               "output":  "2_OUT_Saida",
+                               "library":  "3_LIB_Biblioteca",
+                               "submodules_path":  "1_DNA_Processo/submodulos"
+                           },
+    "platforms":  [
+                      "09_Plataforma_Genius_3D_Experience",
+                      "03_Plataforma_Genius_AgroGestao",
+                      "08_Plataforma_Genius_Conhecimento",
+                      "05_Plataforma_Genius_InfraRural",
+                      "01_Plataforma_Genius_System"
+                  ],
+    "submodules":  [
+                       "01_sub_espacos_trabalho_projetos_modulos",
+                       "02_sub_listas_quadros_tarefas",
+                       "03_sub_fluxos_status_aprovacoes",
+                       "04_sub_documentos_wikis_colaborativos",
+                       "05_sub_comunicacao_comentarios_mencoes",
+                       "06_sub_agendas_prazos_calendarios",
+                       "07_sub_gestao_equipes_cargas_trabalho",
+                       "08_sub_templates_checklists_processos",
+                       "09_sub_integracao_projetos_cowork_modulos",
+                       "10_sub_paineis_produtividade_workspace"
+                   ],
+    "expected_inputs":  [
+                            "Demandas recebidas via Mod_Gestao_Genius_In",
+                            "Dados e documentos enviados por usuarios, agentes ou modulos relacionados",
+                            "Cadastros, status, evidencias e historicos vinculados ao dominio do modulo",
+                            "Eventos e atualizacoes vindos de integracoes/APIs autorizadas"
+                        ],
+    "generated_outputs":  [
+                              "Registros processados e padronizados para o dominio do modulo",
+                              "Eventos de status para Mod_Gestao_Genius_Hub",
+                              "Dados tratados para Mod_Gestao_Dados_DataLake",
+                              "Indicadores e metricas para Mod_Gestao_Dashboards_BI",
+                              "Solicitacoes ou encaminhamentos para modulos dependentes"
+                          ],
+    "depends_on":  [
+                       "Mod_Gestao_Genius_In",
+                       "Mod_Gestao_Genius_Hub",
+                       "Mod_Gestao_Dados_DataLake",
+                       "Mod_Gestao_Integracoes_APIs",
+                       "Mod_Gestao_Dashboards_BI",
+                       "Mod_Gestao_Automacoes",
+                       "Mod_Gestao_Seguranca_Informacao",
+                       "Mod_Gestao_Genius_Cloud"
+                   ],
+    "depended_by":  [
+                        "Plataforma: 09_Plataforma_Genius_3D_Experience",
+                        "Plataforma: 03_Plataforma_Genius_AgroGestao",
+                        "Plataforma: 08_Plataforma_Genius_Conhecimento",
+                        "Plataforma: 05_Plataforma_Genius_InfraRural",
+                        "Plataforma: 01_Plataforma_Genius_System"
+                    ],
+    "publishes_events":  [
+                             "Mod_Gestao_Genius_Workspace.evento.criado",
+                             "Mod_Gestao_Genius_Workspace.evento.atualizado",
+                             "Mod_Gestao_Genius_Workspace.evento.status_alterado",
+                             "Mod_Gestao_Genius_Workspace.evento.finalizado"
+                         ],
+    "consumes_events":  [
+                            "Mod_Gestao_Genius_In.evento.demanda_recebida",
+                            "Mod_Gestao_Genius_Hub.evento.fluxo_encaminhado",
+                            "Mod_Gestao_Integracoes_APIs.evento.sincronizacao_recebida"
+                        ],
+    "api_contract":  {
+                         "base_route":  "/api/modulos/Mod_Gestao_Genius_Workspace",
+                         "reads":  [
+                                       "GET /status",
+                                       "GET /submodulos",
+                                       "GET /registros"
+                                   ],
+                         "writes":  [
+                                        "POST /entrada",
+                                        "POST /evento",
+                                        "PATCH /status"
+                                    ],
+                         "integration_owner":  "Mod_Gestao_Integracoes_APIs"
+                     },
+    "permissions_profiles":  [
+                                 "admin_ecossistema",
+                                 "gestor_modulo",
+                                 "operador_modulo",
+                                 "leitor_modulo",
+                                 "agente_ia_autorizado"
+                             ],
+    "dashboards":  [
+                       "Mod_Gestao_Genius_Workspace.dashboard_operacional",
+                       "Mod_Gestao_Genius_Workspace.dashboard_indicadores",
+                       "Mod_Gestao_Genius_Workspace.dashboard_alertas"
+                   ],
+    "datalake_integration":  {
+                                 "raw_layer":  "raw/Mod_Gestao_Genius_Workspace",
+                                 "trusted_layer":  "trusted/Mod_Gestao_Genius_Workspace",
+                                 "analytics_layer":  "analytics/Mod_Gestao_Genius_Workspace",
+                                 "lineage_required":  true
+                             },
+    "hub_integration":  {
+                            "show_in_hub":  true,
+                            "receives_from_genius_in":  true,
+                            "publishes_status_to_hub":  true
+                        },
+    "plug_and_play_status":  "estrutura_padronizada_contrato_inicial_criado"
+}

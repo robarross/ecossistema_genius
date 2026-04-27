@@ -1,0 +1,60 @@
+{
+  "tabela_sugerida": "fractal_integracao_contratos_juridico_permissoes",
+  "primary_key": "id_fractal_registro",
+  "campos": [
+    {
+      "nome": "id_fractal_registro",
+      "tipo": "uuid",
+      "obrigatorio": true,
+      "descricao": "Identificador unico do registro do fractal."
+    },
+    {
+      "nome": "id_unidade_agricola",
+      "tipo": "uuid/text",
+      "obrigatorio": true,
+      "descricao": "Referencia da unidade agricola."
+    },
+    {
+      "nome": "id_origem",
+      "tipo": "text",
+      "obrigatorio": false,
+      "descricao": "Referencia externa ou registro de origem."
+    },
+    {
+      "nome": "status",
+      "tipo": "text",
+      "obrigatorio": true,
+      "descricao": "Status do registro dentro do fractal."
+    },
+    {
+      "nome": "payload",
+      "tipo": "jsonb",
+      "obrigatorio": false,
+      "descricao": "Dados flexiveis do fractal."
+    },
+    {
+      "nome": "created_at",
+      "tipo": "timestamptz",
+      "obrigatorio": true,
+      "descricao": "Data de criacao."
+    },
+    {
+      "nome": "updated_at",
+      "tipo": "timestamptz",
+      "obrigatorio": true,
+      "descricao": "Data de atualizacao."
+    },
+    {
+      "nome": "sync_status",
+      "tipo": "text",
+      "obrigatorio": true,
+      "descricao": "Status de sincronizacao com Supabase/DataLake."
+    }
+  ],
+  "relacionamentos": [
+    {
+      "campo": "id_unidade_agricola",
+      "referencia": "propriedades_agricolas.id_unidade_agricola"
+    }
+  ]
+}

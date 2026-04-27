@@ -1,0 +1,103 @@
+﻿{
+    "schema_version":  "1.0",
+    "module_name":  "Mod_Gestao_Expansao_NovosNegocios",
+    "module_title":  "Gestao Expansao NovosNegocios",
+    "module_kind":  "modular",
+    "description":  "Modulo plug and play do ecossistema Genius responsavel por Gestao Expansao NovosNegocios, integrado as plataformas: 07_Plataforma_Genius_Mercado_Rural.",
+    "path":  "E:\\Diretorios\\Diretorio_Agentes\\_processo_Inteligencia\\_sistemas_estruturais\\genius_systems_modulares\\06_F_Modulos_Negocio_Expansao\\10_Mod_Gestao_Expansao_NovosNegocios",
+    "standard_structure":  {
+                               "input":  "0_IN_Entrada",
+                               "process":  "1_DNA_Processo",
+                               "output":  "2_OUT_Saida",
+                               "library":  "3_LIB_Biblioteca",
+                               "submodules_path":  "1_DNA_Processo/submodulos"
+                           },
+    "platforms":  [
+                      "07_Plataforma_Genius_Mercado_Rural"
+                  ],
+    "submodules":  [
+                       "01_sub_mapeamento_oportunidades_expansao",
+                       "02_sub_diagnostico_viabilidade_negocios",
+                       "03_sub_modelagem_novos_negocios",
+                       "04_sub_estudos_mercado_concorrencia",
+                       "05_sub_planejamento_expansao_implantacao",
+                       "06_sub_parcerias_aliancas_estrategicas",
+                       "07_sub_pilotos_validacao_negocios",
+                       "08_sub_aprovacao_governanca_expansao",
+                       "09_sub_implantacao_acompanhamento_negocios",
+                       "10_sub_integracao_ecossistema_expansao"
+                   ],
+    "expected_inputs":  [
+                            "Demandas recebidas via Mod_Gestao_Genius_In",
+                            "Dados e documentos enviados por usuarios, agentes ou modulos relacionados",
+                            "Cadastros, status, evidencias e historicos vinculados ao dominio do modulo",
+                            "Eventos e atualizacoes vindos de integracoes/APIs autorizadas"
+                        ],
+    "generated_outputs":  [
+                              "Registros processados e padronizados para o dominio do modulo",
+                              "Eventos de status para Mod_Gestao_Genius_Hub",
+                              "Dados tratados para Mod_Gestao_Dados_DataLake",
+                              "Indicadores e metricas para Mod_Gestao_Dashboards_BI",
+                              "Solicitacoes ou encaminhamentos para modulos dependentes"
+                          ],
+    "depends_on":  [
+                       "Mod_Gestao_Genius_In",
+                       "Mod_Gestao_Genius_Hub",
+                       "Mod_Gestao_Dados_DataLake",
+                       "Mod_Gestao_Integracoes_APIs",
+                       "Mod_Gestao_Dashboards_BI",
+                       "Mod_Gestao_Automacoes",
+                       "Mod_Gestao_Seguranca_Informacao",
+                       "Mod_Gestao_Genius_Cloud"
+                   ],
+    "depended_by":  "Plataforma: 07_Plataforma_Genius_Mercado_Rural",
+    "publishes_events":  [
+                             "Mod_Gestao_Expansao_NovosNegocios.evento.criado",
+                             "Mod_Gestao_Expansao_NovosNegocios.evento.atualizado",
+                             "Mod_Gestao_Expansao_NovosNegocios.evento.status_alterado",
+                             "Mod_Gestao_Expansao_NovosNegocios.evento.finalizado"
+                         ],
+    "consumes_events":  [
+                            "Mod_Gestao_Genius_In.evento.demanda_recebida",
+                            "Mod_Gestao_Genius_Hub.evento.fluxo_encaminhado",
+                            "Mod_Gestao_Integracoes_APIs.evento.sincronizacao_recebida"
+                        ],
+    "api_contract":  {
+                         "base_route":  "/api/modulos/Mod_Gestao_Expansao_NovosNegocios",
+                         "reads":  [
+                                       "GET /status",
+                                       "GET /submodulos",
+                                       "GET /registros"
+                                   ],
+                         "writes":  [
+                                        "POST /entrada",
+                                        "POST /evento",
+                                        "PATCH /status"
+                                    ],
+                         "integration_owner":  "Mod_Gestao_Integracoes_APIs"
+                     },
+    "permissions_profiles":  [
+                                 "admin_ecossistema",
+                                 "gestor_modulo",
+                                 "operador_modulo",
+                                 "leitor_modulo",
+                                 "agente_ia_autorizado"
+                             ],
+    "dashboards":  [
+                       "Mod_Gestao_Expansao_NovosNegocios.dashboard_operacional",
+                       "Mod_Gestao_Expansao_NovosNegocios.dashboard_indicadores",
+                       "Mod_Gestao_Expansao_NovosNegocios.dashboard_alertas"
+                   ],
+    "datalake_integration":  {
+                                 "raw_layer":  "raw/Mod_Gestao_Expansao_NovosNegocios",
+                                 "trusted_layer":  "trusted/Mod_Gestao_Expansao_NovosNegocios",
+                                 "analytics_layer":  "analytics/Mod_Gestao_Expansao_NovosNegocios",
+                                 "lineage_required":  true
+                             },
+    "hub_integration":  {
+                            "show_in_hub":  true,
+                            "receives_from_genius_in":  true,
+                            "publishes_status_to_hub":  true
+                        },
+    "plug_and_play_status":  "estrutura_padronizada_contrato_inicial_criado"
+}

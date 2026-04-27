@@ -1,0 +1,1225 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestão da Unidade Agrícola - Sistema Inteligente</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --forest-green: #2C5F2D;
+            --moss: #97BC62;
+            --terracotta: #B85042;
+            --navy: #1E2761;
+            --white: #FFFFFF;
+            --cream: #F5F5F5;
+            --light-gray: #E8E8E8;
+            --dark-gray: #333333;
+        }
+
+        body {
+            font-family: 'Calibri', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--dark-gray);
+        }
+
+        /* Navigation */
+        nav {
+            background-color: var(--forest-green);
+            padding: 1rem 2rem;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            justify-content: flex-end;
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        nav a {
+            color: var(--white);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        nav a:hover {
+            color: var(--moss);
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, var(--forest-green) 0%, #1E4620 100%);
+            color: var(--white);
+            padding: 6rem 2rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 300px;
+            height: 300px;
+            background: rgba(151, 188, 98, 0.1);
+            border-radius: 50%;
+            opacity: 0.3;
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+            font-weight: bold;
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero p {
+            font-size: 1.5rem;
+            color: var(--moss);
+            margin-bottom: 2rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero-divider {
+            width: 120px;
+            height: 4px;
+            background-color: var(--terracotta);
+            margin: 1.5rem auto;
+        }
+
+        .hero-tagline {
+            font-size: 1.1rem;
+            color: var(--light-gray);
+            font-style: italic;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Container */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        /* Section */
+        section {
+            padding: 4rem 0;
+        }
+
+        section h2 {
+            font-size: 2.5rem;
+            color: var(--navy);
+            margin-bottom: 3rem;
+            text-align: center;
+            position: relative;
+            padding-bottom: 1rem;
+        }
+
+        section h2::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 3px;
+            background-color: var(--terracotta);
+        }
+
+        /* Overview Section */
+        #overview {
+            background-color: var(--cream);
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .stat-box {
+            background-color: var(--white);
+            border: 3px solid var(--forest-green);
+            border-radius: 12px;
+            padding: 2rem;
+            text-align: center;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .stat-box:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .stat-number {
+            font-size: 3rem;
+            font-weight: bold;
+            color: var(--forest-green);
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            font-size: 1.2rem;
+            color: var(--navy);
+            font-weight: 600;
+        }
+
+        /* Submodules Section */
+        #submodulos {
+            background-color: var(--white);
+        }
+
+        .submodulos-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .submodulo-card {
+            padding: 1.5rem;
+            border-radius: 8px;
+            border-left: 5px solid var(--terracotta);
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+
+        .submodulo-card:nth-child(odd) {
+            background-color: var(--moss);
+            color: var(--white);
+        }
+
+        .submodulo-card:nth-child(even) {
+            background-color: var(--light-gray);
+            color: var(--navy);
+        }
+
+        .submodulo-card:hover {
+            transform: translateX(5px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .submodulo-card h3 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        /* Dashboard Section */
+        #dashboard {
+            background-color: var(--cream);
+        }
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .dashboard-item {
+            padding: 2rem;
+            border-radius: 12px;
+            color: var(--white);
+            text-align: center;
+            font-weight: 600;
+            font-size: 1.2rem;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            cursor: pointer;
+        }
+
+        .dashboard-item:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+        }
+
+        .item-1 { background: linear-gradient(135deg, #065A82 0%, #0A4A6B 100%); }
+        .item-2 { background: linear-gradient(135deg, #1C7293 0%, #155380 100%); }
+        .item-3 { background: linear-gradient(135deg, #28A745 0%, #1E8A3A 100%); }
+        .item-4 { background: linear-gradient(135deg, #FFC107 0%, #E0A100 100%); }
+        .item-5 { background: linear-gradient(135deg, #17A2B8 0%, #128DA3 100%); }
+        .item-6 { background: linear-gradient(135deg, #DC3545 0%, #C82333 100%); }
+
+        /* Workflow Section */
+        #workflow {
+            background-color: var(--white);
+        }
+
+        .workflow-container {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            margin-top: 3rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .workflow-step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            flex: 1;
+            min-width: 150px;
+        }
+
+        .step-circle {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background-color: var(--forest-green);
+            color: var(--white);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            font-weight: bold;
+            margin-bottom: 1rem;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .step-label {
+            font-weight: 600;
+            color: var(--navy);
+            margin-bottom: 0.5rem;
+            text-align: center;
+        }
+
+        .step-description {
+            font-size: 0.9rem;
+            color: var(--light-gray);
+            text-align: center;
+            max-width: 120px;
+        }
+
+        .workflow-arrow {
+            font-size: 2rem;
+            color: var(--moss);
+            display: none;
+        }
+
+        @media (min-width: 768px) {
+            .workflow-arrow {
+                display: block;
+            }
+        }
+
+        /* Benefits Section */
+        #benefits {
+            background-color: var(--cream);
+        }
+
+        .benefits-list {
+            display: grid;
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .benefit-item {
+            padding: 1.5rem;
+            border-left: 5px solid var(--terracotta);
+            border-radius: 4px;
+            transition: all 0.3s ease;
+        }
+
+        .benefit-item:nth-child(odd) {
+            background-color: var(--white);
+        }
+
+        .benefit-item:nth-child(even) {
+            background-color: var(--light-gray);
+        }
+
+        .benefit-item:hover {
+            transform: translateX(5px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .benefit-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: var(--navy);
+            margin-bottom: 0.5rem;
+        }
+
+        .benefit-description {
+            color: var(--dark-gray);
+            font-size: 1rem;
+        }
+
+        /* CTA Section */
+        #cta {
+            background: linear-gradient(135deg, var(--forest-green) 0%, #1E4620 100%);
+            color: var(--white);
+            text-align: center;
+            padding: 5rem 2rem;
+        }
+
+        #cta h2 {
+            color: var(--white);
+            margin-bottom: 1rem;
+        }
+
+        #cta h2::after {
+            background-color: var(--terracotta);
+        }
+
+        .cta-subtitle {
+            font-size: 1.3rem;
+            color: var(--moss);
+            margin-bottom: 2rem;
+        }
+
+        .cta-button {
+            display: inline-block;
+            padding: 1.2rem 3rem;
+            background-color: var(--terracotta);
+            color: var(--white);
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            border: 2px solid var(--terracotta);
+            cursor: pointer;
+        }
+
+        .cta-button:hover {
+            background-color: transparent;
+            border-color: var(--terracotta);
+            transform: scale(1.05);
+        }
+
+        .cta-footer {
+            margin-top: 2rem;
+            font-size: 0.95rem;
+            color: var(--cream);
+        }
+
+        /* Footer */
+        footer {
+            background-color: var(--navy);
+            color: var(--white);
+            padding: 2rem;
+            text-align: center;
+            margin-top: 4rem;
+        }
+
+        footer p {
+            margin-bottom: 0.5rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+
+            section h2 {
+                font-size: 2rem;
+            }
+
+            nav ul {
+                gap: 1rem;
+                font-size: 0.9rem;
+            }
+
+            .stat-number {
+                font-size: 2.5rem;
+            }
+        }
+
+        /* Animations */
+        /* Hierarchy Tree Styles */
+        .hierarchy-container {
+            padding: 2rem;
+            background: var(--white);
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .tree ul {
+            padding-top: 20px; 
+            position: relative;
+            transition: all 0.5s;
+            display: flex;
+            justify-content: center;
+        }
+
+        .tree li {
+            text-align: center;
+            list-style-type: none;
+            position: relative;
+            padding: 20px 5px 0 5px;
+            transition: all 0.5s;
+        }
+
+        /* Connectors */
+        .tree li::before, .tree li::after {
+            content: '';
+            position: absolute; top: 0; right: 50%;
+            border-top: 2px solid var(--forest-green);
+            width: 50%; height: 20px;
+        }
+        .tree li::after {
+            right: auto; left: 50%;
+            border-left: 2px solid var(--forest-green);
+        }
+
+        .tree li:only-child::after, .tree li:only-child::before { display: none; }
+        .tree li:only-child { padding-top: 0; }
+        .tree li:first-child::before, .tree li:last-child::after { border: 0 none; }
+        .tree li:last-child::before { border-right: 2px solid var(--forest-green); border-radius: 0 5px 0 0; }
+        .tree li:first-child::after { border-radius: 5px 0 0 0; }
+
+        .tree ul ul::before {
+            content: '';
+            position: absolute; top: 0; left: 50%;
+            border-left: 2px solid var(--forest-green);
+            width: 0; height: 20px;
+        }
+
+        .tree li div {
+            border: 2px solid var(--forest-green);
+            padding: 10px 15px;
+            text-decoration: none;
+            color: var(--dark-gray);
+            font-size: 0.9rem;
+            display: inline-block;
+            border-radius: 8px;
+            transition: all 0.5s;
+            background: var(--white);
+            font-weight: 600;
+        }
+
+        .tree li div:hover {
+            background: var(--moss);
+            color: var(--white);
+            border: 2px solid var(--forest-green);
+            transform: scale(1.1);
+        }
+
+        .node-core { background: var(--navy) !important; color: white !important; }
+        .node-super { background: var(--forest-green) !important; color: white !important; }
+        .node-modular { border-color: var(--terracotta) !important; }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        section {
+            animation: fadeInUp 0.8s ease;
+        }
+        /* --- AGENT LEVEL BADGES --- */
+        .node-core::after, .node-super::after, .node-modular::after {
+            content: attr(data-level);
+            position: absolute;
+            top: -10px;
+            right: -10px;
+            background: #00ff7f;
+            color: black;
+            font-weight: bold;
+            font-size: 8px;
+            padding: 2px 4px;
+            border-radius: 4px;
+            box-shadow: 0 0 10px #00ff7f;
+            z-index: 10;
+        }
+        .node-modular::after { background: #00bfff; box-shadow: 0 0 10px #00bfff; }
+        
+        /* LEVEL UP ANIMATION */
+        @keyframes levelUpGlow {
+            0% { transform: scale(1); box-shadow: 0 0 10px #00ff7f; }
+            50% { transform: scale(1.1); box-shadow: 0 0 50px #00ff7f, 0 0 100px white; border-color: white; }
+            100% { transform: scale(1); box-shadow: 0 0 10px #00ff7f; }
+        }
+        .level-up-active { animation: levelUpGlow 1.5s ease-out; z-index: 100; }
+        /* Genius Bus Console Styles */
+        #genius-bus-console {
+            position: fixed;
+            bottom: -350px;
+            right: 20px;
+            width: 350px;
+            height: 400px;
+            background: rgba(10, 25, 47, 0.95);
+            border: 1px solid var(--moss);
+            border-radius: 12px 12px 0 0;
+            color: #00ff7f;
+            font-family: 'Courier New', Courier, monospace;
+            transition: bottom 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            z-index: 1000;
+            box-shadow: 0 -5px 25px rgba(0, 255, 127, 0.2);
+            display: flex;
+            flex-direction: column;
+            backdrop-filter: blur(10px);
+        }
+
+        #genius-bus-console.open {
+            bottom: 0;
+        }
+
+        .bus-handle {
+            background: var(--moss);
+            color: var(--navy);
+            padding: 8px;
+            text-align: center;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 0.9rem;
+            border-radius: 12px 12px 0 0;
+            letter-spacing: 2px;
+        }
+
+        .bus-header {
+            padding: 10px;
+            font-size: 0.75rem;
+            border-bottom: 1px solid rgba(0, 255, 127, 0.3);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: rgba(0,0,0,0.3);
+        }
+
+        .bus-active-indicator {
+            width: 8px;
+            height: 8px;
+            background: #00ff7f;
+            border-radius: 50%;
+            animation: pulse-glow 1s infinite;
+        }
+
+        @keyframes pulse-glow {
+            0% { opacity: 0.5; box-shadow: 0 0 0 0 rgba(0, 255, 127, 0.7); }
+            70% { opacity: 1; box-shadow: 0 0 0 10px rgba(0, 255, 127, 0); }
+            100% { opacity: 0.5; box-shadow: 0 0 0 0 rgba(0, 255, 127, 0); }
+        }
+
+        .bus-stream {
+            flex: 1;
+            overflow-y: auto;
+            padding: 10px;
+            font-size: 0.8rem;
+            scrollbar-width: thin;
+            scrollbar-color: var(--moss) transparent;
+        }
+
+        .pulse-item {
+            margin-bottom: 12px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid rgba(0, 255, 127, 0.1);
+            animation: slideInRight 0.3s ease-out;
+        }
+
+        .pulse-meta {
+            font-size: 0.65rem;
+            color: rgba(0, 255, 127, 0.6);
+            margin-bottom: 4px;
+        }
+
+        .pulse-body {
+            word-break: break-all;
+        }
+
+        .pulse-item.critical { color: #ff4d4d; border-color: rgba(255, 77, 77, 0.3); }
+        .pulse-item.warn { color: #ffcc00; border-color: rgba(255, 204, 0, 0.3); }
+
+        @keyframes slideInRight {
+            from { transform: translateX(20px); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        /* ClickUp Board Styles */
+        .clickup-section {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            padding: 5rem 0;
+        }
+
+        .clickup-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .clickup-column {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(10px);
+            border-radius: 16px;
+            padding: 1.5rem;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 8px 32px rgba(31, 38, 135, 0.07);
+        }
+
+        .clickup-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 1.5rem;
+            font-weight: bold;
+            text-transform: uppercase;
+            font-size: 0.85rem;
+            letter-spacing: 1px;
+        }
+
+        .clickup-card {
+            background: var(--white);
+            border-radius: 10px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            border-left: 4px solid var(--forest-green);
+            transition: transform 0.2s ease;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .clickup-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+
+        .card-tag {
+            font-size: 0.7rem;
+            padding: 2px 8px;
+            border-radius: 4px;
+            background: var(--light-gray);
+            color: var(--dark-gray);
+            margin-bottom: 5px;
+            display: inline-block;
+        }
+
+        .layer-strategic { border-left-color: var(--navy); }
+        .layer-tactical { border-left-color: var(--terracotta); }
+        .layer-operational { border-left-color: #00ff7f; }
+
+        .task-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 8px 0;
+            border-bottom: 1px solid var(--light-gray);
+        }
+
+        .task-item:last-child { border-bottom: none; }
+
+        .checkbox-custom {
+            width: 18px;
+            height: 18px;
+            border: 2px solid var(--moss);
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .status-badge {
+            font-size: 0.65rem;
+            padding: 2px 6px;
+            border-radius: 10px;
+            background: #e0f2f1;
+            color: #00796b;
+            margin-left: auto;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav>
+        <ul>
+            <li><a href="#visao">Visão Geral</a></li>
+            <li><a href="#submodulos">Submódulos</a></li>
+            <li><a href="#hierarchy">Hierarquia</a></li>
+            <li><a href="#clickup">ClickUp Genius</a></li>
+            <li><a href="#dashboard">Interface</a></li>
+            <li><a href="#workflow">Processos</a></li>
+            <li><a href="#benefits">Benefícios</a></li>
+            <li><a href="#cta">Começar</a></li>
+        </ul>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <h1>Gestão da Unidade Agrícola</h1>
+        <p>Sistema Inteligente de Gestão Territorial, Produção e Conformidade</p>
+        <div class="hero-divider"></div>
+        <p class="hero-tagline">Optimize • Rastrear • Conformidade</p>
+    </section>
+
+    <!-- Overview Section -->
+    <section id="overview" id="visao">
+        <div class="container">
+            <h2>Visão Geral do Sistema</h2>
+            <div class="stats-grid">
+                <div class="stat-box">
+                    <div class="stat-number">8</div>
+                    <div class="stat-label">Submódulos</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-number">32</div>
+                    <div class="stat-label">Fractais</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-number">128</div>
+                    <div class="stat-label">Ferramentas</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Submodules Section -->
+    <section id="submodulos">
+        <div class="container">
+            <h2>Estrutura de Submódulos</h2>
+            <div class="submodulos-grid">
+                <div class="submodulo-card">
+                    <h3>Sub Unidades Agrícolas</h3>
+                </div>
+                <div class="submodulo-card">
+                    <h3>Sub Territórios e Produção</h3>
+                </div>
+                <div class="submodulo-card">
+                    <h3>Sub Documentação</h3>
+                </div>
+                <div class="submodulo-card">
+                    <h3>Sub Certidões Ambientais</h3>
+                </div>
+                <div class="submodulo-card">
+                    <h3>Sub Limites e Acessos</h3>
+                </div>
+                <div class="submodulo-card">
+                    <h3>Sub Responsáveis / Gestores</h3>
+                </div>
+                <div class="submodulo-card">
+                    <h3>Sub Infraestrutura</h3>
+                </div>
+                <div class="submodulo-card">
+                    <h3>Sub Produção</h3>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Hierarchy Section -->
+    <section id="hierarchy">
+        <div class="container">
+            <h2>Hierarquia Agêntica</h2>
+            <div class="hierarchy-container">
+                <div class="tree">
+                    <ul>
+                        <li>
+                            <div class="node-core">#100 Genius Ecossistema <br> (Supervisor Supremo)</div>
+                            <ul>
+                                <li>
+                                    <div class="node-core">#01 Genius IN</div>
+                                    <ul>
+                                        <li>
+                                            <div class="node-core">#02 Genius HUB</div>
+                                            <ul>
+                                                <li><div class="node-core">#03 Archon</div></li>
+                                            </ul>
+                                        </li>
+                                    </ul>
+                                </li>
+                                <li>
+                                    <div class="node-core">#04 Genius Systems</div>
+                                    <ul>
+                                        <li><div class="node-core">#SG-01 Aria (Secretária Geral)</div></li>
+                                        <li>
+                                            <div class="node-super">#14 Criador de Secretários</div>
+                                            <ul>
+                                                <li><div class="node-modular">#24 VERA</div></li>
+                                            </ul>
+                                        </li>
+                                        <li>
+                                            <div class="node-super">#05 Criador de Agentes</div>
+                                            <ul>
+                                                <li><div class="node-super" data-level="Lv. 1">#25 Criadora de Ferramentas</div></li>
+                                                <li><div class="node-super" data-level="Lv. 1">#28 Criador de Dashboards</div></li>
+                                                <li><div class="node-super" data-level="Lv. 1">#29 Criador de KPIs</div></li>
+                                                <li><div class="node-super" data-level="Lv. 1">#30 Agente de Comunicação</div></li>
+                                                <li><div class="node-super" data-level="Lv. 1">#35 Agente Bibliotecário</div></li>
+                                                <li><div class="node-super" data-level="Lv. 1">#36 Agente Auditor</div></li>
+                                                <li><div class="node-super" data-level="Lv. 1">#37 Agente de Portaria</div></li>
+                                                <li><div class="node-super" data-level="Lv. 1">#38 Agente ClickUp</div></li>
+                                                <li>
+                                                    <div class="node-super" data-level="Lv. 1">#12 Super Agente Professor</div>
+                                                    <ul>
+                                                        <li><div class="node-modular" data-level="Lv. 1">#20 Professor Modular</div></li>
+                                                    </ul>
+                                                </li>
+                                                <li>
+                                                    <div class="node-super" data-id="6" data-level="Lv. 1">#06 Criador de Módulos</div>
+                                                    <ul>
+                                                        <li>
+                                                            <div class="node-modular" data-level="Lv. 1">#G-UA Guardião (UA)</div>
+                                                            <ul>
+                                                                <li><div class="node-modular" data-level="Lv. 1" data-id="M-UA">#M-UA Gerente</div></li>
+                                                                <li><div class="node-modular" data-level="Lv. 1">#P-UA Pesquisador</div></li>
+                                                                <li><div class="node-modular" data-level="Lv. 1">#PR-UA Professor</div></li>
+                                                                <li><div class="node-modular" data-level="Lv. 1">#S-UA Secretária</div></li>
+                                                                <li><div class="node-modular" data-level="Lv. 1">#B-UA Bibliotecário</div></li>
+                                                            </ul>
+                                                        </li>
+                                                        <li><div class="node-super" data-level="Lv. 1">#27 Criadora de Submódulos</div></li>
+                                                        <li>
+                                                            <div class="node-modular" data-level="Lv. 1">#G-PV Guardião (Vegetal)</div>
+                                                            <ul>
+                                                                <li><div class="node-modular" data-level="Lv. 1">#M-PV Gerente</div></li>
+                                                                <li><div class="node-modular" data-level="Lv. 1">#P-PV Pesquisador</div></li>
+                                                                <li><div class="node-modular" data-level="Lv. 1">#PR-PV Professor</div></li>
+                                                                <li><div class="node-modular" data-level="Lv. 1">#S-PV Secretária</div></li>
+                                                                <li><div class="node-modular" data-level="Lv. 1">#B-PV Bibliotecário</div></li>
+                                                                <li><div class="node-modular" data-level="Lv. 1">#T-PV Equipe Técnica</div></li>
+                                                            </ul>
+                                                        </li>
+                                                    </ul>
+                                                </li>
+                                                <li><div class="node-modular">#22 Gestor Agronômico</div></li>
+                                            </ul>
+                                        </li>
+                                        <li>
+                                            <div class="node-super">#11 Criador de Robôs</div>
+                                        </li>
+                                    </ul>
+                                </li>
+                                 <li><div class="node-super" style="background: var(--terracotta); color: white; border: 2px solid gold;">👑 #CEO-01 Diretor Executivo</div>
+                                    <ul>
+                                        <li><div class="node-core">#01 Genius IN</div></li>
+                                        <li><div class="node-core">#02 Genius HUB</div></li>
+                                        <li><div class="node-core">#03 Archon</div></li>
+                                    </ul>
+                                 </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Dashboard Section -->
+    <section id="dashboard">
+        <div class="container">
+            <h2>Painel Genius Bus (Tempo Real)</h2>
+            
+            <div class="stats-grid" id="genius-bus-metrics" style="margin-bottom: 2rem;">
+                <div class="stat-box" id="card-level" style="border-color: var(--moss); transition: box-shadow 0.3s ease;">
+                    <div class="stat-number" id="display-level" style="color: var(--navy);">--</div>
+                    <div class="stat-label">Nível Genius</div>
+                </div>
+                <div class="stat-box" id="card-xp" style="border-color: var(--terracotta); transition: box-shadow 0.3s ease;">
+                    <div class="stat-number" id="display-xp" style="color: var(--terracotta);">--</div>
+                    <div class="stat-label">Total de XP</div>
+                </div>
+                <div class="stat-box" id="card-trust" style="border-color: #00ff7f; transition: box-shadow 0.3s ease;">
+                    <div class="stat-number" id="display-trust" style="color: #00ff7f;">--</div>
+                    <div class="stat-label">Trust Score</div>
+                </div>
+                <div class="stat-box" id="card-badges" style="border-color: #ffd700; transition: box-shadow 0.3s ease;">
+                    <div id="display-badges" style="display: flex; justify-content: center; gap: 5px; min-height: 3rem; align-items: center;">--</div>
+                    <div class="stat-label">Conquistas (Badges)</div>
+                </div>
+            </div>
+
+            <div class="events-container" style="background: var(--white); padding: 2rem; border-radius: 12px; border: 3px solid var(--forest-green); box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+                <h3 style="color: var(--navy); margin-bottom: 1rem; border-bottom: 2px solid var(--light-gray); padding-bottom: 0.5rem;">Logs de Telemetria</h3>
+                <div id="events-list" style="font-family: 'Courier New', Courier, monospace; font-size: 0.95rem; line-height: 1.8;">
+                    <span style="color: var(--moss);">[SISTEMA] Aguardando conexão inteligente com o Genius Bus no Supabase...</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Workflow Section -->
+    <section id="workflow">
+        <div class="container">
+            <h2>Fluxo de Processos</h2>
+            <div class="workflow-container">
+                <div class="workflow-step">
+                    <div class="step-circle">1</div>
+                    <div class="step-label">Entrada</div>
+                    <div class="step-description">Recebimento de dados</div>
+                </div>
+                <div class="workflow-arrow">→</div>
+                <div class="workflow-step">
+                    <div class="step-circle">2</div>
+                    <div class="step-label">Validação</div>
+                    <div class="step-description">Integridade verificada</div>
+                </div>
+                <div class="workflow-arrow">→</div>
+                <div class="workflow-step">
+                    <div class="step-circle">3</div>
+                    <div class="step-label">Processamento</div>
+                    <div class="step-description">Análise e cálculo</div>
+                </div>
+                <div class="workflow-arrow">→</div>
+                <div class="workflow-step">
+                    <div class="step-circle">4</div>
+                    <div class="step-label">Saída</div>
+                    <div class="step-description">Certidão emitida</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- LEGO Fractal Factory -->
+    <section id="factory" style="background: var(--navy); color: var(--white); padding: 5rem 0;">
+        <div class="container">
+            <h2 style="color: var(--terracotta);">🧱 Laboratório LEGO Genius (Plug & Play)</h2>
+            <p style="margin-bottom: 3rem; opacity: 0.8;">Arquitetura Fractal: Cada peça possui 5 sockets universais de conexão.</p>
+            
+            <div class="stats-grid">
+                <div class="stat-box" style="background: rgba(255,255,255,0.05); border-color: var(--terracotta);">
+                    <div style="font-size: 0.8rem; text-transform: uppercase; margin-bottom: 0.5rem;">[Socket 0-1-2]</div>
+                    <h3 style="color: var(--terracotta);">Chassi E/P/S</h3>
+                    <p>Instanciar IN, DNA e OUT</p>
+                    <button class="btn" style="background: var(--terracotta); margin-top: 1rem;" onclick="alert('Plugando Chassi Industrial...')">PLUGAR</button>
+                </div>
+                <div class="stat-box" style="background: rgba(255,255,255,0.05); border-color: var(--moss);">
+                    <div style="font-size: 0.8rem; text-transform: uppercase; margin-bottom: 0.5rem;">[Socket 3]</div>
+                    <h3 style="color: var(--moss);">Módulo de Memória</h3>
+                    <p>Conectar Biblioteca Fractal</p>
+                    <button class="btn" style="background: var(--moss); margin-top: 1rem;" onclick="alert('Conectando Socket LIB...')">CONECTAR</button>
+                </div>
+                <div class="stat-box" style="background: rgba(255,255,255,0.05); border-color: #ffd700;">
+                    <div style="font-size: 0.8rem; text-transform: uppercase; margin-bottom: 0.5rem;">[Socket 4]</div>
+                    <h3 style="color: #ffd700;">Link de Barramento</h3>
+                    <p>Ativar Telemetria (Bus)</p>
+                    <button class="btn" style="background: #ffd700; color: var(--navy); margin-top: 1rem;" onclick="alert('Sinal BUS Ativo.')">SINCRONIZAR</button>
+                </div>
+            </div>
+
+            <div style="margin-top: 4rem; padding: 2rem; border: 1px dashed rgba(255,255,255,0.2); border-radius: 12px; text-align: center;">
+                <h4 style="margin-bottom: 1rem;">Estado da Prensa Industrial</h4>
+                <div style="display: flex; justify-content: center; gap: 20px;">
+                    <span style="color: #00ff7f;">● Blueprints v2.0 Carregados</span>
+                    <span style="color: #00ff7f;">● LEGO Standard Ativo</span>
+                    <span style="color: #00ff7f;">● Matrioshka Sync OK</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Genius Store & Workbench -->
+    <section id="marketplace" style="padding: 5rem 0; background: var(--white);">
+        <div class="container">
+            <div class="stats-grid">
+                <!-- Genius Store -->
+                <div style="background: var(--navy); color: var(--white); padding: 2rem; border-radius: 12px; grid-column: span 2;">
+                    <h2 style="color: #ffd700; display: flex; align-items: center; gap: 10px;">🏪 Genius Store <span style="font-size: 0.9rem; background: rgba(255,255,255,0.1); padding: 4px 10px; border-radius: 20px;">Mercado Livre Agro</span></h2>
+                    
+                    <!-- Filtros de Categoria -->
+                    <div style="display: flex; gap: 10px; margin: 1.5rem 0; overflow-x: auto; padding-bottom: 10px;">
+                        <button class="btn" style="background: #ffd700; color: var(--navy); font-size: 0.7rem; padding: 5px 15px;">TODOS</button>
+                        <button class="btn" style="background: rgba(255,255,255,0.1); font-size: 0.7rem; padding: 5px 15px;">🔩 PEÇAS GENIUS</button>
+                        <button class="btn" style="background: rgba(255,255,255,0.1); font-size: 0.7rem; padding: 5px 15px;">🌱 INSUMOS</button>
+                        <button class="btn" style="background: rgba(255,255,255,0.1); font-size: 0.7rem; padding: 5px 15px;">🚜 MAQUINÁRIO</button>
+                        <button class="btn" style="background: rgba(255,255,255,0.1); font-size: 0.7rem; padding: 5px 15px;">👨‍🌾 SERVIÇOS</button>
+                    </div>
+
+                    <p style="opacity: 0.7; margin-bottom: 2rem;">Produtos e serviços para a sua unidade agrícola.</p>
+                    
+                    <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 15px;">
+                        <div style="background: rgba(255,255,255,0.05); padding: 1rem; border-radius: 8px; border: 1px solid rgba(255,255,255,0.1);">
+                            <div style="font-size: 2rem; margin-bottom: 0.5rem;">🧪</div>
+                            <strong>Agente Solo Pro</strong>
+                            <p style="font-size: 0.8rem; margin: 5px 0;">Fractal Técnico</p>
+                            <div style="color: #ffd700; font-weight: bold; margin: 10px 0;">500 XP</div>
+                            <button class="btn" style="width: 100%; font-size: 0.8rem; background: #ffd700; color: var(--navy);" onclick="window.buyItem('Agente Solo Pro', 500)">COMPRAR</button>
+                        </div>
+                        <div style="background: rgba(255,255,255,0.05); padding: 1rem; border-radius: 8px; border: 1px solid rgba(255,255,255,0.1);">
+                            <div style="font-size: 2rem; margin-bottom: 0.5rem;">💰</div>
+                            <strong>Finanças Core</strong>
+                            <p style="font-size: 0.8rem; margin: 5px 0;">Módulo Gestão</p>
+                            <div style="color: #ffd700; font-weight: bold; margin: 10px 0;">2000 XP</div>
+                            <button class="btn" style="width: 100%; font-size: 0.8rem; background: #ffd700; color: var(--navy);" onclick="window.buyItem('Finanças Core', 2000)">COMPRAR</button>
+                        </div>
+                        <div style="background: rgba(255,255,255,0.05); padding: 1rem; border-radius: 8px; border: 1px solid rgba(255,255,255,0.1);">
+                            <div style="font-size: 2rem; margin-bottom: 0.5rem;">🌦️</div>
+                            <strong>Clima Plus</strong>
+                            <p style="font-size: 0.8rem; margin: 5px 0;">Submódulo</p>
+                            <div style="color: #ffd700; font-weight: bold; margin: 10px 0;">1200 XP</div>
+                            <button class="btn" style="width: 100%; font-size: 0.8rem; background: #ffd700; color: var(--navy);" onclick="window.buyItem('Clima Plus', 1200)">COMPRAR</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Workbench -->
+                <div style="background: var(--moss); color: var(--white); padding: 2rem; border-radius: 12px;">
+                    <h2 style="color: var(--navy);">⚒️ Bancada de Montagem</h2>
+                    <p style="color: var(--navy); opacity: 0.8;">Arraste e combine peças para criar super-fractais.</p>
+                    
+                    <div style="margin-top: 2rem; min-height: 200px; border: 3px dashed var(--navy); border-radius: 12px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 15px;">
+                        <div style="background: var(--white); color: var(--navy); padding: 10px 20px; border-radius: 20px; font-weight: bold; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">Slot Principal [Módulo]</div>
+                        <div style="font-size: 1.5rem;">⬇️</div>
+                        <div style="background: var(--white); color: var(--navy); padding: 10px 20px; border-radius: 20px; font-weight: bold; opacity: 0.5; border: 2px solid var(--terracotta);">[Vazio - Clique para Plugar]</div>
+                        
+                        <button class="btn" style="background: var(--navy); margin-top: 1rem;" onclick="alert('Fusão LEGO Iniciada! Criando nova peça...')">COMBINAR PEÇAS</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ClickUp Board Section -->
+    <section id="clickup" class="clickup-section">
+        <div class="container">
+            <h2>ClickUp Genius: Gestão de Soberania</h2>
+            <div class="clickup-grid">
+                <!-- Layer 1: Estratégico -->
+                <div class="clickup-column">
+                    <div class="clickup-header" style="color: var(--navy);">
+                        <span>🔵 ESTRATÉGICO (Soberania)</span>
+                    </div>
+                    <div class="clickup-card layer-strategic">
+                        <span class="card-tag">Workspace</span>
+                        <h4>Ecossistema Genius</h4>
+                        <p style="font-size: 0.8rem; opacity: 0.7;">Toda a Organização</p>
+                    </div>
+                    <div class="clickup-card layer-strategic">
+                        <span class="card-tag">Space</span>
+                        <h4>Unidade Agrícola</h4>
+                        <p style="font-size: 0.8rem; opacity: 0.7;">Operações Territoriais</p>
+                    </div>
+                    <div class="clickup-card layer-strategic">
+                        <span class="card-tag">Space</span>
+                        <h4>IA e Agentes</h4>
+                        <p style="font-size: 0.8rem; opacity: 0.7;">Infraestrutura Cognitiva</p>
+                    </div>
+                </div>
+
+                <!-- Layer 2: Tático -->
+                <div class="clickup-column">
+                    <div class="clickup-header" style="color: var(--terracotta);">
+                        <span>🟡 TÁTICO (Planejamento)</span>
+                    </div>
+                    <div class="clickup-card layer-tactical">
+                        <span class="card-tag">Folder</span>
+                        <h4>Gestão de Safras</h4>
+                        <p style="font-size: 0.8rem; opacity: 0.7;">Ciclo de Produção</p>
+                    </div>
+                    <div class="clickup-card layer-tactical">
+                        <span class="card-tag">List</span>
+                        <h4>Fractal Soja 01</h4>
+                        <p style="font-size: 0.8rem; opacity: 0.7;">Unidade de Execução</p>
+                    </div>
+                </div>
+
+                <!-- Layer 3: Operacional -->
+                <div class="clickup-column">
+                    <div class="clickup-header" style="color: #00796b;">
+                        <span>🟢 OPERACIONAL (Execução)</span>
+                    </div>
+                    <div class="clickup-card layer-operational">
+                        <span class="card-tag">Task</span>
+                        <h4>Monitoramento Fitossanitário</h4>
+                        <div class="task-list" style="margin-top: 10px;">
+                            <div class="task-item">
+                                <div class="checkbox-custom" style="background: var(--moss); border-color: var(--moss); display: flex; align-items: center; justify-content: center; color: white; font-size: 10px;">✓</div>
+                                <span style="font-size: 0.8rem;">Coleta de amostras solo</span>
+                                <span class="status-badge">Done</span>
+                            </div>
+                            <div class="task-item">
+                                <div class="checkbox-custom"></div>
+                                <span style="font-size: 0.8rem;">Análise via Agente #P-PV</span>
+                                <span class="status-badge" style="background: #fff3e0; color: #ef6c00;">In Progress</span>
+                            </div>
+                            <div class="task-item">
+                                <div class="checkbox-custom"></div>
+                                <span style="font-size: 0.8rem;">Relatório de Recomendação</span>
+                                <span class="status-badge" style="background: #f5f5f5; color: #9e9e9e;">Todo</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Benefits Section -->
+    <section id="benefits">
+        <div class="container">
+            <h2>Benefícios Principais</h2>
+            <div class="benefits-list">
+                <div class="benefit-item">
+                    <div class="benefit-title">🎯 Rastreabilidade Total</div>
+                    <div class="benefit-description">Acompanhamento completo de cada unidade agrícola com histórico detalhado e auditoria integrada</div>
+                </div>
+                <div class="benefit-item">
+                    <div class="benefit-title">✓ Conformidade Legal</div>
+                    <div class="benefit-description">Certificações ambientais e documentação automática garantindo cumprimento regulatório</div>
+                </div>
+                <div class="benefit-item">
+                    <div class="benefit-title">📈 Otimização Produtiva</div>
+                    <div class="benefit-description">Análise territorial inteligente para máxima eficiência produtiva e gestão de recursos</div>
+                </div>
+                <div class="benefit-item">
+                    <div class="benefit-title">🔗 Gestão Integrada</div>
+                    <div class="benefit-description">Todos os responsáveis com visão única e comunicação centralizada em tempo real</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section id="cta">
+        <div class="container">
+            <h2>Próximas Etapas</h2>
+            <p class="cta-subtitle">Implantação • Treinamento • Suporte Contínuo</p>
+            <a href="#" class="cta-button">Começar Agora</a>
+            <div class="cta-footer">
+                <p>Gestão Inteligente • Conformidade Garantida • Produção Otimizada</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Genius Bus Console -->
+    <div id="genius-bus-console">
+        <div class="bus-handle" onclick="toggleBus()">⚡ GENIUS BUS</div>
+        <div class="bus-header">
+            <span class="bus-active-indicator"></span> LIVE TELEMETRY
+        </div>
+        <div id="bus-stream" class="bus-stream">
+            <!-- Pulses will appear here -->
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2026 Gestão da Unidade Agrícola - Diretório Agentes</p>
+        <p>Sistema Inteligente de Gestão Territorial, Produção e Conformidade</p>
+    </footer>
+    <!-- Script do Genius Bus (Telemetria Real via Supabase) -->
+    <script src="assets/js/genius_bus.js?v=2"></script>
+    <script>
+        function toggleBus() {
+            document.getElementById('genius-bus-console').classList.toggle('open');
+        }
+    </script>
+    <script type="module" src="assets/js/main.js?v=2"></script>
+</body>
+</html>

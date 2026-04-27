@@ -1,0 +1,43 @@
+<!-- 
+# 🧬 Template: Landing Page de Captura (High-Conversion)
+# ID: T-WEB-LP-01
+# Estilo: Genius Premium (Dark/Neon)
+-->
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>{{TITULO_DA_LP}}</title>
+    <style>
+        :root {
+            --primary: #00f2ff; /* Cyan Neon */
+            --bg: #0a0a0c;
+            --card: #16161a;
+            --text: #ffffff;
+        }
+        body { background: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; margin: 0; text-align: center; }
+        .hero { padding: 100px 20px; background: linear-gradient(180deg, rgba(0,242,255,0.1) 0%, rgba(10,10,12,1) 100%); }
+        h1 { font-size: 3.5rem; color: var(--primary); text-shadow: 0 0 20px rgba(0,242,255,0.5); }
+        .cta-box { background: var(--card); border: 1px solid var(--primary); padding: 40px; border-radius: 20px; max-width: 500px; margin: 0 auto; }
+        input { width: 80%; padding: 15px; border-radius: 10px; border: none; margin-bottom: 20px; }
+        button { background: var(--primary); color: black; padding: 15px 40px; border: none; border-radius: 10px; font-weight: bold; cursor: pointer; font-size: 1.2rem; }
+    </style>
+</head>
+<body>
+    <section class="hero">
+        <h1>{{MANCHETE_IRRESISTIVEL}}</h1>
+        <p>{{SUBTITULO_COM_PROMESSA}}</p>
+    </section>
+    
+    <div class="cta-box">
+        <h3>{{CHAMADA_PARA_ACAO}}</h3>
+        <input type="email" placeholder="Seu melhor e-mail...">
+        <br>
+        <button>{{BOTAO_DE_CAPTURA}}</button>
+    </div>
+
+    <footer>
+        <p>&copy; 2026 Ecossistema Genius - Todos os Direitos Reservados</p>
+    </footer>
+</body>
+</html>

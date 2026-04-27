@@ -1,0 +1,15 @@
+version: '3.8'
+
+services:
+  harness-backend:
+    build: .
+    container_name: genius_harness_backend
+    ports:
+      - "8000:8000"
+    volumes:
+      - .:/app
+    environment:
+      - SUPABASE_URL=${SUPABASE_URL}
+      - SUPABASE_SERVICE_KEY=${SUPABASE_SERVICE_KEY}
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+    restart: unless-stopped

@@ -1,0 +1,3 @@
+lote_importacao,linha_origem,codigo_unidade,codigo_area,nome_area,tipo_area,area_ha,uso_atual,cultura_atividade,latitude_centroide,longitude_centroide,status_area,observacoes
+lote_submodulos_base_001,1,PA-IMP-0002,TAL-IMP-01,Talhao Importado 01,Talhao,120.50,Produtivo,Mandioca,-3.1310,-60.0310,Ativo,Area produtiva importada
+lote_submodulos_base_001,2,PA-IMP-0003,GLB-IMP-01,Gleba Importada 01,Gleba,18.75,Implantacao,Hortalicas,-3.2810,-60.1810,Ativo,Gleba importada para teste

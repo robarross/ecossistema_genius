@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Genius Command Center | Industrial Monitoring</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&family=JetBrains+Mono&display=swap" rel="stylesheet">
+    <style>
+        body {
+            background: radial-gradient(circle at top right, #0f172a, #020617);
+            color: #f8fafc;
+            font-family: 'Outfit', sans-serif;
+            overflow: hidden;
+        }
+        .glass {
+            background: rgba(15, 23, 42, 0.6);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .neon-border {
+            border: 1px solid rgba(34, 211, 238, 0.3);
+            box-shadow: 0 0 15px rgba(34, 211, 238, 0.1);
+        }
+        .status-pulse {
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.4; }
+            100% { opacity: 1; }
+        }
+        .mono { font-family: 'JetBrains Mono', monospace; }
+    </style>
+</head>
+<body class="h-screen p-6 flex flex-col">
+    <!-- Header -->
+    <header class="flex justify-between items-center mb-8">
+        <div>
+            <h1 class="text-3xl font-bold tracking-tighter bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 to-purple-500">
+                GENIUS COMMAND CENTER
+            </h1>
+            <p class="text-slate-400 text-sm mono">INDUSTRIAL MONITORING SYSTEM V4.0 // PRODUCTION_READY</p>
+        </div>
+        <div class="flex gap-4">
+            <div class="glass px-4 py-2 rounded-lg border border-cyan-500/20">
+                <span class="text-xs text-slate-400 block">SISTEMA STATUS</span>
+                <span class="text-cyan-400 font-bold flex items-center gap-2">
+                    <div class="w-2 h-2 bg-cyan-400 rounded-full status-pulse"></div> ONLINE
+                </span>
+            </div>
+            <div class="glass px-4 py-2 rounded-lg border border-purple-500/20">
+                <span class="text-xs text-slate-400 block">CPU LOAD</span>
+                <span class="text-purple-400 font-bold">14.2%</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Dashboard -->
+    <main class="flex-1 grid grid-cols-12 gap-6 overflow-hidden">
+        <!-- Live Production Feed -->
+        <section class="col-span-8 flex flex-col gap-4 overflow-hidden">
+            <div class="flex justify-between items-end px-2">
+                <h2 class="text-lg font-semibold flex items-center gap-2 text-slate-300">
+                    🚀 ESTEIRA DE PRODUÇÃO EM TEMPO REAL
+                </h2>
+                <span class="text-xs text-slate-500 mono" id="event-count">0 EVENTOS NAS ÚLTIMAS 24H</span>
+            </div>
+            
+            <div id="production-feed" class="flex-1 overflow-y-auto pr-2 space-y-3 custom-scrollbar">
+                <!-- Eventos serão injetados aqui -->
+                <div class="glass p-6 rounded-2xl flex items-center justify-center text-slate-500 border-dashed border-2 border-slate-800">
+                    Aguardando sinal da Gigafactory...
+                </div>
+            </div>
+        </section>
+
+        <!-- Sidebar: Metrics & Health -->
+        <aside class="col-span-4 flex flex-col gap-6">
+            <div class="glass p-6 rounded-3xl neon-border">
+                <h3 class="text-sm font-bold text-cyan-400 mb-4 tracking-widest uppercase">Estatísticas de Safra</h3>
+                <div class="space-y-4">
+                    <div>
+                        <div class="flex justify-between text-xs mb-1">
+                            <span class="text-slate-400">Progresso Geral</span>
+                            <span class="text-cyan-400">62%</span>
+                        </div>
+                        <div class="h-1.5 w-full bg-slate-800 rounded-full overflow-hidden">
+                            <div class="h-full bg-cyan-500" style="width: 62%"></div>
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="bg-slate-900/50 p-3 rounded-xl border border-slate-800">
+                            <span class="text-[10px] text-slate-500 block">FRACTAIS OK</span>
+                            <span class="text-xl font-bold text-emerald-400">42</span>
+                        </div>
+                        <div class="bg-slate-900/50 p-3 rounded-xl border border-slate-800">
+                            <span class="text-[10px] text-slate-500 block">FALHAS</span>
+                            <span class="text-xl font-bold text-rose-500">0</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="glass p-6 rounded-3xl flex-1 overflow-hidden flex flex-col">
+                <h3 class="text-sm font-bold text-purple-400 mb-4 tracking-widest uppercase">Logs de Sistema</h3>
+                <div id="system-logs" class="text-[10px] mono text-slate-500 space-y-1 overflow-y-auto flex-1">
+                    > SYSTEM_BOOT_SEQUENCE_COMPLETE<br>
+                    > CONNECTING_TO_GENIUS_EVENT_BUS...<br>
+                    > AUTHENTICATING_SUPABASE_CLIENT...<br>
+                    > STANDBY_FOR_PRODUCTION_SIGNALS...<br>
+                </div>
+            </div>
+        </aside>
+    </main>
+
+    <script>
+        // Configurações do Supabase (Injetadas via Env no mundo real)
+        const SUPABASE_URL = "SUA_URL_AQUI"; // Será preenchido ou lido do local
+        const SUPABASE_KEY = "SUA_KEY_AQUI"; 
+
+        const productionFeed = document.getElementById('production-feed');
+        const systemLogs = document.getElementById('system-logs');
+
+        function addEvent(source, type, payload) {
+            const time = new Date().toLocaleTimeString();
+            
+            // Log no terminal lateral
+            const logLine = document.createElement('div');
+            logLine.innerHTML = `<span class="text-slate-600">[${time}]</span> <span class="text-cyan-600">${source}</span>::${type}`;
+            systemLogs.prepend(logLine);
+
+            // Card no feed principal
+            const card = document.createElement('div');
+            card.className = 'glass p-4 rounded-2xl flex items-center gap-4 border-l-4 ' + 
+                            (type.includes('COMPLETED') ? 'border-emerald-500' : 'border-cyan-500');
+            
+            card.innerHTML = `
+                <div class="w-12 h-12 rounded-xl bg-slate-900 flex items-center justify-center text-2xl">
+                    ${type.includes('DNA') ? '🧬' : type.includes('STARTED') ? '🏗️' : '✅'}
+                </div>
+                <div class="flex-1">
+                    <div class="flex justify-between items-start">
+                        <h4 class="font-bold text-slate-100">${payload.module || 'Módulo Desconhecido'}</h4>
+                        <span class="text-[10px] mono text-slate-500">${time}</span>
+                    </div>
+                    <p class="text-xs text-slate-400">${type.replace('_', ' ')} - Status: Operacional</p>
+                </div>
+                <div class="text-right">
+                    <span class="text-[10px] font-bold px-2 py-1 bg-cyan-500/10 text-cyan-400 rounded-full">${payload.level || 'FRACTAL'}</span>
+                </div>
+            `;
+
+            if (productionFeed.children[0] && productionFeed.children[0].classList.contains('border-dashed')) {
+                productionFeed.innerHTML = '';
+            }
+            
+            productionFeed.prepend(card);
+        }
+
+        // Mock de simulação para o usuário ver o Dashboard em ação
+        setTimeout(() => addEvent('FACTORY', 'PRODUCTION_STARTED', {module: 'SISTEMA_AGRO_V3', level: 'SISTEMA'}), 1000);
+        setTimeout(() => addEvent('FACTORY', 'DNA_GENERATED', {module: 'SISTEMA_AGRO_V3'}), 3000);
+        setTimeout(() => addEvent('FACTORY', 'PRODUCTION_COMPLETED', {module: 'SISTEMA_AGRO_V3'}), 5000);
+
+    </script>
+</body>
+</html>

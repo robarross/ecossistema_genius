@@ -1,0 +1,17 @@
+{
+  "nome_fractal": "{{NOME_FRACTAL}}",
+  "titulo": "{{TITULO_FRACTAL}}",
+  "descricao": "{{DESCRICAO_FRACTAL}}",
+  "status": "proposto",
+  "versao": "0.1.0",
+  "escopo": "{{ESCOPO_FRACTAL}}",
+  "modulo_pai": "{{NOME_MODULO}}",
+  "submodulo_pai": "{{NOME_SUBMODULO}}",
+  "plug_and_play": true,
+  "entradas_esperadas": ["dados_origem", "id_entidade_base", "id_usuario_responsavel", "contexto_operacional"],
+  "saidas_geradas": ["registro_validado", "evento_publicado", "indicador_atualizado"],
+  "depende_de": ["Mod_Gestao_Genius_Hub", "Mod_Gestao_Dados_DataLake"],
+  "integra_com": ["Mod_Gestao_Dashboards_BI", "Mod_Gestao_Integracoes_APIs"],
+  "permissoes_perfis": ["admin_ecossistema", "gestor_modulo", "operador_autorizado"],
+  "dashboards_proprios": ["dashboard_status_fractal", "dashboard_pendencias_fractal"]
+}

@@ -1,0 +1,41 @@
+name: CI / Automated Validations
+
+on:
+  pull_request:
+  push:
+    branches-ignore:
+      - main
+
+jobs:
+  ci-checks:
+    name: Supabase Health Checks
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+
+      - name: Validate Segundo Cérebro (Linter do Obsidian)
+        run: python scripts/validate_obsidian.py
+
+      - name: Setup Supabase CLI
+        uses: supabase/setup-cli@v1
+        with:
+          version: latest
+
+      - name: Validate Supabase SQL Migrations
+        # Inicializa o contêiner do Supabase na máquina virtual do GitHub. 
+        # Isso atua como um "Teste Seco" (Dry-Run): Se alguma Tabela ou 
+        # RLS (Políticas) contiver erro sintático ou loops, o GitHub
+        # rejeita a Pull Request automaticamente e aponta a linha do erro no SQL.
+        run: supabase start
+
+      - name: Validate Edge Functions (Deno Type Check)
+        # Se você esqueceu uma vírgula ou importou algo errado no webhook da VERA, 
+        # ele vai pegar isso sem corromper a nuvem!
+        run: supabase functions build agent-vera-webhook

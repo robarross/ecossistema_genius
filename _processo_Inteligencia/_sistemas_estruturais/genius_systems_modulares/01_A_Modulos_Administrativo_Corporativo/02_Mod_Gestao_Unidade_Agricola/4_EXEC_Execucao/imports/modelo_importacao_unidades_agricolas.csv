@@ -1,0 +1,2 @@
+lote_importacao,linha_origem,codigo_unidade,nome_unidade,tipo_unidade,status_cadastro,situacao_operacional,uf,municipio,latitude_sede,longitude_sede,area_total_ha,proprietario_nome,proprietario_documento,telefone_principal,email_principal,observacoes
+lote_teste_001,1,PA-IMP-0001,Fazenda Importada Genius,Fazenda,Ativo,Em operacao,AM,Manaus,-3.1200,-60.0200,850.75,Produtor Importado,00000000000191,+55 92 99999-1001,importado@genius.local,Linha modelo para importacao via CSV

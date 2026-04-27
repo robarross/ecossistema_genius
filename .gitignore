@@ -9,3 +9,7 @@ $RECYCLE.BIN/
 # Temporary files
 *.tmp
 *.log
+node_modules
+.env
+.env.local
+.env.*.local

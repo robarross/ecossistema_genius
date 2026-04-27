@@ -1,0 +1,225 @@
+{
+  "main": {
+    "id": "b61cc96d0d3e67b4",
+    "type": "split",
+    "children": [
+      {
+        "id": "5c15cd651da73b26",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "7e43a37e213ce87e",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "_processo_Inteligencia/_modulos/A_Modulos_Administrativo_Corporativo/Mod_Gestao_Financeira/1_DNA_Processo/equipe_modular/dna_guardiao.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "dna_guardiao"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "vertical"
+  },
+  "left": {
+    "id": "2bf4114ec028a37c",
+    "type": "split",
+    "children": [
+      {
+        "id": "f78808aaaf0917c2",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "e2d5fd79f55831d7",
+            "type": "leaf",
+            "state": {
+              "type": "file-explorer",
+              "state": {
+                "sortOrder": "alphabetical",
+                "autoReveal": false
+              },
+              "icon": "lucide-folder-closed",
+              "title": "Explorador de arquivos"
+            }
+          },
+          {
+            "id": "952411ea2665b858",
+            "type": "leaf",
+            "state": {
+              "type": "search",
+              "state": {
+                "query": "",
+                "matchingCase": false,
+                "explainSearch": false,
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical"
+              },
+              "icon": "lucide-search",
+              "title": "Procurar"
+            }
+          },
+          {
+            "id": "e19aabfdc5df47f0",
+            "type": "leaf",
+            "state": {
+              "type": "bookmarks",
+              "state": {},
+              "icon": "lucide-bookmark",
+              "title": "Marcadores"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300
+  },
+  "right": {
+    "id": "a01a935b903ee1a1",
+    "type": "split",
+    "children": [
+      {
+        "id": "97fca358051fc7ef",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "f0a06472d092f0bf",
+            "type": "leaf",
+            "state": {
+              "type": "backlink",
+              "state": {
+                "file": "Lista módulos.md",
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical",
+                "showSearch": false,
+                "searchQuery": "",
+                "backlinkCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-coming-in",
+              "title": "Links inversos para Lista módulos"
+            }
+          },
+          {
+            "id": "308f2a5d9daef30a",
+            "type": "leaf",
+            "state": {
+              "type": "outgoing-link",
+              "state": {
+                "file": "Lista módulos.md",
+                "linksCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-going-out",
+              "title": "Links de saída para Lista módulos"
+            }
+          },
+          {
+            "id": "c6a07591db27c201",
+            "type": "leaf",
+            "state": {
+              "type": "tag",
+              "state": {
+                "sortOrder": "frequency",
+                "useHierarchy": true,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-tags",
+              "title": "Etiquetas"
+            }
+          },
+          {
+            "id": "52210814293ac0be",
+            "type": "leaf",
+            "state": {
+              "type": "all-properties",
+              "state": {
+                "sortOrder": "frequency",
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-archive",
+              "title": "Todas as propriedades"
+            }
+          },
+          {
+            "id": "1320aa2b0c8d8d67",
+            "type": "leaf",
+            "state": {
+              "type": "outline",
+              "state": {
+                "file": "Lista módulos.md",
+                "followCursor": false,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-list",
+              "title": "Sumário de Lista módulos"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300,
+    "collapsed": true
+  },
+  "left-ribbon": {
+    "hiddenItems": {
+      "switcher:Abrir a troca rápida": false,
+      "graph:Abrir visualização em gráfico": false,
+      "canvas:Criar novo canvas": false,
+      "daily-notes:Abrir a nota de hoje": false,
+      "templates:Inserir modelo": false,
+      "command-palette:Abrir paleta de comandos": false,
+      "bases:Criar nova base": false
+    }
+  },
+  "active": "7e43a37e213ce87e",
+  "lastOpenFiles": [
+    "_processo_Inteligencia/_modulos/A_Modulos_Administrativo_Corporativo/Mod_Gestao_Financeira/1_DNA_Processo/equipe_modular/dna_gerente.md",
+    "_processo_Inteligencia/_modulos/A_Modulos_Administrativo_Corporativo/Mod_Gestao_Financeira/1_DNA_Processo/equipe_modular/dna_bibliotecario.md",
+    "_processo_Inteligencia/_modulos/A_Modulos_Administrativo_Corporativo/Mod_Gestao_Unidade_Agricola/2_processo/plano_do_mapa_unidade_agricola.md",
+    "_processo_Inteligencia/_modulos/A_Modulos_Administrativo_Corporativo/Mod_Gestao_Unidade_Agricola/2_processo/mapa_do_modulo_unidade_agricola.md",
+    "_processo_Inteligencia/_modulos/A_Modulos_Administrativo_Corporativo/Mod_Gestao_Unidade_Agricola/2_processo/dna_unidade_agricola.md",
+    "MANUAL_OPERACIONAL_GENIUS.md",
+    "supabase/migrations/20260415130000_register_portaria_agent.sql",
+    "_processo_Inteligencia/_modulos/F_Modulos_Negocio_Expansao/Mod_Gestao_IA_Agentes/0_biblioteca_setorial/referencia/01_templates/Template_criacao_de_agentes.md",
+    "_processo_Inteligencia/_modulos/F_Modulos_Negocio_Expansao/Mod_Gestao_IA_Agentes/0_biblioteca_setorial/referencia/01_templates",
+    "_entrada_inical/03_Templates_Mestre/Template_criacao_de_agentes.lnk",
+    "_entrada_inical/03_Templates_Mestre",
+    "_entrada_inical/02_Gestao_IA",
+    "_entrada_inical/01_Operacional_Agro",
+    "supabase/migrations/20260415120000_register_auditor_linker.sql",
+    "_saidas_final/03_Planilhas_Dados/Submodulos_Estrutura.lnk",
+    "_saidas_final/03_Planilhas_Dados/Diretorio_Agentes_Planilhas.lnk",
+    "_saidas_final/01_Apresentacoes/Submodulos_Atualizado.lnk",
+    "_processo_Inteligencia/_modulos/A_Modulos_Administrativo_Corporativo/Mod_Gestao_RH/0_biblioteca_setorial/referencia/01_templates/template_ficha_admissao.md",
+    "_processo_Inteligencia/_modulos/A_Modulos_Administrativo_Corporativo/Mod_Gestao_Financeira/0_biblioteca_setorial/referencia/01_templates/template_fluxo_caixa_semanal.md",
+    "_processo_Inteligencia/_modulos/E_Modulos_Produtivo/Mod_Gestao_Producao_Vegetal/0_biblioteca_setorial/referencia/01_templates/template_relatorio_campo.md",
+    "_segundo_cerebro_genius/proximos_passos.md",
+    "_processo_Inteligencia/_modulos/E_Modulos_Produtivo/Mod_Gestao_Producao_Vegetal/2_processo/skill_caderno_de_producao.md",
+    "_processo_Inteligencia/_modulos/E_Modulos_Produtivo/Mod_Gestao_Producao_Vegetal/2_processo/plano_do_mapa_producao_vegetal.md",
+    "_processo_Inteligencia/_modulos/E_Modulos_Produtivo/Mod_Gestao_Producao_Vegetal/2_processo/mapa_do_modulo_producao_vegetal.md",
+    "_processo_Inteligencia/_modulos/E_Modulos_Produtivo/Mod_Gestao_Producao_Vegetal/2_processo/submodulos/sub_colheita_rendimento/2_processo/equipe_submodular/dna_tecnico_colh.md",
+    "_processo_Inteligencia/_modulos/E_Modulos_Produtivo/Mod_Gestao_Producao_Vegetal/2_processo/submodulos/sub_monitoramento_clima/2_processo/equipe_submodular/dna_tecnico_moni.md",
+    "_processo_Inteligencia/_modulos/E_Modulos_Produtivo/Mod_Gestao_Producao_Vegetal/2_processo/submodulos/sub_planejamento_plantio/2_processo/equipe_submodular/dna_tecnico_plantio.md",
+    "_processo_Inteligencia/_modulos/E_Modulos_Produtivo/Mod_Gestao_Producao_Vegetal/2_processo/submodulos/sub_protecao_plantas_fitossanidade/2_processo/equipe_submodular/dna_tecnico_fito.md",
+    "_processo_Inteligencia/_modulos/E_Modulos_Produtivo/Mod_Gestao_Producao_Vegetal/2_processo/submodulos/sub_manejo_solo_nutricao/2_processo/equipe_submodular/dna_tecnico_solo.md",
+    "_processo_Inteligencia/_modulos/E_Modulos_Produtivo/Mod_Gestao_Producao_Vegetal/Sub_Colheita_Rendimento/2_processo/equipe_submodular/dna_tecnico_colh.md",
+    "_processo_Inteligencia/_modulos/E_Modulos_Produtivo/Mod_Gestao_Producao_Vegetal/Sub_Monitoramento_Clima/2_processo/equipe_submodular/dna_tecnico_moni.md",
+    "_processo_Inteligencia/_modulos/E_Modulos_Produtivo/Mod_Gestao_Producao_Vegetal/Sub_Planejamento_Plantio/2_processo/equipe_submodular/dna_tecnico_plantio.md",
+    "_processo_Inteligencia/_modulos/E_Modulos_Produtivo/Mod_Gestao_Producao_Vegetal/Sub_Protecao_Plantas_Fitossanidade/2_processo/equipe_submodular/dna_tecnico_fito.md",
+    "_processo_Inteligencia/_modulos/E_Modulos_Produtivo/Mod_Gestao_Producao_Vegetal/Sub_Manejo_Solo_Nutricao/2_processo/equipe_submodular/dna_tecnico_solo.md",
+    "_segundo_cerebro_genius/A_Protocolo_Gamificacao_XP.md",
+    "_segundo_cerebro_genius/A_Protocolo_Comunicacao_Genius_Bus.md"
+  ]
+}

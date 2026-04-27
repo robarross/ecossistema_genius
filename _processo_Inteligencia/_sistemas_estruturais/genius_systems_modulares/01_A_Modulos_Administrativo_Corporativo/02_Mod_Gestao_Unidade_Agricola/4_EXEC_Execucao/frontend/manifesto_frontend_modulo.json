@@ -1,0 +1,515 @@
+{
+  "schema_version": "1.0",
+  "manifest_type": "frontend_modulo",
+  "module_id": "Mod_Gestao_Unidade_Agricola",
+  "module_name": "Mod_Gestao_Unidade_Agricola",
+  "module_title": "Gestao da Unidade Agricola",
+  "frontend_id": "frontend_mod_gestao_unidade_agricola",
+  "frontend_title": "Painel Operacional da Unidade Agricola",
+  "version": "0.1.0-dev",
+  "status": "homologacao",
+  "runtime_modes": {
+    "standalone": {
+      "enabled": true,
+      "entrypoint": "index.html",
+      "local_server": "server.mjs",
+      "default_url": "http://localhost:4173",
+      "description": "Roda como aplicacao local independente para testes, homologacao e operacao isolada do modulo."
+    },
+    "platform": {
+      "enabled": true,
+      "host_platform": "Plataforma_Ecossistema_Genius",
+      "mount_strategy": "module_shell",
+      "mount_path": "/modulos/unidade-agricola",
+      "description": "Pode ser carregado pela Plataforma Ecossistema Genius como modulo plug and play com menus, rotas, permissoes, eventos e dashboards padronizados."
+    }
+  },
+  "routes": [
+    {
+      "id": "dashboard",
+      "label": "Dashboard",
+      "path": "/modulos/unidade-agricola/dashboard",
+      "standalone_view": "dashboard",
+      "permission_required": "unidade_agricola.dashboard.visualizar",
+      "description": "Visao executiva, KPIs, saude do modulo e matriz de liberacao para outros modulos."
+    },
+    {
+      "id": "cadastros",
+      "label": "Cadastros",
+      "path": "/modulos/unidade-agricola/cadastros",
+      "standalone_view": "cadastros",
+      "permission_required": "unidade_agricola.cadastros.visualizar",
+      "description": "Entrada e manutencao dos cadastros estruturantes da unidade agricola."
+    },
+    {
+      "id": "gerenciamento",
+      "label": "Gerenciamento do Modulo",
+      "path": "/modulos/unidade-agricola/gerenciamento",
+      "standalone_view": "gerenciamento",
+      "permission_required": "unidade_agricola.gerenciamento.visualizar",
+      "description": "Governanca do modulo, contratos, manifesto, status plug and play e encaixe na Plataforma Genius."
+    },
+    {
+      "id": "agentes",
+      "label": "Agentes de IA",
+      "path": "/modulos/unidade-agricola/agentes",
+      "standalone_view": "agentes",
+      "permission_required": "unidade_agricola.agentes.visualizar",
+      "description": "Painel dos agentes de IA vinculados a validacao, auditoria, importacao e integracao do modulo."
+    },
+    {
+      "id": "ferramentas",
+      "label": "Ferramentas",
+      "path": "/modulos/unidade-agricola/ferramentas",
+      "standalone_view": "ferramentas",
+      "permission_required": "unidade_agricola.ferramentas.visualizar",
+      "description": "Ferramentas operacionais para atualizar dados, validar qualidade e acompanhar liberacoes."
+    },
+    {
+      "id": "relatorios",
+      "label": "Relatorios",
+      "path": "/modulos/unidade-agricola/relatorios",
+      "standalone_view": "relatorios",
+      "permission_required": "unidade_agricola.relatorios.visualizar",
+      "description": "Relatorios executivos, relacionais, auditoria e integracao do modulo."
+    },
+    {
+      "id": "bancoDados",
+      "label": "Banco de Dados",
+      "path": "/modulos/unidade-agricola/banco-de-dados",
+      "standalone_view": "bancoDados",
+      "permission_required": "unidade_agricola.banco_dados.visualizar",
+      "description": "Visao tecnica do schema, views, eventos e status da integracao com Supabase."
+    },
+    {
+      "id": "configuracoes",
+      "label": "Configuracoes",
+      "path": "/modulos/unidade-agricola/configuracoes",
+      "standalone_view": "configuracoes",
+      "permission_required": "unidade_agricola.configuracoes.visualizar",
+      "description": "Conexao, contexto, permissoes e preparacao para a Plataforma Ecossistema Genius."
+    },
+    {
+      "id": "unidades",
+      "label": "Unidades",
+      "path": "/modulos/unidade-agricola/unidades",
+      "standalone_view": "unidades",
+      "permission_required": "unidade_agricola.unidades.visualizar",
+      "description": "Lista unidades agricolas prontas, bloqueadas ou liberadas para o ecossistema."
+    },
+    {
+      "id": "detalhe",
+      "label": "Detalhe",
+      "path": "/modulos/unidade-agricola/unidades/:codigo_unidade",
+      "standalone_view": "detalhe",
+      "permission_required": "unidade_agricola.unidades.detalhar",
+      "description": "Apresenta proprietarios, responsaveis, areas produtivas, resumo relacional e timeline de eventos por unidade."
+    },
+    {
+      "id": "auditoria",
+      "label": "Auditoria",
+      "path": "/modulos/unidade-agricola/auditoria",
+      "standalone_view": "auditoria",
+      "permission_required": "unidade_agricola.auditoria.visualizar",
+      "description": "Mostra qualidade dos dados, bloqueios, pendencias e inconsistencias."
+    },
+    {
+      "id": "importacoes",
+      "label": "Importacoes",
+      "path": "/modulos/unidade-agricola/importacoes",
+      "standalone_view": "importacoes",
+      "permission_required": "unidade_agricola.importacoes.visualizar",
+      "description": "Acompanha lotes de importacao de planilhas e importacoes dos submodulos base."
+    }
+  ],
+  "menus": [
+    {
+      "id": "menu_modulo_unidade_agricola",
+      "label": "Unidade Agricola",
+      "icon": "land-plot",
+      "order": 2,
+      "platform_area": "03_Plataforma_Genius_AgroGestao",
+      "items": [
+        "dashboard",
+        "cadastros",
+        "gerenciamento",
+        "ferramentas",
+        "relatorios",
+        "bancoDados",
+        "configuracoes"
+      ],
+      "internal_tabs": {
+        "gerenciamento": [
+          "gerenciamento",
+          "unidades",
+          "detalhe",
+          "auditoria",
+          "importacoes"
+        ],
+        "configuracoes": [
+          "configuracoes",
+          "bancoDados"
+        ]
+      },
+      "secondary_items": [
+        "unidades",
+        "detalhe",
+        "auditoria",
+        "importacoes"
+      ]
+    }
+  ],
+  "submodule_filter": {
+    "enabled": true,
+    "placement": "sidebar_after_brand",
+    "default_value": "todos",
+    "child_filter": "fractal_filter",
+    "items": [
+      "todos",
+      "01_sub_cadastro_unidades_agricolas",
+      "02_sub_proprietarios_possuidores",
+      "03_sub_responsaveis_gestores",
+      "04_sub_territorios_areas_producao",
+      "05_sub_limites_acessos",
+      "06_sub_documentacao_unidade",
+      "07_sub_base_ativos_estruturais_unidade",
+      "08_sub_chaves_permissoes_operacionais",
+      "09_sub_status_operacional_unidade",
+      "10_sub_prestacao_contas_unidade"
+    ],
+    "description": "Filtro visual e operacional para navegar entre os 10 submodulos do modulo. Nesta fase altera o contexto ativo; nas proximas etapas sera conectado aos componentes, fractais e views especificas por submodulo."
+  },
+  "fractal_filter": {
+    "enabled": true,
+    "placement": "sidebar_after_submodule_filter",
+    "default_value": "todos",
+    "depends_on": "submodule_filter",
+    "behavior": "Quando um submodulo especifico e selecionado, exibe apenas os fractais daquele submodulo. Quando todos os submodulos estao selecionados, exibe todos os fractais do modulo.",
+    "items_per_submodule": 6,
+    "total_fractals": 60,
+    "description": "Filtro encadeado para navegar pelos fractais plug and play do modulo."
+  },
+  "agent_chat_sidebar": {
+    "enabled": true,
+    "placement": "right_page_sidebar",
+    "default_state": "collapsed",
+    "expand_direction": "left",
+    "collapse_direction": "right",
+    "purpose": "Ambiente lateral direito recolhivel para conversar com os Agentes de IA do modulo.",
+    "future_integrations": [
+      "Mod_Gestao_Genius_Hub",
+      "Mod_Gestao_Agentes_IA",
+      "eventos do modulo",
+      "contexto de submodulo",
+      "contexto de fractal"
+    ]
+  },
+  "cadastro_pages": [
+    {
+      "id": "cadastro_unidade_agricola",
+      "route": "cadastros",
+      "submodule": "01_sub_cadastro_unidades_agricolas",
+      "primary_fractal": "01_fractal_dados_basicos_unidade",
+      "mode": "rascunho_local",
+      "fields": [
+        "codigo_unidade",
+        "nome_unidade",
+        "tipo_unidade",
+        "status_cadastro",
+        "situacao_operacional",
+        "uf",
+        "municipio",
+        "area_total_ha",
+        "latitude_sede",
+        "longitude_sede",
+        "observacoes"
+      ],
+      "next_backend_step": "Criar function/RPC no Supabase para validar, gravar e publicar evento de unidade cadastrada."
+    },
+    {
+      "id": "cadastro_proprietarios_possuidores",
+      "route": "cadastros",
+      "submodule": "02_sub_proprietarios_possuidores",
+      "primary_fractal": "01_fractal_cadastro_proprietarios",
+      "mode": "rascunho_local",
+      "fields": [
+        "codigo_unidade",
+        "nome_titular",
+        "tipo_vinculo",
+        "documento",
+        "participacao_percentual",
+        "telefone",
+        "email",
+        "status_vinculo",
+        "observacoes"
+      ],
+      "next_backend_step": "Criar function/RPC no Supabase para validar, gravar e publicar evento de proprietario/possuidor cadastrado."
+    },
+    {
+      "id": "cadastro_responsaveis_gestores",
+      "route": "cadastros",
+      "submodule": "03_sub_responsaveis_gestores",
+      "primary_fractal": "01_fractal_cadastro_responsaveis",
+      "mode": "rascunho_local",
+      "fields": [
+        "codigo_unidade",
+        "nome_responsavel",
+        "tipo_responsabilidade",
+        "cargo_funcao",
+        "nivel_autorizacao",
+        "principal",
+        "telefone",
+        "email",
+        "observacoes"
+      ],
+      "next_backend_step": "Criar function/RPC no Supabase para validar, gravar e publicar evento de responsavel/gestor cadastrado."
+    }
+  ],
+  "spreadsheet_mode": {
+    "enabled": true,
+    "label": "Modo Planilha",
+    "purpose": "Permitir preenchimento em grade tipo Excel para cadastros do modulo.",
+    "supported_cadastros": [
+      "cadastro_unidade_agricola",
+      "cadastro_proprietarios_possuidores",
+      "cadastro_responsaveis_gestores"
+    ],
+    "current_storage": "rascunho_local",
+    "next_backend_step": "Conectar salvamento em lote ao Supabase por function/RPC com validacao e publicacao de eventos."
+  },
+  "database_friendly_view": {
+    "enabled": true,
+    "route": "bancoDados",
+    "purpose": "Mostrar ao usuario a relacao das planilhas/tabelas do banco e como os dados se conectam.",
+    "main_entities": [
+      "Unidades Agricolas",
+      "Proprietarios/Possuidores",
+      "Responsaveis/Gestores",
+      "Areas Produtivas",
+      "Eventos dos Fractais",
+      "Liberacao para Ecossistema"
+    ],
+    "relationship_key": "codigo_unidade"
+  },
+  "views_consumed": [
+    "unidade_agricola.vw_dashboard_executivo_unidade_agricola",
+    "unidade_agricola.vw_unidades_agricolas_prontas_ecossistema",
+    "unidade_agricola.vw_matriz_consumo_modulos_unidade_agricola",
+    "unidade_agricola.vw_unidade_relacional_resumo",
+    "unidade_agricola.vw_unidade_proprietarios",
+    "unidade_agricola.vw_unidade_responsaveis",
+    "unidade_agricola.vw_unidade_areas_produtivas",
+    "unidade_agricola.vw_unidade_eventos_timeline",
+    "unidade_agricola.vw_auditoria_qualidade_resumo",
+    "unidade_agricola.vw_unidades_bloqueadas_ecossistema",
+    "unidade_agricola.vw_importacao_planilha_unidades_status",
+    "unidade_agricola.vw_importacao_submodulos_base_status",
+    "unidade_agricola.vw_resumo_liberacao_ecossistema"
+  ],
+  "events_published": [
+    "unidade_agricola.frontend.modulo.aberto",
+    "unidade_agricola.frontend.dashboard.visualizado",
+    "unidade_agricola.frontend.unidade.selecionada",
+    "unidade_agricola.frontend.dados.atualizados",
+    "unidade_agricola.frontend.erro_consulta"
+  ],
+  "events_consumed": [
+    "Plataforma_Ecossistema_Genius.usuario.autenticado",
+    "Plataforma_Ecossistema_Genius.permissoes.carregadas",
+    "Mod_Gestao_Genius_Hub.modulo.status_atualizado",
+    "Mod_Gestao_Dashboards_BI.dashboard.atualizado",
+    "Mod_Gestao_Integracoes_APIs.schema.disponibilizado"
+  ],
+  "permissions": [
+    {
+      "key": "unidade_agricola.dashboard.visualizar",
+      "profiles": [
+        "admin_ecossistema",
+        "gestor_modulo",
+        "operador_modulo",
+        "leitor_modulo",
+        "agente_ia_autorizado"
+      ]
+    },
+    {
+      "key": "unidade_agricola.cadastros.visualizar",
+      "profiles": [
+        "admin_ecossistema",
+        "gestor_modulo",
+        "operador_modulo",
+        "agente_ia_autorizado"
+      ]
+    },
+    {
+      "key": "unidade_agricola.gerenciamento.visualizar",
+      "profiles": [
+        "admin_ecossistema",
+        "gestor_modulo",
+        "agente_ia_autorizado"
+      ]
+    },
+    {
+      "key": "unidade_agricola.agentes.visualizar",
+      "profiles": [
+        "admin_ecossistema",
+        "gestor_modulo",
+        "agente_ia_autorizado"
+      ]
+    },
+    {
+      "key": "unidade_agricola.ferramentas.visualizar",
+      "profiles": [
+        "admin_ecossistema",
+        "gestor_modulo",
+        "operador_modulo",
+        "agente_ia_autorizado"
+      ]
+    },
+    {
+      "key": "unidade_agricola.relatorios.visualizar",
+      "profiles": [
+        "admin_ecossistema",
+        "gestor_modulo",
+        "auditor_modulo",
+        "leitor_modulo"
+      ]
+    },
+    {
+      "key": "unidade_agricola.banco_dados.visualizar",
+      "profiles": [
+        "admin_ecossistema",
+        "gestor_modulo",
+        "auditor_modulo",
+        "agente_ia_autorizado"
+      ]
+    },
+    {
+      "key": "unidade_agricola.configuracoes.visualizar",
+      "profiles": [
+        "admin_ecossistema",
+        "gestor_modulo",
+        "agente_ia_autorizado"
+      ]
+    },
+    {
+      "key": "unidade_agricola.unidades.visualizar",
+      "profiles": [
+        "admin_ecossistema",
+        "gestor_modulo",
+        "operador_modulo",
+        "leitor_modulo"
+      ]
+    },
+    {
+      "key": "unidade_agricola.unidades.detalhar",
+      "profiles": [
+        "admin_ecossistema",
+        "gestor_modulo",
+        "operador_modulo",
+        "leitor_modulo"
+      ]
+    },
+    {
+      "key": "unidade_agricola.auditoria.visualizar",
+      "profiles": [
+        "admin_ecossistema",
+        "gestor_modulo",
+        "auditor_modulo",
+        "agente_ia_autorizado"
+      ]
+    },
+    {
+      "key": "unidade_agricola.importacoes.visualizar",
+      "profiles": [
+        "admin_ecossistema",
+        "gestor_modulo",
+        "operador_modulo",
+        "agente_ia_autorizado"
+      ]
+    }
+  ],
+  "dependencies": {
+    "frontend": [
+      "HTML5",
+      "CSS3",
+      "JavaScript ES Modules",
+      "Supabase REST API"
+    ],
+    "supabase": {
+      "project_ref": "eajbrkypndqlumrmuoag",
+      "schema": "unidade_agricola",
+      "required_exposed_schema": true,
+      "required_grants_migration": "202604260013_frontend_dev_grants_unidade_agricola.sql"
+    },
+    "genius_modules": [
+      "Mod_Gestao_Genius_Hub",
+      "Mod_Gestao_Dados_DataLake",
+      "Mod_Gestao_Dashboards_BI",
+      "Mod_Gestao_Integracoes_APIs",
+      "Mod_Gestao_Seguranca_Informacao"
+    ]
+  },
+  "dashboards": [
+    {
+      "id": "dashboard_executivo",
+      "source_view": "unidade_agricola.vw_dashboard_executivo_unidade_agricola",
+      "description": "KPIs executivos de unidades, area, eventos, qualidade e saude operacional."
+    },
+    {
+      "id": "dashboard_liberacao_ecossistema",
+      "source_view": "unidade_agricola.vw_resumo_liberacao_ecossistema",
+      "description": "Resumo de unidades prontas ou bloqueadas para consumo por outros modulos."
+    },
+    {
+      "id": "dashboard_auditoria_qualidade",
+      "source_view": "unidade_agricola.vw_auditoria_qualidade_resumo",
+      "description": "Status de qualidade, inconsistencias, pendencias e erros."
+    }
+  ],
+  "genius_platform_mount_points": [
+    {
+      "id": "catalogo_modulos",
+      "description": "Registro do modulo no catalogo central da Plataforma Ecossistema Genius."
+    },
+    {
+      "id": "menu_lateral_plataforma",
+      "description": "Entrada de menu para acesso ao modulo dentro da plataforma maior."
+    },
+    {
+      "id": "hub_eventos",
+      "description": "Publicacao e consumo de eventos do modulo no Genius Hub."
+    },
+    {
+      "id": "dashboard_bi_global",
+      "description": "Envio de indicadores consolidados para dashboards globais do ecossistema."
+    },
+    {
+      "id": "datalake_trusted",
+      "description": "Disponibilizacao de dados tratados para DataLake e camadas analiticas."
+    },
+    {
+      "id": "integracoes_apis",
+      "description": "Padronizacao das chamadas REST/API e contratos de integracao."
+    },
+    {
+      "id": "seguranca_perfis",
+      "description": "Aplicacao de perfis, permissoes e politicas de acesso da plataforma."
+    }
+  ],
+  "plug_and_play_contract": {
+    "self_sufficient": true,
+    "independent_runtime": true,
+    "platform_embeddable": true,
+    "requires_backend_schema": "unidade_agricola",
+    "requires_event_catalog": true,
+    "requires_manifest_discovery": true,
+    "requires_permission_mapping": true
+  },
+  "next_evolution": [
+    "Criar componentes frontend por submodulo.",
+    "Criar microcomponentes frontend por fractal.",
+    "Adicionar rotas reais na Plataforma Ecossistema Genius.",
+    "Substituir grants anon de homologacao por RLS e autenticacao de usuarios.",
+    "Publicar eventos de interacao do frontend no Genius Hub."
+  ]
+}

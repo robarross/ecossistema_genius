@@ -1,0 +1,77 @@
+<!-- 
+# 🧬 Template: Site Institucional Genius
+# ID: T-WEB-SITE-01
+# Estilo: Autoridade Máxima / Futurista
+-->
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Genius Ecosystem | Soberania Digital</title>
+    <style>
+        :root {
+            --cyan: #00f2ff;
+            --dark: #050505;
+            --glass: rgba(255, 255, 255, 0.05);
+        }
+        body { background: var(--dark); color: white; font-family: 'Outfit', sans-serif; margin: 0; overflow-x: hidden; }
+        nav { padding: 20px 50px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--glass); }
+        .logo { font-size: 1.5rem; font-weight: bold; letter-spacing: 2px; color: var(--cyan); }
+        
+        header { height: 80vh; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 0 20px; }
+        header h1 { font-size: 4rem; margin: 0; background: linear-gradient(to right, #fff, var(--cyan)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        header p { font-size: 1.2rem; color: #888; max-width: 600px; margin-top: 20px; }
+
+        .section { padding: 80px 50px; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 30px; margin-top: 50px; }
+        .card { background: var(--glass); padding: 30px; border-radius: 15px; border: 1px solid rgba(0,242,255,0.1); transition: 0.3s; }
+        .card:hover { border-color: var(--cyan); transform: translateY(-10px); }
+        .card h3 { color: var(--cyan); margin-top: 0; }
+
+        footer { padding: 50px; border-top: 1px solid var(--glass); text-align: center; color: #444; }
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="logo">GENIUS_ECOSYSTEM</div>
+        <div>
+            <a href="#" style="color: white; text-decoration: none; margin-left: 20px;">Sistemas</a>
+            <a href="#" style="color: white; text-decoration: none; margin-left: 20px;">Governança</a>
+            <a href="#" style="color: white; text-decoration: none; margin-left: 20px;">Contato</a>
+        </div>
+    </nav>
+
+    <header>
+        <h1>A Inteligência que Cultiva o Futuro</h1>
+        <p>Um ecossistema agêntico industrializado, governado por dados e orquestrado pela excelência.</p>
+        <button style="margin-top: 40px; padding: 15px 30px; background: var(--cyan); border: none; border-radius: 5px; font-weight: bold; cursor: pointer;">Explorar Arquitetura</button>
+    </header>
+
+    <section class="section">
+        <h2>Nossas Verticais Sistêmicas</h2>
+        <div class="grid">
+            <div class="card">
+                <h3>🏛️ Administrativo</h3>
+                <p>Gestão corporativa, financeira e governança total.</p>
+            </div>
+            <div class="card">
+                <h3>🚜 Produtivo</h3>
+                <p>O core business agrícola monitorado em tempo real.</p>
+            </div>
+            <div class="card">
+                <h3>💻 Tecnológico</h3>
+                <p>Infraestrutura de APIs, IoT e Inteligência Artificial.</p>
+            </div>
+            <div class="card">
+                <h3>🌐 Expansão</h3>
+                <p>Marketplace, Banco Rural e crescimento do ecossistema.</p>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <p>&copy; 2026 Genius Ecosystem | Desenvolvido para a Soberania Agro-Digital</p>
+    </footer>
+</body>
+</html>

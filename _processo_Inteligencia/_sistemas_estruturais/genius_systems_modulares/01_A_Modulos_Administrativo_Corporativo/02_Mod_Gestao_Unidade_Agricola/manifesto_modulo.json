@@ -1,0 +1,123 @@
+﻿{
+    "schema_version":  "1.0",
+    "module_name":  "Mod_Gestao_Unidade_Agricola",
+    "module_title":  "Gestao Unidade Agricola",
+    "module_kind":  "modular",
+    "description":  "Modulo plug and play do ecossistema Genius responsavel por Gestao Unidade Agricola, integrado as plataformas: 09_Plataforma_Genius_3D_Experience, 03_Plataforma_Genius_AgroGestao, 06_Plataforma_Genius_AgroProducao, 04_Plataforma_Genius_GeoAmbiental, 05_Plataforma_Genius_InfraRural.",
+    "path":  "E:\\Diretorios\\Diretorio_Agentes\\_processo_Inteligencia\\_sistemas_estruturais\\genius_systems_modulares\\01_A_Modulos_Administrativo_Corporativo\\02_Mod_Gestao_Unidade_Agricola",
+    "standard_structure":  {
+                               "input":  "0_IN_Entrada",
+                               "process":  "1_DNA_Processo",
+                               "output":  "2_OUT_Saida",
+                               "library":  "3_LIB_Biblioteca",
+                               "submodules_path":  "1_DNA_Processo/submodulos"
+                           },
+    "platforms":  [
+                      "09_Plataforma_Genius_3D_Experience",
+                      "03_Plataforma_Genius_AgroGestao",
+                      "06_Plataforma_Genius_AgroProducao",
+                      "04_Plataforma_Genius_GeoAmbiental",
+                      "05_Plataforma_Genius_InfraRural"
+                  ],
+    "submodules":  [
+                       "01_sub_cadastro_unidades_agricolas",
+                       "02_sub_proprietarios_possuidores",
+                       "03_sub_responsaveis_gestores",
+                       "04_sub_territorios_areas_producao",
+                       "05_sub_limites_acessos",
+                       "06_sub_documentacao_unidade",
+                       "07_sub_base_ativos_estruturais_unidade",
+                       "08_sub_chaves_permissoes_operacionais",
+                       "09_sub_status_operacional_unidade",
+                       "10_sub_prestacao_contas_unidade"
+                   ],
+    "expected_inputs":  [
+                            "Demandas recebidas via Mod_Gestao_Genius_In",
+                            "Dados e documentos enviados por usuarios, agentes ou modulos relacionados",
+                            "Cadastros, status, evidencias e historicos vinculados ao dominio do modulo",
+                            "Eventos e atualizacoes vindos de integracoes/APIs autorizadas"
+                        ],
+    "generated_outputs":  [
+                              "Registros processados e padronizados para o dominio do modulo",
+                              "Eventos de status para Mod_Gestao_Genius_Hub",
+                              "Dados tratados para Mod_Gestao_Dados_DataLake",
+                              "Indicadores e metricas para Mod_Gestao_Dashboards_BI",
+                              "Solicitacoes ou encaminhamentos para modulos dependentes"
+                          ],
+    "depends_on":  [
+                       "Mod_Gestao_Genius_In",
+                       "Mod_Gestao_Genius_Hub",
+                       "Mod_Gestao_Dados_DataLake",
+                       "Mod_Gestao_Integracoes_APIs",
+                       "Mod_Gestao_Dashboards_BI",
+                       "Mod_Gestao_Automacoes",
+                       "Mod_Gestao_Seguranca_Informacao",
+                       "Mod_Gestao_Genius_Cloud"
+                   ],
+    "depended_by":  [
+                        "Plataforma: 09_Plataforma_Genius_3D_Experience",
+                        "Plataforma: 03_Plataforma_Genius_AgroGestao",
+                        "Plataforma: 06_Plataforma_Genius_AgroProducao",
+                        "Plataforma: 04_Plataforma_Genius_GeoAmbiental",
+                        "Plataforma: 05_Plataforma_Genius_InfraRural"
+                    ],
+    "publishes_events":  [
+                             "Mod_Gestao_Unidade_Agricola.evento.criado",
+                             "Mod_Gestao_Unidade_Agricola.evento.atualizado",
+                             "Mod_Gestao_Unidade_Agricola.evento.status_alterado",
+                             "Mod_Gestao_Unidade_Agricola.evento.finalizado"
+                         ],
+    "consumes_events":  [
+                            "Mod_Gestao_Genius_In.evento.demanda_recebida",
+                            "Mod_Gestao_Genius_Hub.evento.fluxo_encaminhado",
+                            "Mod_Gestao_Integracoes_APIs.evento.sincronizacao_recebida"
+                        ],
+    "api_contract":  {
+                         "base_route":  "/api/modulos/Mod_Gestao_Unidade_Agricola",
+                         "reads":  [
+                                       "GET /status",
+                                       "GET /submodulos",
+                                       "GET /registros"
+                                   ],
+                         "writes":  [
+                                        "POST /entrada",
+                                        "POST /evento",
+                                        "PATCH /status"
+                                    ],
+                         "integration_owner":  "Mod_Gestao_Integracoes_APIs"
+                     },
+    "permissions_profiles":  [
+                                 "admin_ecossistema",
+                                 "gestor_modulo",
+                                 "operador_modulo",
+                                 "leitor_modulo",
+                                 "agente_ia_autorizado"
+                             ],
+    "dashboards":  [
+                       "Mod_Gestao_Unidade_Agricola.dashboard_operacional",
+                       "Mod_Gestao_Unidade_Agricola.dashboard_indicadores",
+                       "Mod_Gestao_Unidade_Agricola.dashboard_alertas"
+                   ],
+    "datalake_integration":  {
+                                 "raw_layer":  "raw/Mod_Gestao_Unidade_Agricola",
+                                 "trusted_layer":  "trusted/Mod_Gestao_Unidade_Agricola",
+                                 "analytics_layer":  "analytics/Mod_Gestao_Unidade_Agricola",
+                                 "lineage_required":  true
+                             },
+    "hub_integration":  {
+                            "show_in_hub":  true,
+                            "receives_from_genius_in":  true,
+                            "publishes_status_to_hub":  true
+                        },
+    "frontend_integration":  {
+                                 "has_frontend":  true,
+                                 "frontend_path":  "4_EXEC_Execucao/frontend",
+                                 "frontend_manifest":  "4_EXEC_Execucao/frontend/manifesto_frontend_modulo.json",
+                                 "frontend_contract":  "4_EXEC_Execucao/frontend/CONTRATO_FRONTEND_PLATAFORMA_GENIUS.md",
+                                 "standalone_url":  "http://localhost:4173",
+                                 "platform_mount_path":  "/modulos/unidade-agricola",
+                                 "host_platform":  "Plataforma_Ecossistema_Genius",
+                                 "plug_and_play_ready":  true
+                             },
+    "plug_and_play_status":  "estrutura_padronizada_contrato_inicial_criado"
+}

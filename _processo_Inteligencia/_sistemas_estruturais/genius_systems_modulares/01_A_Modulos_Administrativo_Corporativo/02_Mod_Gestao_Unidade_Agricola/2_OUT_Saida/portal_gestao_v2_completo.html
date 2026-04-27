@@ -1,0 +1,2188 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portal Gestão Unidade Agrícola v2 | Genius HUB</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-primary: #0f1419;
+            --bg-secondary: #1a1f2e;
+            --bg-tertiary: #252c3c;
+            --accent: #00ff88;
+            --accent-dark: #00cc6a;
+            --accent-light: #33ffaa;
+            --text-primary: #e0e0e0;
+            --text-secondary: #a0a0a0;
+            --border: #2a3548;
+            --danger: #ff4757;
+            --warning: #ffa502;
+            --success: #00ff88;
+            --info: #0066ff;
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow: hidden;
+        }
+
+        .container-main {
+            display: flex;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        /* ===== SIDEBAR ===== */
+        .sidebar {
+            width: 280px;
+            background: rgba(26, 31, 46, 0.8);
+            backdrop-filter: blur(10px);
+            border-right: 1px solid var(--border);
+            overflow-y: auto;
+            transition: transform 0.3s ease;
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                position: fixed;
+                left: 0;
+                top: 0;
+                height: 100vh;
+                transform: translateX(-100%);
+            }
+
+            .sidebar.active {
+                transform: translateX(0);
+            }
+        }
+
+        .sidebar-header {
+            padding: 24px 20px;
+            border-bottom: 1px solid var(--border);
+            flex-shrink: 0;
+        }
+
+        .logo {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--accent);
+            text-shadow: 0 0 20px rgba(0, 255, 136, 0.3);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .sidebar-menu {
+            list-style: none;
+            padding: 20px 0;
+            flex: 1;
+            overflow-y: auto;
+        }
+
+        .menu-item {
+            padding: 0;
+            margin: 0;
+        }
+
+        .menu-link {
+            display: block;
+            padding: 12px 20px;
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: all 0.3s ease;
+            border-left: 3px solid transparent;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            user-select: none;
+        }
+
+        .menu-link:hover {
+            color: var(--accent);
+            background: rgba(0, 255, 136, 0.1);
+            border-left-color: var(--accent);
+        }
+
+        .menu-link.active {
+            color: var(--accent);
+            background: rgba(0, 255, 136, 0.15);
+            border-left-color: var(--accent);
+        }
+
+        .menu-icon {
+            display: inline-block;
+            margin-right: 10px;
+            font-size: 16px;
+        }
+
+        /* ===== SUBMÓDULOS DROPDOWN ===== */
+        .submodulos-container {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+        }
+
+        .submodulos-container.active {
+            max-height: 400px;
+        }
+
+        .submodulos-list {
+            background: rgba(0, 255, 136, 0.05);
+            border-top: 1px solid var(--border);
+            border-bottom: 1px solid var(--border);
+            list-style: none;
+            margin: 10px 0;
+        }
+
+        .submodulo-item {
+            padding: 10px 30px;
+            border-left: 3px solid transparent;
+            color: var(--text-secondary);
+            cursor: pointer;
+            font-size: 13px;
+            transition: all 0.3s ease;
+        }
+
+        .submodulo-item:hover {
+            color: var(--accent);
+            background: rgba(0, 255, 136, 0.1);
+            border-left-color: var(--accent);
+        }
+
+        .submodulo-item.active {
+            color: var(--accent);
+            background: rgba(0, 255, 136, 0.15);
+            border-left-color: var(--accent);
+        }
+
+        .arrow {
+            display: inline-block;
+            margin-left: 8px;
+            transition: transform 0.3s ease;
+            font-size: 12px;
+        }
+
+        .arrow.rotated {
+            transform: rotate(180deg);
+        }
+
+        /* ===== HEADER ===== */
+        .header {
+            height: 70px;
+            background: rgba(26, 31, 46, 0.8);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 30px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            color: var(--accent);
+            font-size: 24px;
+            cursor: pointer;
+        }
+
+        @media (max-width: 768px) {
+            .menu-toggle {
+                display: block;
+            }
+        }
+
+        .header-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .btn-icon {
+            background: rgba(0, 255, 136, 0.1);
+            border: 1px solid var(--border);
+            color: var(--accent);
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            transition: all 0.3s ease;
+        }
+
+        .btn-icon:hover {
+            background: rgba(0, 255, 136, 0.2);
+            border-color: var(--accent);
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--accent), var(--accent-dark));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            cursor: pointer;
+            border: 2px solid var(--border);
+        }
+
+        /* ===== MAIN CONTENT ===== */
+        .content-wrapper {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .main-content {
+            flex: 1;
+            overflow-y: auto;
+            padding: 30px;
+            background: var(--bg-primary);
+        }
+
+        /* ===== SECTIONS ===== */
+        .section {
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* ===== CARDS ===== */
+        .section-header {
+            margin-bottom: 30px;
+        }
+
+        .section-title {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 10px;
+            color: var(--accent);
+            text-shadow: 0 0 20px rgba(0, 255, 136, 0.2);
+        }
+
+        .section-subtitle {
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .card {
+            background: rgba(37, 44, 60, 0.5);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 20px;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .card:hover {
+            background: rgba(37, 44, 60, 0.7);
+            border-color: var(--accent);
+            box-shadow: 0 0 30px rgba(0, 255, 136, 0.1);
+            transform: translateY(-5px);
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 15px;
+        }
+
+        .card-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .card-icon {
+            font-size: 24px;
+            color: var(--accent);
+        }
+
+        .card-value {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--accent);
+            margin-bottom: 10px;
+        }
+
+        .card-description {
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 6px;
+            background: var(--bg-tertiary);
+            border-radius: 3px;
+            overflow: hidden;
+            margin-top: 10px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--accent), var(--accent-light));
+            border-radius: 3px;
+            width: 75%;
+        }
+
+        /* ===== TABLES ===== */
+        .table-container {
+            background: rgba(37, 44, 60, 0.5);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 20px;
+            backdrop-filter: blur(10px);
+            overflow-x: auto;
+            margin-bottom: 30px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th {
+            background: rgba(0, 255, 136, 0.1);
+            padding: 12px;
+            text-align: left;
+            font-weight: 600;
+            color: var(--accent);
+            border-bottom: 2px solid var(--border);
+        }
+
+        td {
+            padding: 12px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        tr:hover {
+            background: rgba(0, 255, 136, 0.05);
+        }
+
+        /* ===== FORMS ===== */
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: var(--text-primary);
+            font-size: 14px;
+        }
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 10px;
+            background: rgba(37, 44, 60, 0.6);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            color: var(--text-primary);
+            font-family: 'Outfit', sans-serif;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: var(--accent);
+            background: rgba(37, 44, 60, 0.8);
+            box-shadow: 0 0 15px rgba(0, 255, 136, 0.1);
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        /* ===== BUTTONS ===== */
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Outfit', sans-serif;
+            font-size: 14px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--accent), var(--accent-dark));
+            color: var(--bg-primary);
+        }
+
+        .btn-primary:hover {
+            box-shadow: 0 0 20px rgba(0, 255, 136, 0.4);
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background: rgba(0, 255, 136, 0.1);
+            color: var(--accent);
+            border: 1px solid var(--border);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(0, 255, 136, 0.2);
+            border-color: var(--accent);
+        }
+
+        .btn-small {
+            padding: 6px 12px;
+            font-size: 12px;
+        }
+
+        /* ===== DRAWERS ===== */
+        .drawer {
+            position: fixed;
+            top: 70px;
+            right: 0;
+            width: 350px;
+            height: calc(100vh - 70px);
+            background: rgba(26, 31, 46, 0.95);
+            border-left: 1px solid var(--border);
+            backdrop-filter: blur(10px);
+            transform: translateX(100%);
+            transition: transform 0.3s ease;
+            z-index: 999;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .drawer.active {
+            transform: translateX(0);
+        }
+
+        .drawer-header {
+            padding: 20px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .drawer-title {
+            font-size: 16px;
+            font-weight: 600;
+        }
+
+        .drawer-close {
+            background: none;
+            border: none;
+            color: var(--accent);
+            font-size: 20px;
+            cursor: pointer;
+        }
+
+        .drawer-content {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+        }
+
+        .notification-item {
+            background: rgba(0, 255, 136, 0.1);
+            border: 1px solid rgba(0, 255, 136, 0.2);
+            border-radius: 8px;
+            padding: 12px;
+            margin-bottom: 10px;
+            font-size: 13px;
+        }
+
+        .notification-title {
+            font-weight: 600;
+            color: var(--accent);
+            margin-bottom: 4px;
+        }
+
+        .notification-time {
+            font-size: 11px;
+            color: var(--text-secondary);
+        }
+
+        /* ===== PROFILE DRAWER ===== */
+        .profile-section {
+            background: rgba(0, 255, 136, 0.1);
+            border: 1px solid rgba(0, 255, 136, 0.2);
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .profile-avatar-large {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--accent), var(--accent-dark));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+            font-weight: 700;
+            margin: 0 auto 10px;
+            border: 3px solid var(--accent);
+        }
+
+        .profile-name {
+            font-weight: 600;
+            font-size: 16px;
+            margin-bottom: 4px;
+        }
+
+        .profile-role {
+            font-size: 12px;
+            color: var(--text-secondary);
+            margin-bottom: 15px;
+        }
+
+        .stat-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            font-size: 13px;
+        }
+
+        .stat-label {
+            color: var(--text-secondary);
+        }
+
+        .stat-value {
+            color: var(--accent);
+            font-weight: 600;
+        }
+
+        .level-bar {
+            background: var(--bg-tertiary);
+            height: 8px;
+            border-radius: 4px;
+            margin-top: 10px;
+            overflow: hidden;
+        }
+
+        .level-fill {
+            background: linear-gradient(90deg, var(--accent), var(--accent-light));
+            height: 100%;
+            width: 65%;
+        }
+
+        /* ===== BADGE ===== */
+        .badge {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .badge-success {
+            background: rgba(0, 255, 136, 0.2);
+            color: var(--accent);
+        }
+
+        .badge-warning {
+            background: rgba(255, 165, 2, 0.2);
+            color: var(--warning);
+        }
+
+        .badge-info {
+            background: rgba(0, 102, 255, 0.2);
+            color: var(--info);
+        }
+
+        /* ===== TOAST ===== */
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: rgba(0, 255, 136, 0.9);
+            color: var(--bg-primary);
+            padding: 15px 20px;
+            border-radius: 8px;
+            z-index: 3000;
+            animation: slideIn 0.3s ease;
+            max-width: 300px;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(400px);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        @keyframes slideOut {
+            from {
+                transform: translateX(0);
+                opacity: 1;
+            }
+            to {
+                transform: translateX(400px);
+                opacity: 0;
+            }
+        }
+
+        .toast.remove {
+            animation: slideOut 0.3s ease;
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 768px) {
+            .header {
+                padding: 0 15px;
+            }
+
+            .main-content {
+                padding: 15px;
+            }
+
+            .grid {
+                grid-template-columns: 1fr;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+
+            .drawer {
+                width: 100%;
+            }
+
+            table {
+                font-size: 12px;
+            }
+
+            th, td {
+                padding: 8px;
+            }
+
+            .section-title {
+                font-size: 20px;
+            }
+        }
+
+        /* ===== SCROLLBAR ===== */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--bg-secondary);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--border);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--accent);
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: var(--text-secondary);
+        }
+
+        .empty-state-icon {
+            font-size: 64px;
+            margin-bottom: 20px;
+        }
+
+        .empty-state-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 10px;
+        }
+
+        .empty-state-description {
+            font-size: 14px;
+            margin-bottom: 30px;
+        }
+
+        /* ===== SUBMODULE FILTER ===== */
+        .submodule-filter {
+            position: relative;
+            display: none;
+        }
+
+        .submodule-filter.active {
+            display: block;
+        }
+
+        .filter-button {
+            background: rgba(0, 255, 136, 0.1);
+            border: 1px solid var(--accent);
+            color: var(--accent);
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .filter-button:hover {
+            background: rgba(0, 255, 136, 0.2);
+            box-shadow: 0 0 20px rgba(0, 255, 136, 0.3);
+        }
+
+        .filter-dropdown {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            margin-top: 8px;
+            background: rgba(26, 31, 46, 0.95);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            min-width: 250px;
+            z-index: 200;
+            display: none;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+        }
+
+        .filter-dropdown.active {
+            display: block;
+            animation: slideDown 0.3s ease;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .filter-item {
+            padding: 12px 16px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border-left: 3px solid transparent;
+        }
+
+        .filter-item:hover {
+            background: rgba(0, 255, 136, 0.1);
+            border-left-color: var(--accent);
+        }
+
+        .filter-item.active {
+            background: rgba(0, 255, 136, 0.2);
+            color: var(--accent);
+            border-left-color: var(--accent);
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+    <div class="container-main">
+        <!-- SIDEBAR -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <div class="logo">
+                    <span>🌾</span> Gestão Agrícola
+                </div>
+            </div>
+            <ul class="sidebar-menu">
+                <li class="menu-item">
+                    <a class="menu-link" onclick="toggleSubmodulos()">
+                        <span class="menu-icon">📦</span> Submódulos <span class="arrow" id="arrow">▼</span>
+                    </a>
+                </li>
+
+                <div class="submodulos-container" id="submodulosContainer">
+                    <ul class="submodulos-list">
+                        <li class="submodulo-item" onclick="switchSection('sub-proprietarios')">👤 Proprietários</li>
+                        <li class="submodulo-item" onclick="switchSection('sub-unidades')">🏠 Unidades Agrícolas</li>
+                        <li class="submodulo-item" onclick="switchSection('sub-glebas')">🗺️ Glebas e Setores</li>
+                        <li class="submodulo-item" onclick="switchSection('sub-talhoes')">🌽 Talhões</li>
+                        <li class="submodulo-item" onclick="switchSection('sub-ativos')">📋 Ativos Imobiliários</li>
+                        <li class="submodulo-item" onclick="switchSection('sub-chaves')">🔗 Chaves de Relacionamento</li>
+                    </ul>
+                </div>
+
+                <li class="menu-item">
+                    <a class="menu-link active" onclick="switchSection('dashboards')">
+                        <span class="menu-icon">📊</span> Dashboards
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a class="menu-link" onclick="switchSection('cadastros')">
+                        <span class="menu-icon">📝</span> Cadastros
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a class="menu-link" onclick="switchSection('agentes')">
+                        <span class="menu-icon">🤖</span> Agentes de IA
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a class="menu-link" onclick="switchSection('gerenciamento')">
+                        <span class="menu-icon">⚙️</span> Gerenciamento
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a class="menu-link" onclick="switchSection('fractais')">
+                        <span class="menu-icon">✨</span> Fractais
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a class="menu-link" onclick="switchSection('ferramentas')">
+                        <span class="menu-icon">🔧</span> Ferramentas
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a class="menu-link" onclick="switchSection('relatorios')">
+                        <span class="menu-icon">📈</span> Relatórios
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a class="menu-link" onclick="switchSection('banco-dados')">
+                        <span class="menu-icon">🗄️</span> Banco de Dados
+                    </a>
+                </li>
+            </ul>
+        </aside>
+
+        <!-- MAIN WRAPPER -->
+        <div class="content-wrapper">
+            <!-- HEADER -->
+            <header class="header">
+                <div class="header-left">
+                    <button class="menu-toggle" onclick="toggleSidebar()">☰</button>
+                    <h1 class="header-title" id="header-title">Dashboards</h1>
+                </div>
+                <div class="header-right">
+                    <!-- SUBMODULE FILTER -->
+                    <div class="submodule-filter" id="submoduleFilter">
+                        <button class="filter-button" onclick="toggleFilterDropdown()">
+                            📊 <span id="currentSubmodule">Proprietários</span>
+                        </button>
+                        <div class="filter-dropdown" id="filterDropdown">
+                            <div class="filter-item active" onclick="selectSubmodule('sub-proprietarios', this)">👤 Proprietários</div>
+                            <div class="filter-item" onclick="selectSubmodule('sub-unidades', this)">🏠 Unidades Agrícolas</div>
+                            <div class="filter-item" onclick="selectSubmodule('sub-glebas', this)">🗺️ Glebas e Setores</div>
+                            <div class="filter-item" onclick="selectSubmodule('sub-talhoes', this)">🌽 Talhões</div>
+                            <div class="filter-item" onclick="selectSubmodule('sub-ativos', this)">📋 Ativos Imobiliários</div>
+                            <div class="filter-item" onclick="selectSubmodule('sub-chaves', this)">🔗 Chaves de Relacionamento</div>
+                        </div>
+                    </div>
+
+                    <button class="btn-icon" onclick="toggleNotifications()">🔔</button>
+                    <button class="btn-icon" onclick="toggleTheme()">🌙</button>
+                    <button class="btn-icon" onclick="toggleProfile()">👤</button>
+                </div>
+            </header>
+
+            <!-- MAIN CONTENT -->
+            <div class="main-content">
+                <!-- DASHBOARDS SECTION -->
+                <section id="dashboards" class="section active">
+                    <div class="section-header">
+                        <h2 class="section-title">Dashboards</h2>
+                        <p class="section-subtitle">Painéis analíticos e visualizações de dados em tempo real</p>
+                    </div>
+
+                    <div class="grid">
+                        <div class="card">
+                            <div class="card-header">
+                                <span class="card-title">Unidades Agrícolas</span>
+                                <span class="card-icon">🏠</span>
+                            </div>
+                            <div class="card-value">2</div>
+                            <div class="card-description">Fazendas cadastradas no sistema</div>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 100%;"></div>
+                            </div>
+                        </div>
+
+                        <div class="card">
+                            <div class="card-header">
+                                <span class="card-title">Talhões Ativos</span>
+                                <span class="card-icon">🌾</span>
+                            </div>
+                            <div class="card-value">12</div>
+                            <div class="card-description">Áreas em produção ou preparação</div>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 85%;"></div>
+                            </div>
+                        </div>
+
+                        <div class="card">
+                            <div class="card-header">
+                                <span class="card-title">Área Total</span>
+                                <span class="card-icon">📐</span>
+                            </div>
+                            <div class="card-value">1.245 ha</div>
+                            <div class="card-description">Hectares mapeados e validados</div>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 78%;"></div>
+                            </div>
+                        </div>
+
+                        <div class="card">
+                            <div class="card-header">
+                                <span class="card-title">Proprietários</span>
+                                <span class="card-icon">👥</span>
+                            </div>
+                            <div class="card-value">3</div>
+                            <div class="card-description">Pessoas e jurídicas registradas</div>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 100%;"></div>
+                            </div>
+                        </div>
+
+                        <div class="card">
+                            <div class="card-header">
+                                <span class="card-title">Documentos</span>
+                                <span class="card-icon">📄</span>
+                            </div>
+                            <div class="card-value">8/12</div>
+                            <div class="card-description">Matrículas e certidões validadas</div>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 67%;"></div>
+                            </div>
+                        </div>
+
+                        <div class="card">
+                            <div class="card-header">
+                                <span class="card-title">Regularidade</span>
+                                <span class="card-icon">✅</span>
+                            </div>
+                            <div class="card-value">92%</div>
+                            <div class="card-description">Dados validados e atualizados</div>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 92%;"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <h3 style="color: var(--accent); margin-bottom: 20px;">Últimas Atividades</h3>
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Data</th>
+                                    <th>Operação</th>
+                                    <th>Usuário</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>14/04/2026</td>
+                                    <td>Atualização talhão T-001</td>
+                                    <td>João Silva</td>
+                                    <td><span class="badge badge-success">Concluído</span></td>
+                                </tr>
+                                <tr>
+                                    <td>12/04/2026</td>
+                                    <td>Cadastro gleba G-002</td>
+                                    <td>Maria Santos</td>
+                                    <td><span class="badge badge-success">Concluído</span></td>
+                                </tr>
+                                <tr>
+                                    <td>10/04/2026</td>
+                                    <td>Validação matrícula</td>
+                                    <td>Carlos Costa</td>
+                                    <td><span class="badge badge-warning">Pendente</span></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <!-- CADASTROS SECTION -->
+                <section id="cadastros" class="section">
+                    <div class="section-header">
+                        <h2 class="section-title">Cadastros</h2>
+                        <p class="section-subtitle">Registro e gestão de dados principais do sistema</p>
+                    </div>
+
+                    <div class="grid">
+                        <div class="card" onclick="showToast('Abrindo formulário de cadastro de proprietários')">
+                            <div class="card-header">
+                                <span class="card-title">Proprietários</span>
+                                <span class="card-icon">👤</span>
+                            </div>
+                            <div class="card-value">3</div>
+                            <div class="card-description">Clique para gerenciar proprietários</div>
+                        </div>
+
+                        <div class="card" onclick="showToast('Abrindo formulário de cadastro de unidades')">
+                            <div class="card-header">
+                                <span class="card-title">Unidades Agrícolas</span>
+                                <span class="card-icon">🏠</span>
+                            </div>
+                            <div class="card-value">2</div>
+                            <div class="card-description">Clique para gerenciar fazendas</div>
+                        </div>
+
+                        <div class="card" onclick="showToast('Abrindo formulário de cadastro de glebas')">
+                            <div class="card-header">
+                                <span class="card-title">Glebas</span>
+                                <span class="card-icon">🗺️</span>
+                            </div>
+                            <div class="card-value">4</div>
+                            <div class="card-description">Clique para gerenciar glebas</div>
+                        </div>
+
+                        <div class="card" onclick="showToast('Abrindo formulário de cadastro de talhões')">
+                            <div class="card-header">
+                                <span class="card-title">Talhões</span>
+                                <span class="card-icon">🌽</span>
+                            </div>
+                            <div class="card-value">12</div>
+                            <div class="card-description">Clique para gerenciar talhões</div>
+                        </div>
+
+                        <div class="card" onclick="showToast('Abrindo formulário de cadastro de documentos')">
+                            <div class="card-header">
+                                <span class="card-title">Documentos</span>
+                                <span class="card-icon">📄</span>
+                            </div>
+                            <div class="card-value">8</div>
+                            <div class="card-description">Clique para gerenciar ativos</div>
+                        </div>
+
+                        <div class="card" onclick="showToast('Abrindo gerenciador de relacionamentos')">
+                            <div class="card-header">
+                                <span class="card-title">Relacionamentos</span>
+                                <span class="card-icon">🔗</span>
+                            </div>
+                            <div class="card-value">18</div>
+                            <div class="card-description">Clique para gerenciar X-Refs</div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- AGENTES DE IA SECTION -->
+                <section id="agentes" class="section">
+                    <div class="section-header">
+                        <h2 class="section-title">Agentes de IA</h2>
+                        <p class="section-subtitle">Inteligência artificial para processamento e automação</p>
+                    </div>
+
+                    <div class="grid">
+                        <div class="card" onclick="showToast('🤖 Agente de Validação iniciando...')">
+                            <div class="card-header">
+                                <span class="card-title">Validador Territorial</span>
+                                <span class="card-icon">🤖</span>
+                            </div>
+                            <div class="card-value">Ativo</div>
+                            <div class="card-description">Valida integridade de dados geográficos</div>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 85%;"></div>
+                            </div>
+                        </div>
+
+                        <div class="card" onclick="showToast('📋 Agente de Documentação processando...')">
+                            <div class="card-header">
+                                <span class="card-title">Processador de Documentos</span>
+                                <span class="card-icon">📋</span>
+                            </div>
+                            <div class="card-value">Ativo</div>
+                            <div class="card-description">Extrai e classifica documentos</div>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 72%;"></div>
+                            </div>
+                        </div>
+
+                        <div class="card" onclick="showToast('🔗 Agente de Relacionamentos sincronizando...')">
+                            <div class="card-header">
+                                <span class="card-title">Agente de Relacionamentos</span>
+                                <span class="card-icon">🔗</span>
+                            </div>
+                            <div class="card-value">Ativo</div>
+                            <div class="card-description">Mantém referências cruzadas</div>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 100%;"></div>
+                            </div>
+                        </div>
+
+                        <div class="card" onclick="showToast('🌾 Agente de Culturas analisando...')">
+                            <div class="card-header">
+                                <span class="card-title">Analisador de Culturas</span>
+                                <span class="card-icon">🌾</span>
+                            </div>
+                            <div class="card-value">Ativo</div>
+                            <div class="card-description">Monitora safras e produção</div>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 68%;"></div>
+                            </div>
+                        </div>
+
+                        <div class="card" onclick="showToast('📊 Agente de Relatórios gerando...')">
+                            <div class="card-header">
+                                <span class="card-title">Gerador de Relatórios</span>
+                                <span class="card-icon">📊</span>
+                            </div>
+                            <div class="card-value">Ativo</div>
+                            <div class="card-description">Automatiza geração de relatórios</div>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 91%;"></div>
+                            </div>
+                        </div>
+
+                        <div class="card" onclick="showToast('🔐 Agente de Segurança verificando...')">
+                            <div class="card-header">
+                                <span class="card-title">Agente de Segurança</span>
+                                <span class="card-icon">🔐</span>
+                            </div>
+                            <div class="card-value">Ativo</div>
+                            <div class="card-description">Monitora integridade e conformidade</div>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 100%;"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <h3 style="color: var(--accent); margin-bottom: 20px;">Status dos Agentes</h3>
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Agente</th>
+                                    <th>Última Execução</th>
+                                    <th>Próxima Execução</th>
+                                    <th>Registros Processados</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Validador Territorial</td>
+                                    <td>14/04/2026 10:30</td>
+                                    <td>14/04/2026 11:00</td>
+                                    <td>47</td>
+                                    <td><span class="badge badge-success">Operacional</span></td>
+                                </tr>
+                                <tr>
+                                    <td>Processador de Documentos</td>
+                                    <td>14/04/2026 09:45</td>
+                                    <td>14/04/2026 10:45</td>
+                                    <td>23</td>
+                                    <td><span class="badge badge-success">Operacional</span></td>
+                                </tr>
+                                <tr>
+                                    <td>Gerador de Relatórios</td>
+                                    <td>13/04/2026 20:00</td>
+                                    <td>14/04/2026 08:00</td>
+                                    <td>156</td>
+                                    <td><span class="badge badge-success">Operacional</span></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <!-- GERENCIAMENTO SECTION -->
+                <section id="gerenciamento" class="section">
+                    <div class="section-header">
+                        <h2 class="section-title">Gerenciamento</h2>
+                        <p class="section-subtitle">Administração do sistema e controle de usuários</p>
+                    </div>
+
+                    <div class="grid">
+                        <div class="card" onclick="showToast('👥 Abrindo gerenciador de usuários')">
+                            <div class="card-header">
+                                <span class="card-title">Usuários</span>
+                                <span class="card-icon">👥</span>
+                            </div>
+                            <div class="card-value">12</div>
+                            <div class="card-description">Usuários ativos no sistema</div>
+                        </div>
+
+                        <div class="card" onclick="showToast('🔐 Abrindo gerenciador de permissões')">
+                            <div class="card-header">
+                                <span class="card-title">Permissões</span>
+                                <span class="card-icon">🔐</span>
+                            </div>
+                            <div class="card-value">8</div>
+                            <div class="card-description">Grupos de acesso configurados</div>
+                        </div>
+
+                        <div class="card" onclick="showToast('📋 Abrindo gerenciador de projetos')">
+                            <div class="card-header">
+                                <span class="card-title">Projetos</span>
+                                <span class="card-icon">📋</span>
+                            </div>
+                            <div class="card-value">5</div>
+                            <div class="card-description">Projetos em andamento</div>
+                        </div>
+
+                        <div class="card" onclick="showToast('⚙️ Abrindo configurações gerais')">
+                            <div class="card-header">
+                                <span class="card-title">Configurações</span>
+                                <span class="card-icon">⚙️</span>
+                            </div>
+                            <div class="card-value">3</div>
+                            <div class="card-description">Parâmetros do sistema</div>
+                        </div>
+
+                        <div class="card" onclick="showToast('📊 Visualizando logs do sistema')">
+                            <div class="card-header">
+                                <span class="card-title">Auditoria</span>
+                                <span class="card-icon">📊</span>
+                            </div>
+                            <div class="card-value">1.247</div>
+                            <div class="card-description">Eventos registrados este mês</div>
+                        </div>
+
+                        <div class="card" onclick="showToast('🔄 Iniciando sincronização do sistema')">
+                            <div class="card-header">
+                                <span class="card-title">Sincronização</span>
+                                <span class="card-icon">🔄</span>
+                            </div>
+                            <div class="card-value">100%</div>
+                            <div class="card-description">Sistema sincronizado</div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- FRACTAIS SECTION -->
+                <section id="fractais" class="section">
+                    <div class="section-header">
+                        <h2 class="section-title">Fractais</h2>
+                        <p class="section-subtitle">Microunidades inteligentes especializadas</p>
+                    </div>
+
+                    <div class="grid">
+                        <div class="card" onclick="showToast('💰 Gestor de Participação ativado')">
+                            <div class="card-header">
+                                <span class="card-title">Gestor de Participação</span>
+                                <span class="card-icon">💰</span>
+                            </div>
+                            <div class="card-value">Holding</div>
+                            <div class="card-description">Gerencia sociedades e participações</div>
+                        </div>
+
+                        <div class="card" onclick="showToast('✅ Monitor de Regularidade ativado')">
+                            <div class="card-header">
+                                <span class="card-title">Monitor Fiscal</span>
+                                <span class="card-icon">✅</span>
+                            </div>
+                            <div class="card-value">92%</div>
+                            <div class="card-description">Monitora regularidade fiscal</div>
+                        </div>
+
+                        <div class="card" onclick="showToast('🗺️ Cartógrafo Digital ativado')">
+                            <div class="card-header">
+                                <span class="card-title">Cartógrafo Digital</span>
+                                <span class="card-icon">🗺️</span>
+                            </div>
+                            <div class="card-value">1.245</div>
+                            <div class="card-description">Mapeia propriedades com precisão</div>
+                        </div>
+
+                        <div class="card" onclick="showToast('💼 Supervisor de Centros ativado')">
+                            <div class="card-header">
+                                <span class="card-title">Supervisor de Centros</span>
+                                <span class="card-icon">💼</span>
+                            </div>
+                            <div class="card-value">6</div>
+                            <div class="card-description">Supervisiona centros de lucro</div>
+                        </div>
+
+                        <div class="card" onclick="showToast('📍 Gestor de Endereçamento ativado')">
+                            <div class="card-header">
+                                <span class="card-title">Gestor Geovirtual</span>
+                                <span class="card-icon">📍</span>
+                            </div>
+                            <div class="card-value">Plus Codes</div>
+                            <div class="card-description">Endereçamento geográfico avançado</div>
+                        </div>
+
+                        <div class="card" onclick="showToast('📚 Bibliotecário de Matrículas ativado')">
+                            <div class="card-header">
+                                <span class="card-title">Bibliotecário</span>
+                                <span class="card-icon">📚</span>
+                            </div>
+                            <div class="card-value">8</div>
+                            <div class="card-description">Gerencia matrículas e ônus</div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- FERRAMENTAS SECTION -->
+                <section id="ferramentas" class="section">
+                    <div class="section-header">
+                        <h2 class="section-title">Ferramentas</h2>
+                        <p class="section-subtitle">Utilitários e funcionalidades especializadas</p>
+                    </div>
+
+                    <div class="grid">
+                        <div class="card" onclick="showToast('🔧 Abrindo gerador de UUIDs')">
+                            <div class="card-header">
+                                <span class="card-title">Gerador de UUID</span>
+                                <span class="card-icon">🔧</span>
+                            </div>
+                            <div class="card-value">Ativo</div>
+                            <div class="card-description">Gera IDs únicos e imutáveis</div>
+                        </div>
+
+                        <div class="card" onclick="showToast('🔍 Abrindo validador de dados')">
+                            <div class="card-header">
+                                <span class="card-title">Validador de Dados</span>
+                                <span class="card-icon">🔍</span>
+                            </div>
+                            <div class="card-value">92%</div>
+                            <div class="card-description">Valida integridade dos registros</div>
+                        </div>
+
+                        <div class="card" onclick="showToast('📊 Abrindo conversor de formatos')">
+                            <div class="card-header">
+                                <span class="card-title">Conversor de Dados</span>
+                                <span class="card-icon">📊</span>
+                            </div>
+                            <div class="card-value">CSV, JSON</div>
+                            <div class="card-description">Converte entre múltiplos formatos</div>
+                        </div>
+
+                        <div class="card" onclick="showToast('🌐 Abrindo integrador de APIs')">
+                            <div class="card-header">
+                                <span class="card-title">Integrador de APIs</span>
+                                <span class="card-icon">🌐</span>
+                            </div>
+                            <div class="card-value">6</div>
+                            <div class="card-description">Conectores com sistemas externos</div>
+                        </div>
+
+                        <div class="card" onclick="showToast('📞 Abrindo gerenciador de webhooks')">
+                            <div class="card-header">
+                                <span class="card-title">Webhooks</span>
+                                <span class="card-icon">📞</span>
+                            </div>
+                            <div class="card-value">12</div>
+                            <div class="card-description">Notificações em tempo real</div>
+                        </div>
+
+                        <div class="card" onclick="showToast('⚡ Abrindo otimizador de performance')">
+                            <div class="card-header">
+                                <span class="card-title">Otimizador</span>
+                                <span class="card-icon">⚡</span>
+                            </div>
+                            <div class="card-value">98%</div>
+                            <div class="card-description">Performance do sistema</div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- RELATÓRIOS SECTION -->
+                <section id="relatorios" class="section">
+                    <div class="section-header">
+                        <h2 class="section-title">Relatórios</h2>
+                        <p class="section-subtitle">Análises, gráficos e exportação de dados</p>
+                    </div>
+
+                    <div class="grid">
+                        <div class="card" onclick="showToast('📈 Gerando relatório de unidades agrícolas')">
+                            <div class="card-header">
+                                <span class="card-title">Unidades Agrícolas</span>
+                                <span class="card-icon">📈</span>
+                            </div>
+                            <div class="card-value">2</div>
+                            <div class="card-description">Clique para gerar relatório completo</div>
+                        </div>
+
+                        <div class="card" onclick="showToast('🌾 Gerando relatório de talhões')">
+                            <div class="card-header">
+                                <span class="card-title">Análise de Talhões</span>
+                                <span class="card-icon">🌾</span>
+                            </div>
+                            <div class="card-value">12</div>
+                            <div class="card-description">Dados de produção e culturas</div>
+                        </div>
+
+                        <div class="card" onclick="showToast('👤 Gerando relatório de proprietários')">
+                            <div class="card-header">
+                                <span class="card-title">Proprietários</span>
+                                <span class="card-icon">👤</span>
+                            </div>
+                            <div class="card-value">3</div>
+                            <div class="card-description">Perfil e documentação</div>
+                        </div>
+
+                        <div class="card" onclick="showToast('📋 Gerando relatório de documentos')">
+                            <div class="card-header">
+                                <span class="card-title">Documentação</span>
+                                <span class="card-icon">📋</span>
+                            </div>
+                            <div class="card-value">8/12</div>
+                            <div class="card-description">Status de matrículas e certidões</div>
+                        </div>
+
+                        <div class="card" onclick="showToast('🔗 Gerando relatório de relacionamentos')">
+                            <div class="card-header">
+                                <span class="card-title">Relacionamentos</span>
+                                <span class="card-icon">🔗</span>
+                            </div>
+                            <div class="card-value">18</div>
+                            <div class="card-description">Mapeamento de entidades</div>
+                        </div>
+
+                        <div class="card" onclick="showToast('📊 Gerando relatório de compliance')">
+                            <div class="card-header">
+                                <span class="card-title">Compliance</span>
+                                <span class="card-icon">📊</span>
+                            </div>
+                            <div class="card-value">92%</div>
+                            <div class="card-description">Regularidade e conformidade</div>
+                        </div>
+                    </div>
+
+                    <h3 style="color: var(--accent); margin-bottom: 20px;">Relatórios Recentes</h3>
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Relatório</th>
+                                    <th>Gerado em</th>
+                                    <th>Formato</th>
+                                    <th>Registros</th>
+                                    <th>Ação</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Análise Mensal de Unidades</td>
+                                    <td>14/04/2026 10:15</td>
+                                    <td>PDF</td>
+                                    <td>2</td>
+                                    <td><button class="btn btn-secondary btn-small" onclick="showToast('Baixando PDF...')">Download</button></td>
+                                </tr>
+                                <tr>
+                                    <td>Status de Talhões</td>
+                                    <td>13/04/2026 15:30</td>
+                                    <td>Excel</td>
+                                    <td>12</td>
+                                    <td><button class="btn btn-secondary btn-small" onclick="showToast('Baixando Excel...')">Download</button></td>
+                                </tr>
+                                <tr>
+                                    <td>Compliance Fundiário</td>
+                                    <td>12/04/2026 09:00</td>
+                                    <td>PDF</td>
+                                    <td>8</td>
+                                    <td><button class="btn btn-secondary btn-small" onclick="showToast('Baixando PDF...')">Download</button></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <!-- BANCO DE DADOS SECTION -->
+                <section id="banco-dados" class="section">
+                    <div class="section-header">
+                        <h2 class="section-title">Banco de Dados</h2>
+                        <p class="section-subtitle">Visualização e gerenciamento de dados estruturados</p>
+                    </div>
+
+                    <div class="grid">
+                        <div class="card" onclick="showToast('👤 Abrindo tabela de proprietários')">
+                            <div class="card-header">
+                                <span class="card-title">Proprietários</span>
+                                <span class="card-icon">👤</span>
+                            </div>
+                            <div class="card-value">3</div>
+                            <div class="card-description">Registros de pessoas e jurídicas</div>
+                        </div>
+
+                        <div class="card" onclick="showToast('🏠 Abrindo tabela de unidades')">
+                            <div class="card-header">
+                                <span class="card-title">Unidades Agrícolas</span>
+                                <span class="card-icon">🏠</span>
+                            </div>
+                            <div class="card-value">2</div>
+                            <div class="card-description">Fazendas e propriedades</div>
+                        </div>
+
+                        <div class="card" onclick="showToast('🗺️ Abrindo tabela de glebas')">
+                            <div class="card-header">
+                                <span class="card-title">Glebas</span>
+                                <span class="card-icon">🗺️</span>
+                            </div>
+                            <div class="card-value">4</div>
+                            <div class="card-description">Divisões territoriais</div>
+                        </div>
+
+                        <div class="card" onclick="showToast('🌽 Abrindo tabela de talhões')">
+                            <div class="card-header">
+                                <span class="card-title">Talhões</span>
+                                <span class="card-icon">🌽</span>
+                            </div>
+                            <div class="card-value">12</div>
+                            <div class="card-description">Células de plantio</div>
+                        </div>
+
+                        <div class="card" onclick="showToast('📋 Abrindo tabela de documentos')">
+                            <div class="card-header">
+                                <span class="card-title">Documentos</span>
+                                <span class="card-icon">📋</span>
+                            </div>
+                            <div class="card-value">8</div>
+                            <div class="card-description">Ativos imobiliários</div>
+                        </div>
+
+                        <div class="card" onclick="showToast('🔗 Abrindo tabela de relacionamentos')">
+                            <div class="card-header">
+                                <span class="card-title">Relacionamentos</span>
+                                <span class="card-icon">🔗</span>
+                            </div>
+                            <div class="card-value">18</div>
+                            <div class="card-description">Referências cruzadas (X-Ref)</div>
+                        </div>
+                    </div>
+
+                    <h3 style="color: var(--accent); margin-bottom: 20px;">Estrutura do Banco de Dados</h3>
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Tabela</th>
+                                    <th>Registros</th>
+                                    <th>Tamanho</th>
+                                    <th>Última Atualização</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>tbl_proprietarios</td>
+                                    <td>3</td>
+                                    <td>12 KB</td>
+                                    <td>14/04/2026</td>
+                                    <td><span class="badge badge-success">Operacional</span></td>
+                                </tr>
+                                <tr>
+                                    <td>tbl_unidades_agricolas</td>
+                                    <td>2</td>
+                                    <td>8 KB</td>
+                                    <td>12/04/2026</td>
+                                    <td><span class="badge badge-success">Operacional</span></td>
+                                </tr>
+                                <tr>
+                                    <td>tbl_glebas</td>
+                                    <td>4</td>
+                                    <td>15 KB</td>
+                                    <td>10/04/2026</td>
+                                    <td><span class="badge badge-success">Operacional</span></td>
+                                </tr>
+                                <tr>
+                                    <td>tbl_talhoes</td>
+                                    <td>12</td>
+                                    <td>45 KB</td>
+                                    <td>14/04/2026</td>
+                                    <td><span class="badge badge-success">Operacional</span></td>
+                                </tr>
+                                <tr>
+                                    <td>tbl_documentos</td>
+                                    <td>8</td>
+                                    <td>28 KB</td>
+                                    <td>13/04/2026</td>
+                                    <td><span class="badge badge-success">Operacional</span></td>
+                                </tr>
+                                <tr>
+                                    <td>tbl_relacionamentos</td>
+                                    <td>18</td>
+                                    <td>32 KB</td>
+                                    <td>14/04/2026</td>
+                                    <td><span class="badge badge-success">Operacional</span></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <!-- SUBMÓDULOS SECTIONS -->
+                <section id="sub-proprietarios" class="section">
+                    <div class="section-header">
+                        <h2 class="section-title">Submódulo: Proprietários</h2>
+                        <p class="section-subtitle">Gestão de pessoas físicas e jurídicas</p>
+                    </div>
+
+                    <button class="btn btn-primary" onclick="showToast('Abrindo formulário de novo proprietário')">+ Novo Proprietário</button>
+                    <br><br>
+
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Nome/Razão Social</th>
+                                    <th>CPF/CNPJ</th>
+                                    <th>Tipo</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Roberto Silva de Oliveira</td>
+                                    <td>123.456.789-10</td>
+                                    <td>Pessoa Física</td>
+                                    <td><span class="badge badge-success">Regular</span></td>
+                                </tr>
+                                <tr>
+                                    <td>Agroinvestimentos Brasil S/A</td>
+                                    <td>98.765.432/0001-00</td>
+                                    <td>Pessoa Jurídica</td>
+                                    <td><span class="badge badge-success">Regular</span></td>
+                                </tr>
+                                <tr>
+                                    <td>Fazenda Santa Maria Ltda</td>
+                                    <td>55.555.555/0001-99</td>
+                                    <td>Pessoa Jurídica</td>
+                                    <td><span class="badge badge-warning">Incompleto</span></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <section id="sub-unidades" class="section">
+                    <div class="section-header">
+                        <h2 class="section-title">Submódulo: Unidades Agrícolas</h2>
+                        <p class="section-subtitle">Cadastro de fazendas e propriedades</p>
+                    </div>
+
+                    <button class="btn btn-primary" onclick="showToast('Abrindo formulário de nova unidade')">+ Nova Unidade</button>
+                    <br><br>
+
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Nome</th>
+                                    <th>Proprietário</th>
+                                    <th>Município</th>
+                                    <th>Área (ha)</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Fazenda Machadinho</td>
+                                    <td>Roberto Silva</td>
+                                    <td>Ribeirão Preto</td>
+                                    <td>652 ha</td>
+                                    <td><span class="badge badge-success">Validada</span></td>
+                                </tr>
+                                <tr>
+                                    <td>Propriedade São João</td>
+                                    <td>Agroinvestimentos Brasil S/A</td>
+                                    <td>Goiás</td>
+                                    <td>593 ha</td>
+                                    <td><span class="badge badge-success">Validada</span></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <section id="sub-glebas" class="section">
+                    <div class="section-header">
+                        <h2 class="section-title">Submódulo: Glebas e Setores</h2>
+                        <p class="section-subtitle">Divisão territorial interna das unidades</p>
+                    </div>
+
+                    <button class="btn btn-primary" onclick="showToast('Abrindo formulário de nova gleba')">+ Nova Gleba</button>
+                    <br><br>
+
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Código</th>
+                                    <th>Nome</th>
+                                    <th>Unidade</th>
+                                    <th>Área (ha)</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>G-001</td>
+                                    <td>Gleba Norte</td>
+                                    <td>Fazenda Machadinho</td>
+                                    <td>326 ha</td>
+                                    <td><span class="badge badge-success">Ativa</span></td>
+                                </tr>
+                                <tr>
+                                    <td>G-002</td>
+                                    <td>Gleba Sul</td>
+                                    <td>Fazenda Machadinho</td>
+                                    <td>326 ha</td>
+                                    <td><span class="badge badge-success">Ativa</span></td>
+                                </tr>
+                                <tr>
+                                    <td>G-003</td>
+                                    <td>Setor Administrativo</td>
+                                    <td>Propriedade São João</td>
+                                    <td>145 ha</td>
+                                    <td><span class="badge badge-success">Ativa</span></td>
+                                </tr>
+                                <tr>
+                                    <td>G-004</td>
+                                    <td>Setor Produtivo</td>
+                                    <td>Propriedade São João</td>
+                                    <td>448 ha</td>
+                                    <td><span class="badge badge-success">Ativa</span></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <section id="sub-talhoes" class="section">
+                    <div class="section-header">
+                        <h2 class="section-title">Submódulo: Talhões</h2>
+                        <p class="section-subtitle">Células básicas de plantio com identificação única</p>
+                    </div>
+
+                    <button class="btn btn-primary" onclick="showToast('Abrindo formulário de novo talhão')">+ Novo Talhão</button>
+                    <br><br>
+
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Código</th>
+                                    <th>Gleba</th>
+                                    <th>Cultura</th>
+                                    <th>Área Útil (ha)</th>
+                                    <th>Safra</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>T-001</td>
+                                    <td>G-001</td>
+                                    <td>Soja</td>
+                                    <td>85 ha</td>
+                                    <td>2025/2026</td>
+                                </tr>
+                                <tr>
+                                    <td>T-002</td>
+                                    <td>G-001</td>
+                                    <td>Milho</td>
+                                    <td>92 ha</td>
+                                    <td>2025/2026</td>
+                                </tr>
+                                <tr>
+                                    <td>T-003</td>
+                                    <td>G-002</td>
+                                    <td>Cana-de-açúcar</td>
+                                    <td>110 ha</td>
+                                    <td>2025/2026</td>
+                                </tr>
+                                <tr>
+                                    <td>T-004</td>
+                                    <td>G-002</td>
+                                    <td>Pousio</td>
+                                    <td>124 ha</td>
+                                    <td>2025/2026</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <section id="sub-ativos" class="section">
+                    <div class="section-header">
+                        <h2 class="section-title">Submódulo: Ativos Imobiliários</h2>
+                        <p class="section-subtitle">Documentação fundiária e certidões</p>
+                    </div>
+
+                    <button class="btn btn-primary" onclick="showToast('Abrindo formulário de novo ativo')">+ Novo Ativo</button>
+                    <br><br>
+
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Tipo</th>
+                                    <th>Número</th>
+                                    <th>Imóvel</th>
+                                    <th>Validade</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Matrícula</td>
+                                    <td>234.567-X</td>
+                                    <td>Fazenda Machadinho</td>
+                                    <td>Indefinida</td>
+                                    <td><span class="badge badge-success">Validado</span></td>
+                                </tr>
+                                <tr>
+                                    <td>CCIR</td>
+                                    <td>2026-001234</td>
+                                    <td>Fazenda Machadinho</td>
+                                    <td>31/12/2026</td>
+                                    <td><span class="badge badge-success">Validado</span></td>
+                                </tr>
+                                <tr>
+                                    <td>ITR</td>
+                                    <td>2026-567890</td>
+                                    <td>Propriedade São João</td>
+                                    <td>30/04/2026</td>
+                                    <td><span class="badge badge-warning">Vencendo</span></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <section id="sub-chaves" class="section">
+                    <div class="section-header">
+                        <h2 class="section-title">Submódulo: Chaves de Relacionamento</h2>
+                        <p class="section-subtitle">Central de referências cruzadas entre entidades</p>
+                    </div>
+
+                    <div class="grid">
+                        <div class="card">
+                            <div class="card-header">
+                                <span class="card-title">Relacionamentos</span>
+                                <span class="card-icon">🔗</span>
+                            </div>
+                            <div class="card-value">18</div>
+                            <div class="card-description">Conexões entre propriedades</div>
+                        </div>
+
+                        <div class="card">
+                            <div class="card-header">
+                                <span class="card-title">Integridade</span>
+                                <span class="card-icon">✓</span>
+                            </div>
+                            <div class="card-value">100%</div>
+                            <div class="card-description">Validação de referências</div>
+                        </div>
+                    </div>
+
+                    <h3 style="color: var(--accent); margin-bottom: 20px;">Mapeamento de Relacionamentos</h3>
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Entidade 1</th>
+                                    <th>Relação</th>
+                                    <th>Entidade 2</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Roberto Silva</td>
+                                    <td>Proprietário de</td>
+                                    <td>Fazenda Machadinho</td>
+                                    <td><span class="badge badge-success">Ativo</span></td>
+                                </tr>
+                                <tr>
+                                    <td>Fazenda Machadinho</td>
+                                    <td>Contém</td>
+                                    <td>Gleba Norte</td>
+                                    <td><span class="badge badge-success">Ativo</span></td>
+                                </tr>
+                                <tr>
+                                    <td>Gleba Norte</td>
+                                    <td>Contém</td>
+                                    <td>T-001</td>
+                                    <td><span class="badge badge-success">Ativo</span></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </div>
+
+    <!-- PROFILE DRAWER -->
+    <div class="drawer" id="profileDrawer">
+        <div class="drawer-header">
+            <span class="drawer-title">Meu Perfil</span>
+            <button class="drawer-close" onclick="toggleProfile()">✕</button>
+        </div>
+        <div class="drawer-content">
+            <div class="profile-section">
+                <div class="profile-avatar-large">JP</div>
+                <div class="profile-name">João Pedro Silva</div>
+                <div class="profile-role">Gestor Agrícola Senior</div>
+            </div>
+
+            <div style="background: rgba(0, 255, 136, 0.05); padding: 15px; border-radius: 8px; border: 1px solid var(--border);">
+                <div style="margin-bottom: 15px;">
+                    <div style="font-weight: 600; margin-bottom: 5px;">Experiência (XP)</div>
+                    <div class="stat-row">
+                        <span class="stat-label">Total XP</span>
+                        <span class="stat-value">1.500 XP</span>
+                    </div>
+                    <div class="stat-row">
+                        <span class="stat-label">Nível Atual</span>
+                        <span class="stat-value">Nível 8</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- NOTIFICATIONS DRAWER -->
+    <div class="drawer" id="notificationsDrawer">
+        <div class="drawer-header">
+            <span class="drawer-title">Notificações</span>
+            <button class="drawer-close" onclick="toggleNotifications()">✕</button>
+        </div>
+        <div class="drawer-content" id="notificationsContent">
+            <div class="notification-item">
+                <div class="notification-title">✅ Sistema Operacional</div>
+                <div style="font-size: 13px; margin-bottom: 5px;">Todos os módulos estão funcionando normalmente</div>
+                <div class="notification-time">Agora</div>
+            </div>
+
+            <div class="notification-item">
+                <div class="notification-title">📋 Dados Sincronizados</div>
+                <div style="font-size: 13px; margin-bottom: 5px;">Sincronização com banco de dados concluída</div>
+                <div class="notification-time">Há 5 minutos</div>
+            </div>
+
+            <div class="notification-item">
+                <div class="notification-title">🤖 Agentes Ativos</div>
+                <div style="font-size: 13px; margin-bottom: 5px;">Todos os 6 agentes de IA estão operacionais</div>
+                <div class="notification-time">Há 30 minutos</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Toggle Submódulos
+        function toggleSubmodulos() {
+            const container = document.getElementById('submodulosContainer');
+            const arrow = document.getElementById('arrow');
+
+            container.classList.toggle('active');
+            arrow.classList.toggle('rotated');
+        }
+
+        // Switch Section
+        function switchSection(sectionId) {
+            // Hide all sections
+            document.querySelectorAll('.section').forEach(section => {
+                section.classList.remove('active');
+            });
+
+            // Show selected section
+            document.getElementById(sectionId).classList.add('active');
+
+            // Update header title
+            const titles = {
+                'dashboards': 'Dashboards',
+                'cadastros': 'Cadastros',
+                'agentes': 'Agentes de IA',
+                'gerenciamento': 'Gerenciamento',
+                'fractais': 'Fractais',
+                'ferramentas': 'Ferramentas',
+                'relatorios': 'Relatórios',
+                'banco-dados': 'Banco de Dados',
+                'sub-proprietarios': 'Proprietários',
+                'sub-unidades': 'Unidades Agrícolas',
+                'sub-glebas': 'Glebas e Setores',
+                'sub-talhoes': 'Talhões',
+                'sub-ativos': 'Ativos Imobiliários',
+                'sub-chaves': 'Chaves de Relacionamento'
+            };
+
+            document.getElementById('header-title').textContent = titles[sectionId] || 'Dashboard';
+
+            // Show/hide submodule filter
+            const filterContainer = document.getElementById('submoduleFilter');
+            if (sectionId === 'dashboards') {
+                filterContainer.classList.add('active');
+            } else {
+                filterContainer.classList.remove('active');
+                document.getElementById('filterDropdown').classList.remove('active');
+            }
+
+            // Update active menu item
+            document.querySelectorAll('.menu-link').forEach(link => {
+                link.classList.remove('active');
+            });
+            event.target.closest('.menu-link')?.classList.add('active');
+
+            // Close sidebar on mobile
+            closeSidebar();
+        }
+
+        // Toggle Sidebar
+        function toggleSidebar() {
+            document.getElementById('sidebar').classList.toggle('active');
+        }
+
+        function closeSidebar() {
+            if (window.innerWidth <= 768) {
+                document.getElementById('sidebar').classList.remove('active');
+            }
+        }
+
+        // Toggle Drawers
+        function toggleProfile() {
+            document.getElementById('profileDrawer').classList.toggle('active');
+            document.getElementById('notificationsDrawer').classList.remove('active');
+        }
+
+        function toggleNotifications() {
+            document.getElementById('notificationsDrawer').classList.toggle('active');
+            document.getElementById('profileDrawer').classList.remove('active');
+        }
+
+        // Toast Notification
+        function showToast(message) {
+            const toast = document.createElement('div');
+            toast.className = 'toast';
+            toast.textContent = message;
+            document.body.appendChild(toast);
+
+            setTimeout(() => {
+                toast.classList.add('remove');
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
+        }
+
+        // Theme Toggle
+        function toggleTheme() {
+            showToast('🌙 Tema alternado com sucesso');
+        }
+
+        // Filter Dropdown Toggle
+        function toggleFilterDropdown() {
+            const dropdown = document.getElementById('filterDropdown');
+            dropdown.classList.toggle('active');
+        }
+
+        // Select Submodule
+        function selectSubmodule(submoduleId, element) {
+            // Get submodule name from the element
+            const submoduleName = element.textContent.trim();
+
+            // Update button text
+            document.getElementById('currentSubmodule').textContent = submoduleName.substring(2); // Remove emoji
+
+            // Update active filter item
+            document.querySelectorAll('.filter-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            element.classList.add('active');
+
+            // Switch to the submodule section
+            switchSection(submoduleId);
+
+            // Close dropdown
+            document.getElementById('filterDropdown').classList.remove('active');
+        }
+
+        // Close drawers on outside click
+        document.addEventListener('click', (e) => {
+            const profileDrawer = document.getElementById('profileDrawer');
+            const notificationsDrawer = document.getElementById('notificationsDrawer');
+            const filterContainer = document.getElementById('submoduleFilter');
+
+            if (!e.target.closest('.btn-icon') && !e.target.closest('.drawer')) {
+                profileDrawer.classList.remove('active');
+                notificationsDrawer.classList.remove('active');
+            }
+
+            // Close filter dropdown when clicking outside
+            if (!filterContainer.contains(e.target)) {
+                document.getElementById('filterDropdown').classList.remove('active');
+            }
+        });
+
+        // Responsive behavior
+        window.addEventListener('resize', () => {
+            if (window.innerWidth > 768) {
+                document.getElementById('sidebar').classList.remove('active');
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,10 @@
+{
+  "nome_modulo": "{{NOME_MODULO}}",
+  "descricao": "{{DESCRICAO_MODULO}}",
+  "status": "template",
+  "versao": "0.1.0",
+  "plug_and_play": true,
+  "camadas": ["entrada", "dna_processo", "saida", "biblioteca", "fractais", "supabase", "api", "dashboards", "agentes"],
+  "depende_de": ["Mod_Gestao_Genius_Hub", "Mod_Gestao_Dados_DataLake"],
+  "integra_com": ["Mod_Gestao_Integracoes_APIs", "Mod_Gestao_Dashboards_BI"]
+}

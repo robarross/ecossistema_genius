@@ -1,0 +1,3 @@
+lote_importacao,linha_origem,codigo_unidade,nome_titular,documento_titular,tipo_titular,tipo_vinculo,percentual_participacao,telefone,email,observacoes
+lote_submodulos_base_001,1,PA-IMP-0002,Produtor Completo,00000000000272,Pessoa juridica,Proprietario,100,+55 92 99999-2002,completo@genius.local,Titular importado por planilha
+lote_submodulos_base_001,2,PA-IMP-0003,Produtor Modelo,00000000000353,Pessoa fisica,Possuidor,100,+55 92 99999-2003,modelo@genius.local,Titular do sitio importado

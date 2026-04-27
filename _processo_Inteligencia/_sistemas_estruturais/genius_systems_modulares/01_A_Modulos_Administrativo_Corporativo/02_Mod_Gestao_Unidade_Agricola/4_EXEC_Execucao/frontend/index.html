@@ -1,0 +1,673 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Gestão da Unidade Agrícola</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <aside class="sidebar">
+      <div class="brand">
+        <span class="brand-mark">G</span>
+        <div>
+          <strong>Genius</strong>
+          <small>Unidade Agrícola</small>
+        </div>
+        <span id="brandProductContext" class="brand-product-context">Meu Submódulo</span>
+      </div>
+      <button class="nav-item workspace-entry" data-view="workspace">Workspace</button>
+      <div class="submodule-filter hidden">
+        <label for="submoduleSelect">Submódulo</label>
+        <select id="sidebarSubmoduleSelect" aria-label="Filtrar por submódulo">
+          <option value="todos">Todos os submódulos</option>
+          <option value="01_sub_cadastro_unidades_agricolas">01 - Cadastro de Unidades Agrícolas</option>
+          <option value="02_sub_proprietarios_possuidores">02 - Proprietários e Possuidores</option>
+          <option value="03_sub_responsaveis_gestores">03 - Responsáveis e Gestores</option>
+          <option value="04_sub_territorios_areas_producao">04 - Territórios e Áreas de Produção</option>
+          <option value="05_sub_limites_acessos">05 - Limites e Acessos</option>
+          <option value="06_sub_documentacao_unidade">06 - Documentação da Unidade</option>
+          <option value="07_sub_base_ativos_estruturais_unidade">07 - Base de Ativos Estruturais</option>
+          <option value="08_sub_chaves_permissoes_operacionais">08 - Chaves e Permissões Operacionais</option>
+          <option value="09_sub_status_operacional_unidade">09 - Status Operacional da Unidade</option>
+          <option value="10_sub_prestacao_contas_unidade">10 - Prestação de Contas da Unidade</option>
+        </select>
+        <label for="fractalSelect">Fractal</label>
+        <select id="sidebarFractalSelect" aria-label="Filtrar por fractal">
+          <option value="todos">Todos os fractais</option>
+        </select>
+      </div>
+      <nav class="nav">
+        <button class="nav-item active" data-view="dashboard">Dashboard</button>
+        <button class="nav-item" data-view="cadastros">Cadastros</button>
+        <button class="nav-item" data-view="gerenciamento">Gerenciamento do Módulo</button>
+        <button class="nav-item" data-view="ferramentas">Ferramentas</button>
+        <button class="nav-item" data-view="relatorios">Relatórios</button>
+        <button class="nav-item" data-view="bancoDados">Banco de Dados</button>
+      </nav>
+      <button class="nav-item sidebar-action" data-view="configuracoes">Configurações</button>
+    </aside>
+
+    <aside id="agentChatPanel" class="agent-chat-panel collapsed">
+      <button id="agentChatToggle" class="agent-chat-toggle" type="button" aria-expanded="false">Chat IA</button>
+      <div class="agent-chat-content">
+        <div class="agent-chat-header">
+          <strong>Agentes de IA</strong>
+          <span>Conversa contextual do m&oacute;dulo</span>
+        </div>
+        <div class="agent-panel-nav" aria-label="Ambientes dos agentes">
+          <button class="agent-panel-tab active" type="button" data-agent-panel="reuniao">Sala de Reuni&atilde;o</button>
+          <button class="agent-panel-tab" type="button" data-agent-panel="tipos">Tipos de Agentes</button>
+          <button class="agent-panel-tab" type="button" data-agent-panel="agentes">Agentes</button>
+          <button class="agent-panel-tab" type="button" data-agent-panel="ferramentas">Caixa de Ferramentas</button>
+        </div>
+        <div class="agent-panel-section active" data-agent-section="reuniao">
+          <div id="agentChatMessages" class="agent-chat-messages">
+            <div class="chat-message agent">
+              <strong>Agente Genius</strong>
+              <span>Estou pronto para apoiar cadastros, auditoria, dados, fractais e integra&ccedil;&atilde;o deste m&oacute;dulo.</span>
+            </div>
+          </div>
+        </div>
+        <div class="agent-panel-section" data-agent-section="tipos">
+          <div class="agent-type-list">
+            <button type="button">Guardi&otilde;es</button>
+            <button type="button">Gerentes</button>
+            <button type="button">T&eacute;cnicos</button>
+            <button type="button">Bibliotec&aacute;rios</button>
+            <button type="button">Professores</button>
+            <button type="button">Secret&aacute;rios</button>
+          </div>
+        </div>
+        <div class="agent-panel-section" data-agent-section="agentes">
+          <div class="agent-card-list">
+            <div><strong>Agente Validador</strong><span>Qualidade, v&iacute;nculos e consist&ecirc;ncia dos cadastros.</span></div>
+            <div><strong>Agente Importador</strong><span>Planilhas, lotes e pend&ecirc;ncias de importa&ccedil;&atilde;o.</span></div>
+            <div><strong>Agente Integrador</strong><span>Encaixe com Hub, DataLake, BI e m&oacute;dulos consumidores.</span></div>
+            <div><strong>Agente Auditor</strong><span>Eventos, bloqueios, erros e trilhas de valida&ccedil;&atilde;o.</span></div>
+          </div>
+        </div>
+        <div class="agent-panel-section" data-agent-section="ferramentas">
+          <div class="agent-card-list">
+            <div><strong>Analisar Cadastro</strong><span>Revisar campos obrigat&oacute;rios, v&iacute;nculos e status.</span></div>
+            <div><strong>Preparar Importa&ccedil;&atilde;o</strong><span>Apoiar leitura e valida&ccedil;&atilde;o de planilhas.</span></div>
+            <div><strong>Gerar Relato</strong><span>Montar resumo operacional para reuni&otilde;es e auditorias.</span></div>
+            <div><strong>Checar Integra&ccedil;&otilde;es</strong><span>Verificar libera&ccedil;&atilde;o para ecossistema e dashboards.</span></div>
+          </div>
+        </div>
+        <form id="agentChatForm" class="agent-chat-form">
+          <textarea id="agentChatInput" rows="3" placeholder="Escreva para os Agentes de IA"></textarea>
+          <button type="submit">Enviar</button>
+        </form>
+      </div>
+    </aside>
+    <main class="app">
+      <header class="topbar">
+        <div>
+          <h1 id="viewTitle">Dashboard</h1>
+          <p id="viewSubtitle">Visão executiva do módulo Gestão da Unidade Agrícola.</p>
+        </div>
+        <div class="toolbar">
+          <div class="toolbar-main">
+            <div class="connection top-connection">
+              <span id="connectionStatus" class="status-dot"></span>
+              <span id="connectionText">Aguardando configuração</span>
+            </div>
+            <select id="unitSelect" aria-label="Selecionar unidade"></select>
+            <button id="refreshButton" type="button">Atualizar</button>
+          </div>
+          <div class="toolbar-context">
+            <span id="activeSubmodule" class="context-pill">Todos os submódulos</span>
+            <span id="activeFractal" class="context-pill">Todos os fractais</span>
+          </div>
+        </div>
+      </header>
+
+      <section id="alert" class="alert hidden"></section>
+
+      <section id="workspaceView" class="view">
+        <div class="section-tabs">
+          <button class="section-tab active" data-view-target="workspace">Workspace</button>
+          <button class="section-tab" data-view-target="liberacao">Liberação Plug and Play</button>
+        </div>
+        <div class="workspace-grid">
+          <div class="panel">
+            <div class="panel-header">
+              <h2>Contexto do Workspace</h2>
+            </div>
+            <div class="workspace-context">
+              <label>
+                Submódulo
+                <select id="submoduleSelect" aria-label="Filtrar por submódulo"></select>
+              </label>
+              <label>
+                Fractal
+                <select id="fractalSelect" aria-label="Filtrar por fractal">
+                  <option value="todos">Todos os fractais</option>
+                </select>
+              </label>
+            </div>
+          </div>
+
+          <div class="panel">
+            <div class="panel-header">
+              <h2>Ambiente Cowork</h2>
+            </div>
+            <div class="workspace-cowork">
+              <article>
+                <strong>Sala operacional da unidade</strong>
+                <span>Espaço para reunir responsáveis, técnicos, agentes de IA, tarefas e decisões do módulo.</span>
+              </article>
+              <article>
+                <strong>Trabalho por submódulo e fractal</strong>
+                <span>O contexto selecionado acima orienta cadastros, auditorias, relatórios, ferramentas e conversas.</span>
+              </article>
+              <article>
+                <strong>Preparado para a Plataforma Genius</strong>
+                <span>Este Workspace será o encaixe do módulo na plataforma maior, com Cowork, agentes e integrações.</span>
+              </article>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="dashboardView" class="view active">
+        <div id="kpiGrid" class="kpi-grid"></div>
+        <div class="panel">
+          <div class="panel-header">
+            <h2>Liberação para Ecossistema</h2>
+          </div>
+          <div id="ecosystemMatrix" class="table-wrap"></div>
+        </div>
+      </section>
+
+      <section id="liberacaoView" class="view">
+        <div class="section-tabs">
+          <button class="section-tab" data-view-target="workspace">Workspace</button>
+          <button class="section-tab active" data-view-target="liberacao">Liberação Plug and Play</button>
+        </div>
+        <div id="plugPlayHero" class="plug-hero"></div>
+        <div id="plugPlayKpis" class="kpi-grid"></div>
+        <div class="panel">
+          <div class="panel-header">
+            <h2>Módulos consumidores conectados</h2>
+            <select id="plugPlayUnitFilter" aria-label="Filtrar unidade na liberação plug and play"></select>
+          </div>
+          <div id="plugPlayConsumerGrid" class="plug-consumer-grid"></div>
+        </div>
+      </section>
+
+      <section id="cadastrosView" class="view">
+        <div class="cadastro-layout">
+          <div class="section-tabs cadastro-tabs">
+            <button class="section-tab active" data-cadastro-target="cadastroUnidadePanel">Unidade Agrícola</button>
+            <button class="section-tab" data-cadastro-target="cadastroProprietariosPanel">Proprietários/Possuidores</button>
+            <button class="section-tab" data-cadastro-target="cadastroResponsaveisPanel">Responsáveis/Gestores</button>
+          </div>
+
+          <div id="cadastroUnidadePanel" class="cadastro-panel active">
+            <div class="panel">
+            <div class="panel-header">
+              <h2>Cadastro da Unidade Agrícola</h2>
+            </div>
+            <form id="cadastroUnidadeForm" class="form-grid">
+              <label>
+                Código da unidade
+                <input name="codigo_unidade" required placeholder="PA-NOVA-0001" />
+              </label>
+              <label>
+                Nome da unidade
+                <input name="nome_unidade" required placeholder="Fazenda Modelo" />
+              </label>
+              <label>
+                Tipo de unidade
+                <select name="tipo_unidade" required>
+                  <option value="">Selecione</option>
+                  <option>Fazenda</option>
+                  <option>Sítio</option>
+                  <option>Chácara</option>
+                  <option>Unidade Experimental</option>
+                  <option>Área Arrendada</option>
+                </select>
+              </label>
+              <label>
+                Status cadastral
+                <select name="status_cadastro" required>
+                  <option>Ativo</option>
+                  <option>Pendente</option>
+                  <option>Em validação</option>
+                  <option>Inativo</option>
+                </select>
+              </label>
+              <label>
+                Situação operacional
+                <select name="situacao_operacional">
+                  <option>Em operação</option>
+                  <option>Em implantação</option>
+                  <option>Em regularização</option>
+                  <option>Paralisada</option>
+                </select>
+              </label>
+              <label>
+                UF
+                <input name="uf" maxlength="2" placeholder="AM" />
+              </label>
+              <label>
+                Município
+                <input name="municipio" placeholder="Manaus" />
+              </label>
+              <label>
+                Área total ha
+                <input name="area_total_ha" type="number" min="0" step="0.01" placeholder="1250.50" />
+              </label>
+              <label>
+                Latitude da sede
+                <input name="latitude_sede" type="number" step="0.000001" placeholder="-3.120000" />
+              </label>
+              <label>
+                Longitude da sede
+                <input name="longitude_sede" type="number" step="0.000001" placeholder="-60.020000" />
+              </label>
+              <label class="form-full">
+                Observações
+                <textarea name="observacoes" rows="4" placeholder="Informações complementares da unidade agrícola"></textarea>
+              </label>
+              <div class="form-actions form-full">
+                <button type="submit">Salvar rascunho</button>
+                <button id="limparCadastroUnidade" type="button" class="button-secondary">Limpar</button>
+              </div>
+            </form>
+            </div>
+            <div class="panel">
+              <div class="panel-header">
+                <h2>Rascunhos Locais - Unidade Agrícola</h2>
+                <button type="button" class="button-secondary" data-sheet-type="unidade">Modo Planilha</button>
+              </div>
+              <div id="cadastroDrafts" class="table-wrap"></div>
+            </div>
+          </div>
+
+          <div id="cadastroProprietariosPanel" class="cadastro-panel">
+            <div class="panel">
+              <div class="panel-header">
+                <h2>Cadastro de Proprietários e Possuidores</h2>
+              </div>
+              <form id="cadastroProprietarioForm" class="form-grid">
+                <label>
+                  Unidade agrícola
+                  <select name="codigo_unidade" class="unit-options" required></select>
+                </label>
+                <label>
+                  Nome do titular
+                  <input name="nome_titular" required placeholder="Nome do proprietário ou possuidor" />
+                </label>
+                <label>
+                  Tipo de vínculo
+                  <select name="tipo_vinculo" required>
+                    <option value="">Selecione</option>
+                    <option>Proprietário</option>
+                    <option>Possuidor</option>
+                    <option>Arrendatário</option>
+                    <option>Parceiro</option>
+                    <option>Representante legal</option>
+                  </select>
+                </label>
+                <label>
+                  CPF/CNPJ
+                  <input name="documento" placeholder="000.000.000-00" />
+                </label>
+                <label>
+                  Participação %
+                  <input name="participacao_percentual" type="number" min="0" max="100" step="0.01" placeholder="100" />
+                </label>
+                <label>
+                  Telefone
+                  <input name="telefone" placeholder="(00) 00000-0000" />
+                </label>
+                <label>
+                  E-mail
+                  <input name="email" type="email" placeholder="titular@email.com" />
+                </label>
+                <label>
+                  Status
+                  <select name="status_vinculo">
+                    <option>Ativo</option>
+                    <option>Pendente</option>
+                    <option>Em validação</option>
+                    <option>Inativo</option>
+                  </select>
+                </label>
+                <label class="form-full">
+                  Observações
+                  <textarea name="observacoes" rows="4" placeholder="Informações complementares sobre titularidade, posse ou vínculo"></textarea>
+                </label>
+                <div class="form-actions form-full">
+                  <button type="submit">Salvar rascunho</button>
+                  <button id="limparCadastroProprietario" type="button" class="button-secondary">Limpar</button>
+                </div>
+              </form>
+            </div>
+            <div class="panel">
+              <div class="panel-header">
+                <h2>Rascunhos Locais - Proprietários/Possuidores</h2>
+                <button type="button" class="button-secondary" data-sheet-type="proprietario">Modo Planilha</button>
+              </div>
+              <div id="proprietarioDrafts" class="table-wrap"></div>
+            </div>
+          </div>
+
+          <div id="cadastroResponsaveisPanel" class="cadastro-panel">
+            <div class="panel">
+              <div class="panel-header">
+                <h2>Cadastro de Responsáveis e Gestores</h2>
+              </div>
+              <form id="cadastroResponsavelForm" class="form-grid">
+                <label>
+                  Unidade agrícola
+                  <select name="codigo_unidade" class="unit-options" required></select>
+                </label>
+                <label>
+                  Nome do responsável
+                  <input name="nome_responsavel" required placeholder="Nome do responsável ou gestor" />
+                </label>
+                <label>
+                  Tipo de responsabilidade
+                  <select name="tipo_responsabilidade" required>
+                    <option value="">Selecione</option>
+                    <option>Gestor administrativo</option>
+                    <option>Responsável técnico</option>
+                    <option>Encarregado operacional</option>
+                    <option>Consultor</option>
+                    <option>Administrador legal</option>
+                  </select>
+                </label>
+                <label>
+                  Cargo/Função
+                  <input name="cargo_funcao" placeholder="Gerente da unidade" />
+                </label>
+                <label>
+                  Nível de autorização
+                  <select name="nivel_autorizacao">
+                    <option>Operacional</option>
+                    <option>Gestão</option>
+                    <option>Aprovação</option>
+                    <option>Auditoria</option>
+                    <option>Administrador</option>
+                  </select>
+                </label>
+                <label>
+                  Principal
+                  <select name="principal">
+                    <option>Sim</option>
+                    <option>Não</option>
+                  </select>
+                </label>
+                <label>
+                  Telefone
+                  <input name="telefone" placeholder="(00) 00000-0000" />
+                </label>
+                <label>
+                  E-mail
+                  <input name="email" type="email" placeholder="responsavel@email.com" />
+                </label>
+                <label class="form-full">
+                  Observações
+                  <textarea name="observacoes" rows="4" placeholder="Responsabilidades, limites de atuação ou observações"></textarea>
+                </label>
+                <div class="form-actions form-full">
+                  <button type="submit">Salvar rascunho</button>
+                  <button id="limparCadastroResponsavel" type="button" class="button-secondary">Limpar</button>
+                </div>
+              </form>
+            </div>
+            <div class="panel">
+              <div class="panel-header">
+                <h2>Rascunhos Locais - Responsáveis/Gestores</h2>
+                <button type="button" class="button-secondary" data-sheet-type="responsavel">Modo Planilha</button>
+              </div>
+              <div id="responsavelDrafts" class="table-wrap"></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="gerenciamentoView" class="view">
+        <div class="section-tabs">
+          <button class="section-tab active" data-view-target="gerenciamento">Visão Geral</button>
+          <button class="section-tab" data-view-target="unidades">Unidades</button>
+          <button class="section-tab" data-view-target="detalhe">Detalhe</button>
+          <button class="section-tab" data-view-target="auditoria">Auditoria</button>
+          <button class="section-tab" data-view-target="importacoes">Importações</button>
+        </div>
+        <div class="module-grid">
+          <div class="panel">
+            <div class="panel-header">
+              <h2>Governança do Módulo</h2>
+            </div>
+            <div class="feature-list">
+              <div><strong>Manifesto</strong><span>Identidade, versão, rotas, permissões e modo plug and play.</span></div>
+              <div><strong>Contratos</strong><span>Integração com Plataforma Genius, Hub, DataLake, BI e APIs.</span></div>
+              <div><strong>Submódulos</strong><span>Blocos operacionais independentes e integrados do módulo.</span></div>
+              <div><strong>Fractais</strong><span>Unidades menores, reutilizáveis, validáveis e escaláveis.</span></div>
+            </div>
+          </div>
+          <div class="panel">
+            <div class="panel-header">
+              <h2>Status Plug and Play</h2>
+            </div>
+            <div id="moduleManagementSummary" class="summary"></div>
+          </div>
+        </div>
+      </section>
+
+      <section id="configuracoesView" class="view">
+        <div class="section-tabs">
+          <button class="section-tab active" data-view-target="configuracoes">Configurações Gerais</button>
+          <button class="section-tab" data-view-target="bancoDados">Banco de Dados</button>
+        </div>
+        <div class="panel">
+          <div class="panel-header">
+            <h2>Configurações</h2>
+          </div>
+          <div class="feature-list">
+            <div><strong>Conexão Supabase</strong><span>Configuração da URL, anon key, schema exposto e status da Data API.</span></div>
+            <div><strong>Contexto do Módulo</strong><span>Submódulo, fractal e unidade selecionada para operação.</span></div>
+            <div><strong>Modo Plataforma</strong><span>Preparação para rodar dentro da Plataforma Ecossistema Genius.</span></div>
+            <div><strong>Permissões</strong><span>Área reservada para perfis, RLS e políticas de acesso do módulo.</span></div>
+          </div>
+        </div>
+      </section>
+
+      <section id="agentesView" class="view">
+        <div class="panel">
+          <div class="panel-header">
+            <h2>Agentes de IA do Módulo</h2>
+          </div>
+          <div class="feature-list">
+            <div><strong>Agente Validador</strong><span>Verifica qualidade, vínculos e consistência das unidades agrícolas.</span></div>
+            <div><strong>Agente Importador</strong><span>Acompanha planilhas, lotes e pendências de importação.</span></div>
+            <div><strong>Agente Integrador</strong><span>Prepara dados para Hub, DataLake, Dashboards BI e módulos consumidores.</span></div>
+            <div><strong>Agente Auditor</strong><span>Monitora bloqueios, erros, inconsistências e trilhas de eventos.</span></div>
+          </div>
+        </div>
+      </section>
+
+      <section id="ferramentasView" class="view">
+        <div class="panel">
+          <div class="panel-header">
+            <h2>Ferramentas Operacionais</h2>
+          </div>
+          <div class="feature-list">
+            <div><strong>Atualizar Dados</strong><span>Recarrega as views operacionais do Supabase.</span></div>
+            <div><strong>Validar Qualidade</strong><span>Consulta auditorias e identifica pendências do módulo.</span></div>
+            <div><strong>Verificar Liberação</strong><span>Confirma se as unidades estão prontas para outros módulos.</span></div>
+            <div><strong>Acompanhar Importações</strong><span>Mostra status dos lotes vindos de planilhas e submódulos.</span></div>
+          </div>
+        </div>
+      </section>
+
+      <section id="relatoriosView" class="view">
+        <div class="panel">
+          <div class="panel-header">
+            <h2>Relatórios do Módulo</h2>
+          </div>
+          <div class="feature-list">
+            <div><strong>Relatório Executivo</strong><span>Resumo de unidades, áreas, eventos, qualidade e liberação.</span></div>
+            <div><strong>Relatório de Vínculos</strong><span>Proprietários, responsáveis, áreas e relações por unidade agrícola.</span></div>
+            <div><strong>Relatório de Auditoria</strong><span>Pendências, bloqueios, inconsistências e erros encontrados.</span></div>
+            <div><strong>Relatório de Integração</strong><span>Módulos consumidores e unidades liberadas para o ecossistema.</span></div>
+          </div>
+        </div>
+      </section>
+
+      <section id="bancoDadosView" class="view">
+        <div class="panel">
+          <div class="panel-header">
+            <h2>Planilhas e Tabelas do Módulo</h2>
+          </div>
+          <div id="databaseSheets" class="database-sheet-grid"></div>
+        </div>
+        <div class="panel">
+          <div class="panel-header">
+            <h2>Relacionamento dos Dados</h2>
+          </div>
+          <div id="databaseRelations" class="relation-map"></div>
+        </div>
+      </section>
+
+      <section id="unidadesView" class="view">
+        <div class="section-tabs">
+          <button class="section-tab" data-view-target="gerenciamento">Visão Geral</button>
+          <button class="section-tab active" data-view-target="unidades">Unidades</button>
+          <button class="section-tab" data-view-target="detalhe">Detalhe</button>
+          <button class="section-tab" data-view-target="auditoria">Auditoria</button>
+          <button class="section-tab" data-view-target="importacoes">Importações</button>
+        </div>
+        <div class="panel">
+          <div class="panel-header">
+            <h2>Unidades Agrícolas</h2>
+            <input id="unitSearch" type="search" placeholder="Filtrar por código, nome ou município" />
+          </div>
+          <div id="unitsTable" class="table-wrap"></div>
+        </div>
+      </section>
+
+      <section id="detalheView" class="view">
+        <div class="section-tabs">
+          <button class="section-tab" data-view-target="gerenciamento">Visão Geral</button>
+          <button class="section-tab" data-view-target="unidades">Unidades</button>
+          <button class="section-tab active" data-view-target="detalhe">Detalhe</button>
+          <button class="section-tab" data-view-target="auditoria">Auditoria</button>
+          <button class="section-tab" data-view-target="importacoes">Importações</button>
+        </div>
+        <div class="detail-grid">
+          <div class="panel">
+            <div class="panel-header">
+              <h2>Resumo Relacional</h2>
+            </div>
+            <div id="unitSummary" class="summary"></div>
+          </div>
+          <div class="panel">
+            <div class="panel-header">
+              <h2>Timeline de Eventos</h2>
+            </div>
+            <div id="eventsTimeline" class="timeline"></div>
+          </div>
+        </div>
+        <div class="three-columns">
+          <div class="panel">
+            <div class="panel-header">
+              <h2>Proprietários</h2>
+            </div>
+            <div id="ownersTable" class="table-wrap"></div>
+          </div>
+          <div class="panel">
+            <div class="panel-header">
+              <h2>Responsáveis</h2>
+            </div>
+            <div id="managersTable" class="table-wrap"></div>
+          </div>
+          <div class="panel">
+            <div class="panel-header">
+              <h2>Áreas</h2>
+            </div>
+            <div id="areasTable" class="table-wrap"></div>
+          </div>
+        </div>
+      </section>
+
+      <section id="auditoriaView" class="view">
+        <div class="section-tabs">
+          <button class="section-tab" data-view-target="gerenciamento">Visão Geral</button>
+          <button class="section-tab" data-view-target="unidades">Unidades</button>
+          <button class="section-tab" data-view-target="detalhe">Detalhe</button>
+          <button class="section-tab active" data-view-target="auditoria">Auditoria</button>
+          <button class="section-tab" data-view-target="importacoes">Importações</button>
+        </div>
+        <div id="auditGrid" class="kpi-grid"></div>
+        <div class="panel">
+          <div class="panel-header">
+            <h2>Unidades Bloqueadas</h2>
+          </div>
+          <div id="blockedTable" class="table-wrap"></div>
+        </div>
+      </section>
+
+      <section id="importacoesView" class="view">
+        <div class="section-tabs">
+          <button class="section-tab" data-view-target="gerenciamento">Visão Geral</button>
+          <button class="section-tab" data-view-target="unidades">Unidades</button>
+          <button class="section-tab" data-view-target="detalhe">Detalhe</button>
+          <button class="section-tab" data-view-target="auditoria">Auditoria</button>
+          <button class="section-tab active" data-view-target="importacoes">Importações</button>
+        </div>
+        <div class="two-columns">
+          <div class="panel">
+            <div class="panel-header">
+              <h2>Importação de Unidades</h2>
+            </div>
+            <div id="importUnitsTable" class="table-wrap"></div>
+          </div>
+          <div class="panel">
+            <div class="panel-header">
+              <h2>Importação dos Submódulos</h2>
+            </div>
+            <div id="importSubmodulesTable" class="table-wrap"></div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <section id="a4PreviewOverlay" class="a4-preview-overlay hidden" aria-hidden="true">
+      <div class="a4-preview-toolbar">
+        <button id="generatePdfButton" type="button">Gerar PDF</button>
+        <button id="printPreviewButton" type="button">Imprimir</button>
+        <button id="closePreviewButton" type="button" class="button-secondary">Fechar</button>
+      </div>
+      <article id="a4PreviewPage" class="a4-page"></article>
+    </section>
+
+    <section id="sheetModeOverlay" class="sheet-mode-overlay hidden" aria-hidden="true">
+      <div class="sheet-mode-shell">
+        <div class="sheet-mode-header">
+          <div>
+            <h2 id="sheetModeTitle">Modo Planilha</h2>
+            <p>Preencha os cadastros diretamente na grade.</p>
+          </div>
+          <div class="sheet-mode-actions">
+            <input id="sheetImportInput" class="hidden" type="file" accept=".csv,text/csv" />
+            <button id="importSheetButton" type="button" class="button-secondary">Importar Planilha</button>
+            <button id="printSheetButton" type="button" class="button-secondary">Imprimir Planilha</button>
+            <button id="addSheetRowButton" type="button">Adicionar linha</button>
+            <button id="saveSheetButton" type="button">Salvar rascunhos</button>
+            <button id="closeSheetButton" type="button" class="button-secondary">Fechar</button>
+          </div>
+        </div>
+        <div id="sheetGrid" class="sheet-grid"></div>
+      </div>
+    </section>
+
+    <script src="./config.js"></script>
+    <script src="./app.js"></script>
+  </body>
+</html>

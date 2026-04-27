@@ -1,0 +1,3 @@
+lote_importacao,linha_origem,codigo_unidade,nome_unidade,tipo_unidade,status_cadastro,situacao_operacional,uf,municipio,latitude_sede,longitude_sede,area_total_ha,proprietario_nome,proprietario_documento,telefone_principal,email_principal,observacoes
+lote_planilha_robusta_001,1,PA-IMP-0002,Fazenda Importada Completa,Fazenda,Ativo,Em operacao,AM,Manaus,-3.1300,-60.0300,940.25,Produtor Completo,00000000000272,+55 92 99999-2002,completo@genius.local,Linha completa importada por planilha
+lote_planilha_robusta_001,2,PA-IMP-0003,Sitio Importado Modelo,Sitio,Ativo,Em implantacao,AM,Iranduba,-3.2800,-60.1800,72.40,Produtor Modelo,00000000000353,+55 92 99999-2003,modelo@genius.local,Segunda linha para testar lote com mais de um registro

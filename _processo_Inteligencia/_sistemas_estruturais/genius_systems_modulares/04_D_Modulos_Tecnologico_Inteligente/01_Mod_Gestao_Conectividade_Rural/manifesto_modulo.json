@@ -1,0 +1,107 @@
+﻿{
+    "schema_version":  "1.0",
+    "module_name":  "Mod_Gestao_Conectividade_Rural",
+    "module_title":  "Gestao Conectividade Rural",
+    "module_kind":  "modular",
+    "description":  "Modulo plug and play do ecossistema Genius responsavel por Gestao Conectividade Rural, integrado as plataformas: 05_Plataforma_Genius_InfraRural, 02_Plataforma_Genius_TechOps.",
+    "path":  "E:\\Diretorios\\Diretorio_Agentes\\_processo_Inteligencia\\_sistemas_estruturais\\genius_systems_modulares\\04_D_Modulos_Tecnologico_Inteligente\\01_Mod_Gestao_Conectividade_Rural",
+    "standard_structure":  {
+                               "input":  "0_IN_Entrada",
+                               "process":  "1_DNA_Processo",
+                               "output":  "2_OUT_Saida",
+                               "library":  "3_LIB_Biblioteca",
+                               "submodules_path":  "1_DNA_Processo/submodulos"
+                           },
+    "platforms":  [
+                      "05_Plataforma_Genius_InfraRural",
+                      "02_Plataforma_Genius_TechOps"
+                  ],
+    "submodules":  [
+                       "01_sub_diagnostico_cobertura_conectividade",
+                       "02_sub_cadastro_pontos_conectividade",
+                       "03_sub_infraestrutura_redes_rurais",
+                       "04_sub_links_provedores_servicos",
+                       "05_sub_configuracao_acessos_rede",
+                       "06_sub_monitoramento_disponibilidade_sinal",
+                       "07_sub_suporte_incidentes_conectividade",
+                       "08_sub_expansao_melhoria_conectividade",
+                       "09_sub_seguranca_rede_conectividade",
+                       "10_sub_base_operacional_conectividade"
+                   ],
+    "expected_inputs":  [
+                            "Demandas recebidas via Mod_Gestao_Genius_In",
+                            "Dados e documentos enviados por usuarios, agentes ou modulos relacionados",
+                            "Cadastros, status, evidencias e historicos vinculados ao dominio do modulo",
+                            "Eventos e atualizacoes vindos de integracoes/APIs autorizadas"
+                        ],
+    "generated_outputs":  [
+                              "Registros processados e padronizados para o dominio do modulo",
+                              "Eventos de status para Mod_Gestao_Genius_Hub",
+                              "Dados tratados para Mod_Gestao_Dados_DataLake",
+                              "Indicadores e metricas para Mod_Gestao_Dashboards_BI",
+                              "Solicitacoes ou encaminhamentos para modulos dependentes"
+                          ],
+    "depends_on":  [
+                       "Mod_Gestao_Genius_In",
+                       "Mod_Gestao_Genius_Hub",
+                       "Mod_Gestao_Dados_DataLake",
+                       "Mod_Gestao_Integracoes_APIs",
+                       "Mod_Gestao_Dashboards_BI",
+                       "Mod_Gestao_Automacoes",
+                       "Mod_Gestao_Seguranca_Informacao",
+                       "Mod_Gestao_Genius_Cloud"
+                   ],
+    "depended_by":  [
+                        "Plataforma: 05_Plataforma_Genius_InfraRural",
+                        "Plataforma: 02_Plataforma_Genius_TechOps"
+                    ],
+    "publishes_events":  [
+                             "Mod_Gestao_Conectividade_Rural.evento.criado",
+                             "Mod_Gestao_Conectividade_Rural.evento.atualizado",
+                             "Mod_Gestao_Conectividade_Rural.evento.status_alterado",
+                             "Mod_Gestao_Conectividade_Rural.evento.finalizado"
+                         ],
+    "consumes_events":  [
+                            "Mod_Gestao_Genius_In.evento.demanda_recebida",
+                            "Mod_Gestao_Genius_Hub.evento.fluxo_encaminhado",
+                            "Mod_Gestao_Integracoes_APIs.evento.sincronizacao_recebida"
+                        ],
+    "api_contract":  {
+                         "base_route":  "/api/modulos/Mod_Gestao_Conectividade_Rural",
+                         "reads":  [
+                                       "GET /status",
+                                       "GET /submodulos",
+                                       "GET /registros"
+                                   ],
+                         "writes":  [
+                                        "POST /entrada",
+                                        "POST /evento",
+                                        "PATCH /status"
+                                    ],
+                         "integration_owner":  "Mod_Gestao_Integracoes_APIs"
+                     },
+    "permissions_profiles":  [
+                                 "admin_ecossistema",
+                                 "gestor_modulo",
+                                 "operador_modulo",
+                                 "leitor_modulo",
+                                 "agente_ia_autorizado"
+                             ],
+    "dashboards":  [
+                       "Mod_Gestao_Conectividade_Rural.dashboard_operacional",
+                       "Mod_Gestao_Conectividade_Rural.dashboard_indicadores",
+                       "Mod_Gestao_Conectividade_Rural.dashboard_alertas"
+                   ],
+    "datalake_integration":  {
+                                 "raw_layer":  "raw/Mod_Gestao_Conectividade_Rural",
+                                 "trusted_layer":  "trusted/Mod_Gestao_Conectividade_Rural",
+                                 "analytics_layer":  "analytics/Mod_Gestao_Conectividade_Rural",
+                                 "lineage_required":  true
+                             },
+    "hub_integration":  {
+                            "show_in_hub":  true,
+                            "receives_from_genius_in":  true,
+                            "publishes_status_to_hub":  true
+                        },
+    "plug_and_play_status":  "estrutura_padronizada_contrato_inicial_criado"
+}

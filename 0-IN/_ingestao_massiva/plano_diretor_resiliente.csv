@@ -1,0 +1,4 @@
+﻿Nome,Setor,Nivel,Pai,Objetivo
+Modulo Financeiro Global,FINANCEIRO,SISTEMA,,Controle financeiro
+Auditoria de Custos,FINANCEIRO,MODULO,Modulo Financeiro Global,Auditoria interna
+Calculadora de ROI,FINANCEIRO,FRACTAL,Auditoria de Custos,Calculo de retorno

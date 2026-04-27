@@ -1,0 +1,12 @@
+project_id = "mod-gestao-unidade-agricola"
+
+[api]
+enabled = true
+schemas = ["public", "unidade_agricola"]
+extra_search_path = ["public", "extensions"]
+
+[functions.unidade-agricola-api]
+verify_jwt = true
+
+[functions.fractal-eventos]
+verify_jwt = true

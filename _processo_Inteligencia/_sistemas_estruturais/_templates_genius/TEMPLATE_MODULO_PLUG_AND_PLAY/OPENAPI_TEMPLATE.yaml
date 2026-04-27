@@ -1,0 +1,18 @@
+openapi: 3.1.0
+info:
+  title: API - {{NOME_MODULO}}
+  version: 0.1.0
+  description: Contrato OpenAPI plug and play do módulo.
+paths:
+  /entidades:
+    get:
+      summary: Lista entidades base do módulo
+      responses:
+        "200":
+          description: OK
+  /entidades/{id_entidade_base}/fractais:
+    get:
+      summary: Lista fractais da entidade base
+      responses:
+        "200":
+          description: OK

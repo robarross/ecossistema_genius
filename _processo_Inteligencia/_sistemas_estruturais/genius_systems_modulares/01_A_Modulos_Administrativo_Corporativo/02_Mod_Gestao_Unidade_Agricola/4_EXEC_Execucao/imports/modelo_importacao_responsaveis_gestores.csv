@@ -1,0 +1,3 @@
+lote_importacao,linha_origem,codigo_unidade,nome_responsavel,documento_responsavel,tipo_responsabilidade,cargo_funcao,telefone,email,nivel_autorizacao,principal,observacoes
+lote_submodulos_base_001,1,PA-IMP-0002,Marina Gestora,12345678901,Administrativa,Gestora da unidade,+55 92 98888-2002,marina@genius.local,alto,Sim,Responsavel administrativa
+lote_submodulos_base_001,2,PA-IMP-0003,Carlos Tecnico,98765432100,Tecnica,Responsavel tecnico,+55 92 98888-2003,carlos@genius.local,medio,Sim,Responsavel tecnico de campo

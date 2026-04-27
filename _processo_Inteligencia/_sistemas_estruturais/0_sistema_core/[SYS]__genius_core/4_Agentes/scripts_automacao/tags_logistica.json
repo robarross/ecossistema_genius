@@ -1,0 +1,25 @@
+{
+    "tags": {
+        "[ADM]": "_processo_Inteligencia/_sistemas_estruturais/genius_systems_modulares/A_Modulos_Administrativo_Corporativo/Mod_Gestao_Administrativa",
+        "[FIN]": "_processo_Inteligencia/_sistemas_estruturais/genius_systems_modulares/A_Modulos_Administrativo_Corporativo/Mod_Gestao_Financeira",
+        "[RH]": "_processo_Inteligencia/_sistemas_estruturais/genius_systems_modulares/A_Modulos_Administrativo_Corporativo/Mod_Gestao_RH",
+        "[JUR]": "_processo_Inteligencia/_sistemas_estruturais/genius_systems_modulares/A_Modulos_Administrativo_Corporativo/Mod_Gestao_Juridica",
+        "[AMB]": "_processo_Inteligencia/_sistemas_estruturais/genius_systems_modulares/B_Modulos_Territorial_Ambiental/Mod_Gestao_Meio_Ambiente",
+        "[GEO]": "_processo_Inteligencia/_sistemas_estruturais/genius_systems_modulares/B_Modulos_Territorial_Ambiental/Mod_Gestao_Georreferenciamento",
+        "[MAN]": "_processo_Inteligencia/_sistemas_estruturais/genius_systems_modulares/C_Modulos_Infraestrutura_Operacao/Mod_Gestao_Manutencao",
+        "[LOG]": "_processo_Inteligencia/_sistemas_estruturais/genius_systems_modulares/C_Modulos_Infraestrutura_Operacao/Mod_Gestao_Logistica",
+        "[IA]": "_processo_Inteligencia/_sistemas_estruturais/genius_systems_modulares/D_Modulos_Tecnologico_Inteligente/Mod_Gestao_Agricultura_Precisao",
+        "[IOT]": "_processo_Inteligencia/_sistemas_estruturais/genius_systems_modulares/D_Modulos_Tecnologico_Inteligente/Mod_Gestao_TI_IoT_Rural",
+        "[AGRO]": "_processo_Inteligencia/_sistemas_estruturais/genius_systems_modulares/E_Modulos_Produtivo/Mod_Gestao_Producao_Vegetal",
+        "[SOLO]": "_processo_Inteligencia/_sistemas_estruturais/genius_systems_modulares/E_Modulos_Produtivo/Mod_Gestao_Producao_Vegetal/1_DNA_Processo/2_processo/submodulos/sub_manejo_solo_nutricao",
+        "[PEC]": "_processo_Inteligencia/_sistemas_estruturais/genius_systems_modulares/E_Modulos_Produtivo/Mod_Gestao_Producao_Animal",
+        "[MKT]": "_processo_Inteligencia/_sistemas_estruturais/genius_systems_modulares/F_Modulos_Negocio_Expansao/Mod_Gestao_Marketplace_Agricola",
+        "[PLAT]": "_processo_Inteligencia/_plataformas",
+        "[CORE]": "_processo_Inteligencia/_sistemas_estruturais/0_sistema_core/[SYS]__genius_core/_entrada_inicial"
+    },
+    "regras_extensao": {
+        "tabelas": [".xlsx", ".xls", ".csv", ".ods"],
+        "documentos": [".pdf", ".docx", ".txt", ".md"],
+        "apresentacoes": [".pptx", ".ppt", ".pdf"]
+    }
+}

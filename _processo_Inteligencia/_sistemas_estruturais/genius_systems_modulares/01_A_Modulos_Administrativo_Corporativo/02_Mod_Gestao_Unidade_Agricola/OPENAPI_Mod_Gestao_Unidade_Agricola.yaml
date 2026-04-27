@@ -1,0 +1,263 @@
+openapi: 3.1.0
+info:
+  title: API - Gestão da Unidade Agrícola
+  version: 0.1.0
+  description: Contrato OpenAPI plug and play do Mod_Gestao_Unidade_Agricola.
+servers:
+  - url: https://api.genius.local/v1
+    description: Ambiente lógico do ecossistema Genius
+security:
+  - bearerAuth: []
+tags:
+  - name: Unidades Agrícolas
+  - name: Fractais
+  - name: Eventos
+  - name: Integrações
+paths:
+  /unidades-agricolas:
+    get:
+      tags: [Unidades Agrícolas]
+      summary: Lista unidades agrícolas
+      parameters:
+        - in: query
+          name: status_cadastro
+          schema: { type: string }
+        - in: query
+          name: uf
+          schema: { type: string }
+        - in: query
+          name: municipio
+          schema: { type: string }
+      responses:
+        "200":
+          description: Lista de unidades agrícolas
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/UnidadeAgricola"
+    post:
+      tags: [Unidades Agrícolas]
+      summary: Cria uma unidade agrícola
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UnidadeAgricolaInput"
+      responses:
+        "201":
+          description: Unidade agrícola criada
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UnidadeAgricola"
+  /unidades-agricolas/{id_unidade_agricola}:
+    get:
+      tags: [Unidades Agrícolas]
+      summary: Busca unidade agrícola por ID
+      parameters:
+        - $ref: "#/components/parameters/IdUnidadeAgricola"
+      responses:
+        "200":
+          description: Unidade agrícola encontrada
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UnidadeAgricola"
+    patch:
+      tags: [Unidades Agrícolas]
+      summary: Atualiza unidade agrícola
+      parameters:
+        - $ref: "#/components/parameters/IdUnidadeAgricola"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UnidadeAgricolaInput"
+      responses:
+        "200":
+          description: Unidade agrícola atualizada
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UnidadeAgricola"
+  /unidades-agricolas/{id_unidade_agricola}/fractais:
+    get:
+      tags: [Fractais]
+      summary: Lista registros de fractais vinculados à unidade agrícola
+      parameters:
+        - $ref: "#/components/parameters/IdUnidadeAgricola"
+        - in: query
+          name: fractal
+          schema: { type: string }
+        - in: query
+          name: status
+          schema: { type: string }
+      responses:
+        "200":
+          description: Registros de fractais
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/FractalRegistro"
+  /unidades-agricolas/{id_unidade_agricola}/fractais/{nome_fractal}:
+    post:
+      tags: [Fractais]
+      summary: Cria registro em um fractal da unidade agrícola
+      parameters:
+        - $ref: "#/components/parameters/IdUnidadeAgricola"
+        - $ref: "#/components/parameters/NomeFractal"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/FractalRegistroInput"
+      responses:
+        "201":
+          description: Registro de fractal criado
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FractalRegistro"
+  /eventos:
+    get:
+      tags: [Eventos]
+      summary: Lista eventos publicados pelo módulo
+      parameters:
+        - in: query
+          name: nome_evento
+          schema: { type: string }
+        - in: query
+          name: id_unidade_agricola
+          schema: { type: string, format: uuid }
+      responses:
+        "200":
+          description: Eventos do módulo
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/EventoFractal"
+  /fractais/{nome_fractal}/eventos:
+    post:
+      tags: [Eventos]
+      summary: Publica evento de um fractal
+      parameters:
+        - $ref: "#/components/parameters/NomeFractal"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/EventoFractalInput"
+      responses:
+        "202":
+          description: Evento aceito para publicação
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/EventoFractal"
+  /integracoes/sync:
+    post:
+      tags: [Integrações]
+      summary: Sincroniza módulo com Hub, DataLake, Supabase e dashboards
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id_unidade_agricola: { type: string, format: uuid }
+                destino:
+                  type: string
+                  enum: [genius_hub, datalake, dashboards_bi, integracoes_apis, todos]
+      responses:
+        "202":
+          description: Sincronização aceita
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  parameters:
+    IdUnidadeAgricola:
+      in: path
+      name: id_unidade_agricola
+      required: true
+      schema: { type: string, format: uuid }
+    NomeFractal:
+      in: path
+      name: nome_fractal
+      required: true
+      schema: { type: string }
+  schemas:
+    UnidadeAgricolaInput:
+      type: object
+      required: [codigo_unidade, nome_unidade]
+      properties:
+        codigo_unidade: { type: string }
+        nome_unidade: { type: string }
+        tipo_unidade: { type: string }
+        status_cadastro: { type: string }
+        situacao_operacional: { type: string }
+        uf: { type: string }
+        municipio: { type: string }
+        latitude_sede: { type: number }
+        longitude_sede: { type: number }
+        area_total_ha: { type: number }
+        payload: { type: object, additionalProperties: true }
+    UnidadeAgricola:
+      allOf:
+        - $ref: "#/components/schemas/UnidadeAgricolaInput"
+        - type: object
+          properties:
+            id_unidade_agricola: { type: string, format: uuid }
+            sync_status: { type: string }
+            created_at: { type: string, format: date-time }
+            updated_at: { type: string, format: date-time }
+    FractalRegistroInput:
+      type: object
+      required: [payload]
+      properties:
+        id_origem: { type: string }
+        status: { type: string, enum: [pendente, validado, sincronizado, erro, inativo] }
+        payload: { type: object, additionalProperties: true }
+        sync_status: { type: string }
+    FractalRegistro:
+      allOf:
+        - $ref: "#/components/schemas/FractalRegistroInput"
+        - type: object
+          properties:
+            id_fractal_registro: { type: string, format: uuid }
+            id_unidade_agricola: { type: string, format: uuid }
+            nome_fractal: { type: string }
+            created_at: { type: string, format: date-time }
+            updated_at: { type: string, format: date-time }
+    EventoFractalInput:
+      type: object
+      required: [nome_evento, id_unidade_agricola, fractal_origem]
+      properties:
+        nome_evento: { type: string }
+        id_unidade_agricola: { type: string, format: uuid }
+        id_fractal_registro: { type: string, format: uuid }
+        modulo_origem: { type: string, default: "Mod_Gestao_Unidade_Agricola" }
+        submodulo_origem: { type: string }
+        fractal_origem: { type: string }
+        status: { type: string }
+        payload: { type: object, additionalProperties: true }
+    EventoFractal:
+      allOf:
+        - $ref: "#/components/schemas/EventoFractalInput"
+        - type: object
+          properties:
+            id_evento: { type: string, format: uuid }
+            published_at: { type: string, format: date-time }

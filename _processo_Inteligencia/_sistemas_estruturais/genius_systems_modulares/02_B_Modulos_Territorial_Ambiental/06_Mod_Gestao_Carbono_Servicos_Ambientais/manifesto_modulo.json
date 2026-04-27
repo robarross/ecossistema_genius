@@ -1,0 +1,103 @@
+﻿{
+    "schema_version":  "1.0",
+    "module_name":  "Mod_Gestao_Carbono_Servicos_Ambientais",
+    "module_title":  "Gestao Carbono Servicos Ambientais",
+    "module_kind":  "modular",
+    "description":  "Modulo plug and play do ecossistema Genius responsavel por Gestao Carbono Servicos Ambientais, integrado as plataformas: 04_Plataforma_Genius_GeoAmbiental.",
+    "path":  "E:\\Diretorios\\Diretorio_Agentes\\_processo_Inteligencia\\_sistemas_estruturais\\genius_systems_modulares\\02_B_Modulos_Territorial_Ambiental\\06_Mod_Gestao_Carbono_Servicos_Ambientais",
+    "standard_structure":  {
+                               "input":  "0_IN_Entrada",
+                               "process":  "1_DNA_Processo",
+                               "output":  "2_OUT_Saida",
+                               "library":  "3_LIB_Biblioteca",
+                               "submodules_path":  "1_DNA_Processo/submodulos"
+                           },
+    "platforms":  [
+                      "04_Plataforma_Genius_GeoAmbiental"
+                  ],
+    "submodules":  [
+                       "01_sub_cadastro_areas_carbono_servicos",
+                       "02_sub_diagnostico_potencial_ambiental",
+                       "03_sub_linha_base_carbono_ambiental",
+                       "04_sub_metodologias_protocolos_carbono",
+                       "05_sub_projetos_carbono_servicos_ambientais",
+                       "06_sub_monitoramento_mrv",
+                       "07_sub_creditos_ativos_ambientais",
+                       "08_sub_certificacoes_validacoes",
+                       "09_sub_comercializacao_servicos_ambientais",
+                       "10_sub_prestacao_contas_carbono_ambiental"
+                   ],
+    "expected_inputs":  [
+                            "Demandas recebidas via Mod_Gestao_Genius_In",
+                            "Dados e documentos enviados por usuarios, agentes ou modulos relacionados",
+                            "Cadastros, status, evidencias e historicos vinculados ao dominio do modulo",
+                            "Eventos e atualizacoes vindos de integracoes/APIs autorizadas"
+                        ],
+    "generated_outputs":  [
+                              "Registros processados e padronizados para o dominio do modulo",
+                              "Eventos de status para Mod_Gestao_Genius_Hub",
+                              "Dados tratados para Mod_Gestao_Dados_DataLake",
+                              "Indicadores e metricas para Mod_Gestao_Dashboards_BI",
+                              "Solicitacoes ou encaminhamentos para modulos dependentes"
+                          ],
+    "depends_on":  [
+                       "Mod_Gestao_Genius_In",
+                       "Mod_Gestao_Genius_Hub",
+                       "Mod_Gestao_Dados_DataLake",
+                       "Mod_Gestao_Integracoes_APIs",
+                       "Mod_Gestao_Dashboards_BI",
+                       "Mod_Gestao_Automacoes",
+                       "Mod_Gestao_Seguranca_Informacao",
+                       "Mod_Gestao_Genius_Cloud"
+                   ],
+    "depended_by":  "Plataforma: 04_Plataforma_Genius_GeoAmbiental",
+    "publishes_events":  [
+                             "Mod_Gestao_Carbono_Servicos_Ambientais.evento.criado",
+                             "Mod_Gestao_Carbono_Servicos_Ambientais.evento.atualizado",
+                             "Mod_Gestao_Carbono_Servicos_Ambientais.evento.status_alterado",
+                             "Mod_Gestao_Carbono_Servicos_Ambientais.evento.finalizado"
+                         ],
+    "consumes_events":  [
+                            "Mod_Gestao_Genius_In.evento.demanda_recebida",
+                            "Mod_Gestao_Genius_Hub.evento.fluxo_encaminhado",
+                            "Mod_Gestao_Integracoes_APIs.evento.sincronizacao_recebida"
+                        ],
+    "api_contract":  {
+                         "base_route":  "/api/modulos/Mod_Gestao_Carbono_Servicos_Ambientais",
+                         "reads":  [
+                                       "GET /status",
+                                       "GET /submodulos",
+                                       "GET /registros"
+                                   ],
+                         "writes":  [
+                                        "POST /entrada",
+                                        "POST /evento",
+                                        "PATCH /status"
+                                    ],
+                         "integration_owner":  "Mod_Gestao_Integracoes_APIs"
+                     },
+    "permissions_profiles":  [
+                                 "admin_ecossistema",
+                                 "gestor_modulo",
+                                 "operador_modulo",
+                                 "leitor_modulo",
+                                 "agente_ia_autorizado"
+                             ],
+    "dashboards":  [
+                       "Mod_Gestao_Carbono_Servicos_Ambientais.dashboard_operacional",
+                       "Mod_Gestao_Carbono_Servicos_Ambientais.dashboard_indicadores",
+                       "Mod_Gestao_Carbono_Servicos_Ambientais.dashboard_alertas"
+                   ],
+    "datalake_integration":  {
+                                 "raw_layer":  "raw/Mod_Gestao_Carbono_Servicos_Ambientais",
+                                 "trusted_layer":  "trusted/Mod_Gestao_Carbono_Servicos_Ambientais",
+                                 "analytics_layer":  "analytics/Mod_Gestao_Carbono_Servicos_Ambientais",
+                                 "lineage_required":  true
+                             },
+    "hub_integration":  {
+                            "show_in_hub":  true,
+                            "receives_from_genius_in":  true,
+                            "publishes_status_to_hub":  true
+                        },
+    "plug_and_play_status":  "estrutura_padronizada_contrato_inicial_criado"
+}
